@@ -1,0 +1,47 @@
+body {
+    background-color: rgb(182, 182, 182) ;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    font-size: large;
+}
+
+.nav-item {
+    padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+    margin-right: 3rem;
+    border-radius: 10%;
+    padding: 0 0.3rem;
+    font-size: xx-large;
+}
+
+.dropdown-item:hover {
+    background-color: rgb(202, 160, 33);
+}
+
+.nav-link {
+    color: white;
+}
+
+.nav-link:hover, .nav-link:focus {
+    color: rgb(202, 160, 33);
+}
+
+footer {
+    margin-top: auto;
+    padding: 1.5rem;
+    color: rgb(202, 160, 33);
+    font-size: smaller;
+    text-align: center;
+}
+
+.navbar-toggler {
+    background-color:rgb(202, 160, 33);
+    font-size: 1rem;
+}
