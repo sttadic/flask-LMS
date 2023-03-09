@@ -93,10 +93,7 @@ def register():
     # User reached route via POST
     else:
 
-        # Get name form user input
-        name = request.form.get('name')
-
-        # Get username form user input
+        # Get username from user input
         user_name = request.form.get('username')
         
         # Check if username provided
@@ -104,28 +101,29 @@ def register():
             return render_template('error.html', error='Please provide username')
         
         # Check if username already in database
-        elif db.execute('SELECT username FROM staff WHERE username = ?', user_name):
+        elif db.execute('SELECT * FROM staff WHERE username = ?', user_name):
             return render_template('error.html', error='Username already exists')
 
-        # Get password and confirmation password from user input
+        # Get password from user input
         password = request.form.get('password')
-        confirmation = request.form.get('confirmation')
 
         # Check if password provided
         if not password:
             return render_template('error.html', error='Please provide password')
         
         # Ensure password and confirmation password match
-        elif password != confirmation:
+        elif password != request.form.get('confirmation'):
             return render_template('error.html', error='Password do not match confirmation password')
         
-        # Store password hash, name and username into database
-        hash = generate_password_hash('password')
+        # Generate hash for password
+        hash = generate_password_hash(password)
 
-        db.execute('INSERT INTO staff (name, username, hash) VALUES (?, ?, ?)', name, user_name, hash)
+        # Store name, username and password hash into database
+        db.execute('INSERT INTO staff (name, username, hash) VALUES (?, ?, ?)', request.form.get('name'), user_name, hash)
+        id = db.execute('SELECT staff_id FROM staff WHERE username = ?', user_name)
 
         # Remember registered user
-       
+        session['user_id'] = id
 
         # Redirect user to a home page
         return redirect('/')
