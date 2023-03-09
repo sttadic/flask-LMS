@@ -136,4 +136,5 @@ def register():
 @login_required
 def index():
 
+    # Just show index.html
     return render_template('index.html')
