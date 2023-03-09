@@ -4,6 +4,7 @@ from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+from functools import wraps
 
 
 # Configure application
@@ -34,8 +35,105 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if session.get("user_id") is None:
-            return redirect(url_for('login', next=request.url))
+            return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
 
 
+# Log user in
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+
+    # Clear any user_id
+    session.clear()
+
+    # User reached route via GET
+    if request.method == 'GET':
+        return render_template('login.html')
+    
+    # User reached route via POST
+    else:
+        # Ensure username and password are submitted
+        if not request.form.get('username') or not request.form.get('password'):
+            return render_template('error.html', error='Username and password fields are required')
+        
+        # Query database for username
+        user_name = db.execute('SELECT * FROM staff WHERE username = ?', request.form.get('username'))
+
+        # Ensure username exists and password is correct
+        if len(user_name) != 1 or not check_password_hash(user_name[0]['hash'], request.form.get('password')):
+            return render_template('error.html', error='Incorrect username and/or password')
+        
+        # Remember user that has logged in
+        session['user_id'] = user_name[0]['staff_id']
+
+        # Redirect user to a home page
+        return redirect('/')
+    
+
+# Logout
+@app.route('/logout')
+def logout():
+    
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect('/login')
+
+
+# Register new user
+@app.route('/register', methods = ['GET', 'POST'])
+def register():
+
+    # User reached route via GET
+    if request.method == 'GET':
+        return render_template('register.html')
+
+    # User reached route via POST
+    else:
+
+        # Get name form user input
+        name = request.form.get('name')
+
+        # Get username form user input
+        user_name = request.form.get('username')
+        
+        # Check if username provided
+        if not user_name:
+            return render_template('error.html', error='Please provide username')
+        
+        # Check if username already in database
+        elif db.execute('SELECT username FROM staff WHERE username = ?', user_name):
+            return render_template('error.html', error='Username already exists')
+
+        # Get password and confirmation password from user input
+        password = request.form.get('password')
+        confirmation = request.form.get('confirmation')
+
+        # Check if password provided
+        if not password:
+            return render_template('error.html', error='Please provide password')
+        
+        # Ensure password and confirmation password match
+        elif password != confirmation:
+            return render_template('error.html', error='Password do not match confirmation password')
+        
+        # Store password hash, name and username into database
+        hash = generate_password_hash('password')
+
+        db.execute('INSERT INTO staff (name, username, hash) VALUES (?, ?, ?)', name, user_name, hash)
+
+        # Remember registered user
+       
+
+        # Redirect user to a home page
+        return redirect('/')
+    
+
+# Index page
+@app.route('/')
+@login_required
+def index():
+
+    return render_template('index.html')
