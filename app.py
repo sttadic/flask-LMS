@@ -120,6 +120,8 @@ def register():
 
         # Store name, username and password hash into database
         db.execute('INSERT INTO staff (name, username, hash) VALUES (?, ?, ?)', request.form.get('name'), user_name, hash)
+        
+        # Get staff_id from database
         id = db.execute('SELECT staff_id FROM staff WHERE username = ?', user_name)
 
         # Remember registered user

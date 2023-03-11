@@ -5,13 +5,18 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/login" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
+    <div class="aaa">
+    <form id="forms" action="/login" method="post">
+        <h4 class="form_name">LOG IN</h4>        
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">Username</span>
+            <input class="form-control" type="text" name="username" autocomplete="off" autofocus>
+        </div>        
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+            <input class="form-control" type="password" name="password" autocomplete="off">
         </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
-        </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
+        <button id="input-button" type="submit">Log In</button>
     </form>
+</div>
 {% endblock %}

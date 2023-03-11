@@ -1,9 +1,17 @@
+/* Layout style */
 body {
-    background-color: rgb(182, 182, 182) ;
+    background-image: url("pattern.jpg");
     background-attachment: fixed;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-position: center center; 
+    background-size: 100% 100%; 
+}
+
+nav {
+    background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
+    border-bottom: solid black 0.1rem;
 }
 
 .navbar {
@@ -18,11 +26,12 @@ body {
     margin-right: 3rem;
     border-radius: 10%;
     padding: 0 0.3rem;
-    font-size: xx-large;
+    font-size: 2rem;
+    background-color: rgb(240, 189, 33);
 }
 
 .dropdown-item:hover {
-    background-color: rgb(202, 160, 33);
+    background-color: rgb(240, 189, 33);;
 }
 
 .nav-link {
@@ -30,18 +39,89 @@ body {
 }
 
 .nav-link:hover, .nav-link:focus {
-    color: rgb(202, 160, 33);
+    color: rgb(240, 189, 33);;
 }
 
 footer {
+    background-image: linear-gradient(0deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     margin-top: auto;
     padding: 1.5rem;
-    color: rgb(202, 160, 33);
+    color: rgb(240, 189, 33);;
     font-size: smaller;
     text-align: center;
+    border-top: solid black 0.1rem;
 }
 
 .navbar-toggler {
-    background-color:rgb(202, 160, 33);
+    background-color:rgb(240, 189, 33);;
     font-size: 1rem;
+}
+
+/* Error image */
+.container {
+    position: relative;
+    text-align: center;
+}
+
+#error {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+}
+
+/* Login and register form */
+#forms {
+    margin: 3rem auto;
+    padding-bottom: 2rem;
+    width: 30%;
+    min-width: 15rem;
+    border-radius: 0.6rem;
+    border: black solid;
+    box-shadow: 0.7rem 0.7rem;
+}
+
+.form_name {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
+    color: white;
+    width: 100%;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.input-group {
+    padding: 1rem;
+}
+
+.input-group-text {
+    background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
+    color:white;
+    font-size: 1.2rem;
+    padding: 0 2rem 0 2rem;
+    width: 12rem;
+    justify-content: center;
+}
+
+.form-control {
+    background: none;
+    border: 0.05rem solid black;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0.3rem rgb(240, 189, 33);
+    border: 0.01rem black;
+}
+
+#input-button {
+    color: white;
+    background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    padding: 0.2rem 5rem 0.2rem 5rem;
+    border-radius: 0.5rem;
+}
+
+#input-button:hover {
+    box-shadow: 0 0 5px rgb(240, 189, 33);;
 }
