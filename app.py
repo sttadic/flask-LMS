@@ -55,14 +55,14 @@ def login():
     else:
         # Ensure username and password are submitted
         if not request.form.get('username') or not request.form.get('password'):
-            return render_template('error.html', error='Username and password fields are required')
+            return render_template('login.html', error='Username and password fields are required')
         
         # Query database for username
         user_name = db.execute('SELECT * FROM staff WHERE username = ?', request.form.get('username'))
 
         # Ensure username exists and password is correct
         if len(user_name) != 1 or not check_password_hash(user_name[0]['hash'], request.form.get('password')):
-            return render_template('error.html', error='Incorrect username and/or password')
+            return render_template('login.html', error='Incorrect username and/or password')
         
         # Remember user that has logged in
         session['user_id'] = user_name[0]['staff_id']
@@ -92,28 +92,31 @@ def register():
 
     # User reached route via POST
     else:
+        # Check if name provided
+        if not request.form.get('name'):
+            return render_template('register.html', error='Please provide name')
 
         # Get username from user input
         user_name = request.form.get('username')
         
         # Check if username provided
         if not user_name:
-            return render_template('error.html', error='Please provide username')
+            return render_template('register.html', error='Please provide username')
         
         # Check if username already in database
         elif db.execute('SELECT * FROM staff WHERE username = ?', user_name):
-            return render_template('error.html', error='Username already exists')
+            return render_template('register.html', error='Username already exists')
 
         # Get password from user input
         password = request.form.get('password')
 
         # Check if password provided
         if not password:
-            return render_template('error.html', error='Please provide password')
+            return render_template('register.html', error='Please provide password')
         
         # Ensure password and confirmation password match
         elif password != request.form.get('confirmation'):
-            return render_template('error.html', error='Password do not match confirmation password')
+            return render_template('register.html', error='Password do not match confirmation password')
         
         # Generate hash for password
         hash = generate_password_hash(password)

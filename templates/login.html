@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block main %}
-    <div class="aaa">
     <form id="forms" action="/login" method="post">
         <h4 class="form_name">LOG IN</h4>        
         <div class="input-group">
@@ -18,5 +17,5 @@
         </div>
         <button id="input-button" type="submit">Log In</button>
     </form>
-</div>
+    <p id="error">{{ error }}</p>
 {% endblock %}

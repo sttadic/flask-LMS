@@ -53,20 +53,18 @@ footer {
 }
 
 .navbar-toggler {
-    background-color:rgb(240, 189, 33);;
+    background-color:rgb(240, 189, 33);
     font-size: 1rem;
 }
 
-/* Error image */
-.container {
-    position: relative;
-    text-align: center;
-}
-
+/* Error */
 #error {
-    position: absolute;
-    bottom: 8px;
-    left: 16px;
+    margin: auto;
+    font-family: "Bookman Old Style", Verdana;
+    font-size: x-large;
+    font-style: italic;
+    text-align: center;
+    color: black;
 }
 
 /* Login and register form */
@@ -87,6 +85,7 @@ footer {
     color: white;
     width: 100%;
     border-radius: 0.5rem 0.5rem 0 0;
+    border-bottom: 0.1rem solid rgb(240, 189, 33);
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
