@@ -6,7 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     background-position: center center; 
-    background-size: 100% 100%; 
+    background-size: cover; 
 }
 
 nav {
@@ -57,17 +57,24 @@ footer {
     font-size: 1rem;
 }
 
-/* Error */
+/* Error messages */
 #error {
     margin: auto;
     font-family: "Bookman Old Style", Verdana;
-    font-size: x-large;
+    font-size: large;
     font-style: italic;
     text-align: center;
     color: black;
 }
 
-/* Login and register form */
+.alert {
+    margin: auto;
+    width: fit-content;
+    background-color: rgb(240, 189, 33);
+    box-shadow: 0.7rem 0.7rem; 
+}
+
+/* Login and register forms */
 #forms {
     margin: 3rem auto;
     padding-bottom: 2rem;
