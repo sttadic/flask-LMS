@@ -173,6 +173,13 @@ def title():
     # Query database for books and sort by title
     books = db.execute('SELECT * FROM books ORDER BY title ASC')
 
+    # Search
+    q = request.args.get('query')
+    if q:
+        # Query database for title or author based on search input and render template with results
+        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ?', '%' + q + '%', '%' + q + '%')
+        return render_template('books.html', name=name, books=books)
+
     return render_template('books.html', books=books, name=name)
 
 
@@ -190,6 +197,13 @@ def author():
     # Query database for books and sort by author
     books = db.execute('SELECT * FROM books ORDER BY author ASC')
 
+    # Search
+    q = request.args.get('query')
+    if q:
+        # Query database for title or author based on search input and render template with results
+        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ?', '%' + q + '%', '%' + q + '%')
+        return render_template('books.html', name=name, books=books)
+
     return render_template('books.html', books=books, name=name)
 
 
@@ -204,7 +218,7 @@ def genre():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
-    # Query database for books and sort by author
+    # Query database for books and sort by genre
     books = db.execute('SELECT * FROM books ORDER BY genre ASC')
 
     # Search
