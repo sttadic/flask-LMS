@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block search %}
+<form class="d-flex" role="search">
+    <input class="search me-2" type="search" name="query" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-warning" type="submit">Search</button>
+</form>
+{% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>            
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Genre</th>          
+            <th scope="col">Published</th>
+            <th scope="col">Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <th>{{ book.id }}</th>            
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td> 
+            <td>{{ book.genre }}</td>           
+            <td>{{ book.year }}</td>
+            <td>{{ book.stock }}</td>            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

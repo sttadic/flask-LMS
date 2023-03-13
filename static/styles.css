@@ -135,5 +135,12 @@ footer {
 }
 
 #input-button:hover {
-    box-shadow: 0 0 5px rgb(240, 189, 33);;
+    box-shadow: 0 0 5px rgb(240, 189, 33);
+}
+
+/* After login */
+#user {
+    color: rgb(240, 189, 33);    
+    float: right;
+    margin-left: 2rem;    
 }

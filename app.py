@@ -135,7 +135,7 @@ def register():
         id = db.execute('SELECT staff_id FROM staff WHERE username = ?', user_name)
 
         # Remember registered user
-        session['user_id'] = id
+        session['user_id'] = id[0]['staff_id']
 
         # Redirect user to a home page
         return redirect('/')
@@ -145,6 +145,72 @@ def register():
 @app.route('/')
 @login_required
 def index():
+    '''Show list of issued books'''
 
-    # Just show index.html
-    return render_template('index.html')
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    #
+
+    # Render index.html
+    return render_template('index.html', name=name)
+
+
+@app.route('/title')
+@login_required
+def title():
+    '''List books sorted alphabetically by title'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # Query database for books and sort by title
+    books = db.execute('SELECT * FROM books ORDER BY title ASC')
+
+    return render_template('books.html', books=books, name=name)
+
+
+@app.route('/author')
+@login_required
+def author():
+    '''List books sorted alphabetically by author name'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # Query database for books and sort by author
+    books = db.execute('SELECT * FROM books ORDER BY author ASC')
+
+    return render_template('books.html', books=books, name=name)
+
+
+@app.route('/genre')
+@login_required
+def genre():
+    '''List books grouped by genre'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # Query database for books and sort by author
+    books = db.execute('SELECT * FROM books ORDER BY genre ASC')
+
+    # Search
+    if request.args.get('query'):
+    
+        books = db.execute('SELECT * FROM books WHERE title LIKE ?', '%' + request.args.get('query') + '%')
+        return render_template('books.html', name=name, books=books)
+
+    return render_template('books.html', books=books, name=name)
