@@ -208,9 +208,10 @@ def genre():
     books = db.execute('SELECT * FROM books ORDER BY genre ASC')
 
     # Search
-    if request.args.get('query'):
-    
-        books = db.execute('SELECT * FROM books WHERE title LIKE ?', '%' + request.args.get('query') + '%')
+    q = request.args.get('query')
+    if q:
+        # Query database for title or author based on search input and render template with results
+        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ?', '%' + q + '%', '%' + q + '%')
         return render_template('books.html', name=name, books=books)
 
     return render_template('books.html', books=books, name=name)
