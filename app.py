@@ -159,10 +159,10 @@ def index():
     return render_template('index.html', name=name)
 
 
-@app.route('/title')
+@app.route('/books')
 @login_required
-def title():
-    '''List books sorted alphabetically by title'''
+def books():
+    '''List books sorted alphabetically by title, author or genre'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -170,62 +170,29 @@ def title():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
-    # Query database for books and sort by title
-    books = db.execute('SELECT * FROM books ORDER BY title ASC')
-
-    # Search
+    # User reached route via 'By Title' link
+    if request.args.get('action') == 'title':
+        # Query database for books and sort by title
+        books = db.execute('SELECT * FROM books ORDER BY title ASC')
+        return render_template('books.html', books=books, name=name)
+    
+    # User reached route via 'By Author' link
+    elif request.args.get('action') == 'author':
+        # Query database for books and sort by author
+        books = db.execute('SELECT * FROM books ORDER BY author ASC')
+        return render_template('books.html', books=books, name=name)
+    
+    # User reached route via 'By Genre' link
+    elif request.args.get('action') == 'genre':
+        # Query database for books and sort by genre
+        books = db.execute('SELECT * FROM books ORDER BY genre ASC')
+        return render_template('books.html', books=books, name=name)
+    
+    # Search books title or author
     q = request.args.get('query')
     if q:
-        # Query database for title or author based on search input and render template with results
+        # Query database for title or author based on the search input and render template with results
         books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ?', '%' + q + '%', '%' + q + '%')
         return render_template('books.html', name=name, books=books)
 
-    return render_template('books.html', books=books, name=name)
-
-
-@app.route('/author')
-@login_required
-def author():
-    '''List books sorted alphabetically by author name'''
-
-    # Get user_id from session
-    user_id = session['user_id']
-
-    # Query database for librarian name
-    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
-
-    # Query database for books and sort by author
-    books = db.execute('SELECT * FROM books ORDER BY author ASC')
-
-    # Search
-    q = request.args.get('query')
-    if q:
-        # Query database for title or author based on search input and render template with results
-        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ?', '%' + q + '%', '%' + q + '%')
-        return render_template('books.html', name=name, books=books)
-
-    return render_template('books.html', books=books, name=name)
-
-
-@app.route('/genre')
-@login_required
-def genre():
-    '''List books grouped by genre'''
-
-    # Get user_id from session
-    user_id = session['user_id']
-
-    # Query database for librarian name
-    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
-
-    # Query database for books and sort by genre
-    books = db.execute('SELECT * FROM books ORDER BY genre ASC')
-
-    # Search
-    q = request.args.get('query')
-    if q:
-        # Query database for title or author based on search input and render template with results
-        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ?', '%' + q + '%', '%' + q + '%')
-        return render_template('books.html', name=name, books=books)
-
-    return render_template('books.html', books=books, name=name)
+   
