@@ -145,7 +145,7 @@ footer {
     margin-left: 2rem;    
 }
 
-/* Books table style*/
+/* Books and members table style*/
 .table {
     font-weight: bold;
 }
@@ -154,13 +154,26 @@ th {
     font: caption;
 }
 
-.submit-button {
+.table-button {
     color: white;
     background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     border-radius: 0.5rem;
 }
 
-.submit-button:hover {
+.table-button:hover {
+    border-color: rgb(240, 189, 33);
+    color: rgb(240, 189, 33);
+}
+
+#member-button {
+    color: white;
+    background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 3rem;
+}
+
+#member-button:hover {
     border-color: rgb(240, 189, 33);
     color: rgb(240, 189, 33);
 }

@@ -40,9 +40,9 @@ def login_required(f):
     return decorated_function
 
 
-# Log user in
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    '''Librarian login'''
 
     # Clear any user_id
     session.clear()
@@ -73,9 +73,9 @@ def login():
         return redirect('/')
     
 
-# Logout
 @app.route('/logout')
 def logout():
+    '''Librarian logout'''
     
     # Forget any user_id
     session.clear()
@@ -84,9 +84,9 @@ def logout():
     return redirect('/login')
 
 
-# Register new user
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
+    '''Register librarian'''
 
     # User reached route via GET
     if request.method == 'GET':
@@ -138,14 +138,13 @@ def register():
         session['user_id'] = id[0]['staff_id']
 
         # Redirect user to a home page
-        return redirect('/')
-    
+        return redirect('/')    
 
-# Index page
+
 @app.route('/')
 @login_required
 def index():
-    '''Show list of issued books'''
+    '''Index page: show list of issued books'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -162,7 +161,7 @@ def index():
 @app.route('/books')
 @login_required
 def books():
-    '''List books sorted alphabetically by title, author or genre'''
+    '''Books sorted alphabetically by title, author or genre. Search and issue book options'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -195,4 +194,26 @@ def books():
         books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', '%' + q + '%')
         return render_template('books.html', name=name, books=books)
 
-   
+
+@app.route('/members')
+@login_required
+def members():
+    '''Show list of all members with options to manage and add new ones'''
+
+     # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # Query database for members
+    members = db.execute('SELECT * FROM members ORDER BY name ASC')
+
+    # Search members
+    q = request.args.get('query')
+    if q:
+        # Query database for id and name based on the search input and render template with results
+        members = db.execute('SELECT * FROM members WHERE member_id LIKE ? OR name LIKE ?', '%' + q + '%', '%' + q + '%')
+        return render_template('members.html', name=name, members=members)
+
+    return render_template('members.html', name=name, members=members)

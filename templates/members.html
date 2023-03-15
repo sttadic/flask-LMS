@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}Members{% endblock %}
+
+{% block search %}
+<form class="d-flex" role="search">
+    <input class="search me-2" type="search" name="query" autocomplete="off" placeholder="ID or Name" aria-label="Search">
+    <button class="btn btn-outline-warning" type="submit">Search</button>
+</form>
+{% endblock %}
+
+{% block main %}
+<form>
+    <button id="member-button">Add new member</button>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>            
+            <th scope="col">NAME</th>
+            <th scope="col">EMAIL</th>
+            <th scope="col">ADDRESS</th>          
+            <th scope="col">PHONE</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.member_id }}</td>            
+            <td>{{ member.name }}</td>
+            <td>{{ member.email }}</td> 
+            <td>{{ member.address }}</td>           
+            <td>{{ member.phone }}</td>
+            <td><button action="/manage" class="table-button">Manage</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
