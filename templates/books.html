@@ -2,7 +2,7 @@
 
 {% block search %}
 <form class="d-flex" role="search">
-    <input class="search me-2" type="search" name="query" placeholder="Search" aria-label="Search">
+    <input class="search me-2" type="search" name="query" autocomplete="off" placeholder="ID, Title or Author" aria-label="Search">
     <button class="btn btn-outline-warning" type="submit">Search</button>
 </form>
 {% endblock %}
@@ -12,11 +12,11 @@
     <thead>
         <tr>
             <th scope="col">ID</th>            
-            <th scope="col">Title</th>
-            <th scope="col">Author</th>
-            <th scope="col">Genre</th>          
-            <th scope="col">Published</th>
-            <th scope="col">Stock</th>
+            <th scope="col">TITLE</th>
+            <th scope="col">AUTHOR</th>
+            <th scope="col">GENRE</th>          
+            <th scope="col">PUBLISHED</th>
+            <th scope="col">STOCK</th>
         </tr>
     </thead>
     <tbody>
@@ -27,7 +27,8 @@
             <td>{{ book.author }}</td> 
             <td>{{ book.genre }}</td>           
             <td>{{ book.year }}</td>
-            <td>{{ book.stock }}</td>            
+            <td>{{ book.stock }}</td>
+            <td><button action="/issue" class="submit-button" type="submit">Issue book</button></td>
         </tr>
         {% endfor %}
     </tbody>

@@ -144,3 +144,23 @@ footer {
     float: right;
     margin-left: 2rem;    
 }
+
+/* Books table style*/
+.table {
+    font-weight: bold;
+}
+
+th {
+    font: caption;
+}
+
+.submit-button {
+    color: white;
+    background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
+    border-radius: 0.5rem;
+}
+
+.submit-button:hover {
+    border-color: rgb(240, 189, 33);
+    color: rgb(240, 189, 33);
+}

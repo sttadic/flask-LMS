@@ -171,19 +171,19 @@ def books():
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
     # User reached route via 'By Title' link
-    if request.args.get('action') == 'title':
+    if request.args.get('sort') == 'title':
         # Query database for books and sort by title
         books = db.execute('SELECT * FROM books ORDER BY title ASC')
         return render_template('books.html', books=books, name=name)
     
     # User reached route via 'By Author' link
-    elif request.args.get('action') == 'author':
+    elif request.args.get('sort') == 'author':
         # Query database for books and sort by author
         books = db.execute('SELECT * FROM books ORDER BY author ASC')
         return render_template('books.html', books=books, name=name)
     
     # User reached route via 'By Genre' link
-    elif request.args.get('action') == 'genre':
+    elif request.args.get('sort') == 'genre':
         # Query database for books and sort by genre
         books = db.execute('SELECT * FROM books ORDER BY genre ASC')
         return render_template('books.html', books=books, name=name)
@@ -191,8 +191,8 @@ def books():
     # Search books title or author
     q = request.args.get('query')
     if q:
-        # Query database for title or author based on the search input and render template with results
-        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ?', '%' + q + '%', '%' + q + '%')
+        # Query database for id, title and author based on the search input and render template with results
+        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', '%' + q + '%')
         return render_template('books.html', name=name, books=books)
 
    
