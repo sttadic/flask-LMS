@@ -10,10 +10,12 @@
 {% endblock %}
 
 {% block main %}
-<form>
-    <button id="member-button">Add new member</button>
+<form action="/new-member">
+    <button id="member-button">Add Member</button>
 </form>
-<table class="table table-striped">
+<p class="note">In order to edit member details, select the member's field you wish to amend.
+   To save a desired change please select the 'Edit' button at the far right of the member's row. </p>
+<table class="table table-striped" spellcheck="false">
     <thead>
         <tr>
             <th scope="col">ID</th>            
@@ -26,12 +28,15 @@
     <tbody>
         {% for member in members %}
         <tr>
-            <td>{{ member.member_id }}</td>            
-            <td>{{ member.name }}</td>
-            <td>{{ member.email }}</td> 
-            <td>{{ member.address }}</td>           
-            <td>{{ member.phone }}</td>
-            <td><button action="/manage" class="table-button">Manage</button></td>
+            <form action="/members" method="POST" onsubmit="return confirm('Are you sure you want to proceed?')">
+                <td><input type="text" name="id" value="{{ member.member_id }}" hidden>{{ member.member_id }}</td>            
+                <td><textarea name="name" rows="1" cols="30">{{ member.name }}</textarea></td>
+                <td><textarea name="email" rows="1" cols="30">{{ member.email }}</textarea></td> 
+                <td><textarea name="address" rows="1" cols="45">{{ member.address }}</textarea></td>           
+                <td><textarea name="phone" rows="1" cols="15">{{ member.phone }}</textarea></td>
+                <td><button name="button" value="edit" class="table-button" style="padding: 0 0.8rem">Edit</button></td>
+                <td><button name="button" value="delete" class="table-button">Remove</button></td>
+            </form>
         </tr>
         {% endfor %}
     </tbody>

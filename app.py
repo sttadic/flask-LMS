@@ -195,25 +195,106 @@ def books():
         return render_template('books.html', name=name, books=books)
 
 
-@app.route('/members')
+@app.route('/members', methods = ['GET', 'POST'])
 @login_required
 def members():
     '''Show list of all members with options to manage and add new ones'''
 
-     # Get user_id from session
+    # Get user_id from session
     user_id = session['user_id']
 
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
+    # User reached route via GET
+    if request.method == 'GET':      
+
+        # Query database for members
+        members = db.execute('SELECT * FROM members ORDER BY name ASC')  
+
+        # Search members
+        q = request.args.get('query')
+        if q:
+            # Query database for id and name of members based on the search input and render template with results
+            members = db.execute('SELECT * FROM members WHERE member_id LIKE ? OR name LIKE ?', '%' + q + '%', '%' + q + '%')
+            return render_template('members.html', name=name, members=members)
+
+    # User reached route via POST
+    else:
+        # Get the value of the button user clicked on
+        button = request.form.get('button')
+        
+        # If user clicked on delete
+        if button == 'delete':
+
+            # Delete member
+            db.execute('DELETE FROM members WHERE member_id == ?', request.form.get('id'))
+
+            # Query database for members
+            members = db.execute('SELECT * FROM members ORDER BY name ASC')
+   
+            # Render members.html
+            return render_template('members.html', name=name, members=members)
+        
+        # If user clicked on edit
+        elif button == 'edit':
+
+            name = request.form.get('name')
+            email = request.form.get('email')
+            address = request.form.get('address')
+            phone = request.form.get('phone')
+            
+            db.execute('UPDATE members SET name = ?, email = ?, address = ?, phone = ? WHERE member_id == ?', name, email, address, phone, request.form.get('id'))
+
+            # Query database for members
+            members = db.execute('SELECT * FROM members ORDER BY name ASC')
+   
+            # Render members.html
+            return render_template('members.html', name=name, members=members)
+    
     # Query database for members
     members = db.execute('SELECT * FROM members ORDER BY name ASC')
-
-    # Search members
-    q = request.args.get('query')
-    if q:
-        # Query database for id and name based on the search input and render template with results
-        members = db.execute('SELECT * FROM members WHERE member_id LIKE ? OR name LIKE ?', '%' + q + '%', '%' + q + '%')
-        return render_template('members.html', name=name, members=members)
-
+    
+    # Render members.html
     return render_template('members.html', name=name, members=members)
+
+
+@app.route('/new-member', methods = ['GET', 'POST'])
+@login_required
+def newMember():
+    '''Add new members form'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # User reached route via GET
+    if request.method == 'GET':
+        return render_template('new-member.html', name=name)
+    
+    # User reached route via POST
+    else:
+        # Get data from user input
+        member = request.form.get('name')
+        email = request.form.get('email')
+        address = request.form.get('address')
+        phone = request.form.get('phone')
+        
+        # Ensure all details are provided
+        if not member or not email or not address or not phone:
+            flash('All fields are required')
+            return render_template('new-member.html', name=name)
+
+        # Insert new member details into members table
+        db.execute('INSERT INTO members (name, email, address, phone) VALUES (?, ?, ?, ?)', member, email, address, phone)
+        
+        # Redirect to members route
+        return redirect('/members')
+    
+
+
+# Main driver function
+if __name__ == '__main__':
+    app.run()

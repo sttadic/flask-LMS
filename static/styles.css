@@ -145,7 +145,7 @@ footer {
     margin-left: 2rem;    
 }
 
-/* Books and members table style*/
+/* Books and members templates */
 .table {
     font-weight: bold;
 }
@@ -176,4 +176,22 @@ th {
 #member-button:hover {
     border-color: rgb(240, 189, 33);
     color: rgb(240, 189, 33);
+}
+
+textarea {
+    border: none;
+    resize: none;
+    padding: 0;
+    background-color: transparent;
+    text-align: center;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.note {
+    font-style: italic;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
 }
