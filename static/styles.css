@@ -9,7 +9,7 @@ body {
     background-size: cover; 
 }
 
-main {
+.wrapper {
     overflow: hidden;
     overflow-x: auto;
 }
@@ -141,6 +141,7 @@ footer {
 
 #input-button:hover {
     box-shadow: 0 0 5px rgb(240, 189, 33);
+    color: rgb(240, 189, 33);
 }
 
 /* After login */

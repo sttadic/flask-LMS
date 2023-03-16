@@ -224,7 +224,7 @@ def members():
         # Get the value of the button user clicked on
         button = request.form.get('button')
         
-        # If user clicked on delete
+        # If clicked on delete
         if button == 'delete':
 
             # Delete member
@@ -236,7 +236,7 @@ def members():
             # Render members.html
             return render_template('members.html', name=name, members=members)
         
-        # If user clicked on edit
+        # If clicked on edit
         elif button == 'edit':
 
             name = request.form.get('name')
@@ -244,12 +244,13 @@ def members():
             address = request.form.get('address')
             phone = request.form.get('phone')
             
+            # Update members table
             db.execute('UPDATE members SET name = ?, email = ?, address = ?, phone = ? WHERE member_id == ?', name, email, address, phone, request.form.get('id'))
 
             # Query database for members
             members = db.execute('SELECT * FROM members ORDER BY name ASC')
    
-            # Render members.html
+            # Render updated table on members.html
             return render_template('members.html', name=name, members=members)
     
     # Query database for members
@@ -276,7 +277,7 @@ def newMember():
     
     # User reached route via POST
     else:
-        # Get data from user input
+        # Get user input
         member = request.form.get('name')
         email = request.form.get('email')
         address = request.form.get('address')

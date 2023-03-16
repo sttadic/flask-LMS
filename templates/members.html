@@ -13,8 +13,11 @@
 <form action="/new-member">
     <button id="member-button">Add Member</button>
 </form>
-<p class="note">In order to edit member details, select the member's field you wish to amend.
-   To save a desired change please select the 'Edit' button at the far right of the member's row. </p>
+<p class="note">
+    In order to edit member details, select the member's field you wish to amend.
+    To save desired changes please select the 'Edit' button at the far right of the member's row.
+</p>
+<div class="wrapper">
 <table class="table table-striped" spellcheck="false">
     <thead>
         <tr>
@@ -41,4 +44,5 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}
