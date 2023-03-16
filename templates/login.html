@@ -5,7 +5,7 @@ Log In
 {% endblock %}
 
 {% block main %}
-<form id="forms" action="/login" method="post">
+<form class="forms" action="/login" method="post">
     <h4 class="form_name">LOG IN</h4>
     <div class="input-group">
         <span class="input-group-text" id="inputGroup-sizing-default">Username</span>
@@ -15,14 +15,14 @@ Log In
         <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
         <input class="form-control" type="password" name="password" autocomplete="off">
     </div>
-    <button id="input-button" type="submit">Log In</button>
+    <button class="input-button" type="submit">Log In</button>
 </form>
 <div calss="container">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     {% for message in messages %}
     <div class="alert alert-dismissible fade show" role="alert">
-        <span id="error">{{ message }}</span>
+        <span class="error">{{ message }}</span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}

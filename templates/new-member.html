@@ -3,7 +3,7 @@
 {% block title %}New member{% endblock %}
 
 {% block main %}
-<form id="forms" action="/new-member" method="post" onsubmit="return confirm('Please confirm new member details are correct.')">
+<form class="forms" action="/new-member" method="post" onsubmit="return confirm('Please confirm new member details are correct.')">
     <h4 class="form_name">NEW MEMBER FORM</h4>
     <div class="input-group">
         <span class="input-group-text" id="inputGroup-sizing-default">Full Name</span>
@@ -21,14 +21,14 @@
         <span class="input-group-text" id="inputGroup-sizing-default">Phone Number</span>
         <input class="form-control" type="text" name="phone" autocomplete="off">
     </div>
-    <button id="input-button" type="submit">Register</button>
+    <button class="input-button" type="submit">Register</button>
 </form>
-<div calss="container">
+<div class="container">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     {% for message in messages %}
     <div class="alert alert-dismissible fade show" role="alert">
-        <span id="error">{{ message }}</span>
+        <span class="error">{{ message }}</span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}

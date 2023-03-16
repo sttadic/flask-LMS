@@ -6,12 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     background-position: center center; 
-    background-size: cover; 
-}
-
-.wrapper {
-    overflow: hidden;
-    overflow-x: auto;
+    background-size: cover;
 }
 
 nav {
@@ -68,8 +63,8 @@ footer {
     font-size: 1rem;
 }
 
-/* Error messages */
-#error {
+/* Error flash messages */
+.error {
     margin: auto;
     font-family: "Bookman Old Style", Verdana;
     font-size: large;
@@ -85,8 +80,8 @@ footer {
     box-shadow: 0.7rem 0.7rem; 
 }
 
-/* Login and register form */
-#forms {
+/* Login, register and other forms */
+.forms {
     margin: 3rem auto;
     padding-bottom: 2rem;
     width: 30%;
@@ -130,7 +125,7 @@ footer {
     border: 0.01rem black;
 }
 
-#input-button {
+.input-button {
     color: white;
     background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     font-size: 1.2rem;
@@ -139,19 +134,24 @@ footer {
     border-radius: 0.5rem;
 }
 
-#input-button:hover {
+.input-button:hover {
     box-shadow: 0 0 5px rgb(240, 189, 33);
     color: rgb(240, 189, 33);
 }
 
-/* After login */
-#user {
+/* After login librarian name */
+.user {
     color: rgb(240, 189, 33);    
     float: right;
     margin-left: 2rem;    
 }
 
 /* Books and members templates */
+.wrapper {
+    overflow: hidden;
+    overflow-x: auto;
+}
+
 .table {
     font-weight: bold;
 }
@@ -171,7 +171,7 @@ th {
     color: rgb(240, 189, 33);
 }
 
-#member-button {
+.member-button {
     color: white;
     background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     border-radius: 0.5rem;
@@ -179,7 +179,7 @@ th {
     margin-bottom: 3rem;
 }
 
-#member-button:hover {
+.member-button:hover {
     border-color: rgb(240, 189, 33);
     color: rgb(240, 189, 33);
 }
