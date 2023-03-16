@@ -187,11 +187,11 @@ def books():
         books = db.execute('SELECT * FROM books ORDER BY genre ASC')
         return render_template('books.html', books=books, name=name)
     
-    # Search books title or author
+    # Search books title, author or id
     q = request.args.get('query')
     if q:
-        # Query database for id, title and author based on the search input and render template with results
-        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', '%' + q + '%')
+        # Query database for title, author and id (id requires precise search query) based on the search input and render template with results
+        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', q)
         return render_template('books.html', name=name, books=books)
 
 
@@ -216,7 +216,7 @@ def members():
         q = request.args.get('query')
         if q:
             # Query database for id and name of members based on the search input and render template with results
-            members = db.execute('SELECT * FROM members WHERE member_id LIKE ? OR name LIKE ?', '%' + q + '%', '%' + q + '%')
+            members = db.execute('SELECT * FROM members WHERE member_id LIKE ? OR name LIKE ?', q, '%' + q + '%')
             return render_template('members.html', name=name, members=members)
 
     # User reached route via POST

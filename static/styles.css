@@ -9,6 +9,11 @@ body {
     background-size: cover; 
 }
 
+main {
+    overflow: hidden;
+    overflow-x: auto;
+}
+
 nav {
     background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     border-bottom: solid black 0.1rem;
