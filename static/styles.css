@@ -1,4 +1,4 @@
-/* Layout style */
+/* Layout styling */
 body {
     background-image: url("pattern.jpg");
     background-attachment: fixed;
@@ -63,7 +63,7 @@ footer {
     font-size: 1rem;
 }
 
-/* Error flash messages */
+/* Flash messages styling */
 .error {
     margin: auto;
     font-family: "Bookman Old Style", Verdana;
@@ -80,7 +80,7 @@ footer {
     box-shadow: 0.7rem 0.7rem; 
 }
 
-/* Login, register and other forms */
+/* Forms styling */
 .forms {
     margin: 3rem auto;
     padding-bottom: 2rem;
@@ -139,14 +139,14 @@ footer {
     color: rgb(240, 189, 33);
 }
 
-/* After login librarian name */
+/* Logged in librarian name */
 .user {
     color: rgb(240, 189, 33);    
     float: right;
     margin-left: 2rem;    
 }
 
-/* Books and members templates */
+/* Books & members templates */
 .wrapper {
     overflow: hidden;
     overflow-x: auto;
@@ -196,8 +196,17 @@ textarea {
     cursor: pointer;
 }
 
+textarea:hover {
+    outline: 0.1rem solid rgb(240, 189, 33);
+    box-shadow: 0 0 2rem rgb(240, 189, 33);
+}
+
 .note {
-    font-style: italic;
+    
+    text-align: left;
     font-size: 1.1rem;
     margin-bottom: 2rem;
+    background-color: rgb(240, 189, 33);
+    outline: 0.05rem solid black;
+    border-radius: 0.4rem;
 }
