@@ -24,14 +24,14 @@
     </thead>
     <tbody>
         {% for book in books %}
-        <tr>
+        <tr class="row-data">
             <td>{{ book.id }}</td>            
             <td>{{ book.title }}</td>
             <td>{{ book.author }}</td> 
             <td>{{ book.genre }}</td>           
             <td>{{ book.year }}</td>
             <td>{{ book.stock }}</td>
-            <td><button action="/issue" class="table-button">Issue book</button></td>
+            <td><button action="/issue" class="button">Issue book</button></td>
         </tr>
         {% endfor %}
     </tbody>

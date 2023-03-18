@@ -55,7 +55,7 @@ def login():
     else:
         # Ensure username and password are submitted
         if not request.form.get('username') or not request.form.get('password'):
-            flash('Username and password are required fields!')
+            flash('Username and password fields are required!')
             return render_template('login.html')
         
         # Query database for username
@@ -86,7 +86,7 @@ def logout():
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
-    '''Register librarian'''
+    '''Register new librarian'''
 
     # User reached route via GET
     if request.method == 'GET':
@@ -94,9 +94,13 @@ def register():
 
     # User reached route via POST
     else:
-        # Check if name provided
-        if not request.form.get('name'):
-            flash('Name is required field')
+
+        # Get name from user input
+        name = request.form.get('name')
+
+        # Ensure name is provided
+        if not name:
+            flash('Name field is required')
             return render_template('register.html')
 
         # Get username from user input
@@ -104,12 +108,12 @@ def register():
         
         # Check if username provided
         if not user_name:
-            flash('Username is required field')
+            flash('Username field is required')
             return render_template('register.html')
         
-        # Check if username already in database
+        # Username already in database
         elif db.execute('SELECT * FROM staff WHERE username = ?', user_name):
-            flash('That username already exists')
+            flash('Username already exists')
             return render_template('register.html')
 
         # Get password from user input
@@ -117,7 +121,12 @@ def register():
 
         # Check if password provided
         if not password:
-            flash('Password is required field')
+            flash('Password field is required')
+            return render_template('register.html')
+        
+        # Ensure password is at least 4 characters long
+        if len(password) < 4:
+            flash('Password must be at least four characters long')
             return render_template('register.html')
         
         # Ensure password and confirmation password match
@@ -129,7 +138,7 @@ def register():
         hash = generate_password_hash(password)
 
         # Store name, username and password hash into database
-        db.execute('INSERT INTO staff (name, username, hash) VALUES (?, ?, ?)', request.form.get('name'), user_name, hash)
+        db.execute('INSERT INTO staff (name, username, hash) VALUES (?, ?, ?)', name, user_name, hash)
         
         # Get staff_id from database
         id = db.execute('SELECT staff_id FROM staff WHERE username = ?', user_name)
@@ -144,7 +153,7 @@ def register():
 @app.route('/')
 @login_required
 def index():
-    '''Index page: show list of issued books'''
+    '''Index page: show list of currently issued books'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -161,7 +170,7 @@ def index():
 @app.route('/books')
 @login_required
 def books():
-    '''Books sorted alphabetically by title, author or genre. Search and issue book options'''
+    '''Books sorted alphabetically by title, author or genre. Search and issue book features'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -171,24 +180,29 @@ def books():
 
     # User reached route via 'By Title' link
     if request.args.get('sort') == 'title':
+        
         # Query database for books and sort by title
         books = db.execute('SELECT * FROM books ORDER BY title ASC')
         return render_template('books.html', books=books, name=name)
     
     # User reached route via 'By Author' link
     elif request.args.get('sort') == 'author':
+        
         # Query database for books and sort by author
         books = db.execute('SELECT * FROM books ORDER BY author ASC')
         return render_template('books.html', books=books, name=name)
     
     # User reached route via 'By Genre' link
     elif request.args.get('sort') == 'genre':
+        
         # Query database for books and sort by genre
         books = db.execute('SELECT * FROM books ORDER BY genre ASC')
         return render_template('books.html', books=books, name=name)
     
-    # Search books title, author or id
+    # Search books query by user
     q = request.args.get('query')
+
+    # Search query submitted
     if q:
         # Query database for title, author and id (id requires precise search query) based on the search input and render template with results
         books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', q)
@@ -212,8 +226,10 @@ def members():
         # Query database for members
         members = db.execute('SELECT * FROM members ORDER BY name ASC')  
 
-        # Search members
+        # Search members query by user
         q = request.args.get('query')
+
+        # Search query submitted
         if q:
             # Query database for id and name of members based on the search input and render template with results
             members = db.execute('SELECT * FROM members WHERE member_id LIKE ? OR name LIKE ?', q, '%' + q + '%')
@@ -230,10 +246,13 @@ def members():
             # Delete member
             db.execute('DELETE FROM members WHERE member_id == ?', request.form.get('id'))
 
+            # Flash a message that memeber is removed
+            flash('Member removed!')
+
             # Query database for members
             members = db.execute('SELECT * FROM members ORDER BY name ASC')
    
-            # Render members.html
+            # Render updated members.html template
             return render_template('members.html', name=name, members=members)
         
         # If clicked on edit
@@ -247,10 +266,13 @@ def members():
             # Update members table
             db.execute('UPDATE members SET name = ?, email = ?, address = ?, phone = ? WHERE member_id == ?', name, email, address, phone, request.form.get('id'))
 
+            # Flash a message
+            flash('Member details changed!')
+
             # Query database for members
             members = db.execute('SELECT * FROM members ORDER BY name ASC')
    
-            # Render updated table on members.html
+            # Render updated members.html template
             return render_template('members.html', name=name, members=members)
     
     # Query database for members
@@ -262,7 +284,7 @@ def members():
 
 @app.route('/new-member', methods = ['GET', 'POST'])
 @login_required
-def newMember():
+def new_member():
     '''Add new members form'''
 
     # Get user_id from session
@@ -286,13 +308,51 @@ def newMember():
         # Ensure all details are provided
         if not member or not email or not address or not phone:
             flash('All fields are required')
-            return render_template('new-member.html', name=name)
+            return render_template('new-member.html', name=name)        
 
         # Insert new member details into members table
         db.execute('INSERT INTO members (name, email, address, phone) VALUES (?, ?, ?, ?)', member, email, address, phone)
         
+        # Flash member added message on redirect
+        flash(f'A member {member} joins the library.')
+       
         # Redirect to members route
         return redirect('/members')
+    
+
+@app.route('/manage-books', methods = ['GET', 'POST'])
+@login_required
+def manage_books():
+    '''Books management'''
+
+    # Get user_id from session
+    user_id =  session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # User reached route via GET
+    if request.method == 'GET':
+        
+        # Search books query by user
+        q = request.args.get('query')
+
+        # Search query submitted
+        if q:
+            # Query database for title, author and id (id requires precise search query) based on the search input and render template with results
+            books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', q)
+            return render_template('manage-books.html', name=name, books=books)
+        
+        # Query database for books and sort by title
+        books = db.execute('SELECT * FROM books ORDER BY title ASC')
+        return render_template('manage-books.html', books=books, name=name)       
+    
+    # User reached route via POST
+    else:
+        
+        return render_template('manage-books.html', name=name)
+
+
     
 
 

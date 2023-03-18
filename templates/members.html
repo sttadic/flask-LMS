@@ -3,7 +3,7 @@
 {% block title %}Members{% endblock %}
 
 {% block search %}
-<form class="d-flex" role="search">
+<form class="d-flex aaa" role="search">
     <input class="search me-2" type="search" name="query" autocomplete="off" placeholder="ID or Name" aria-label="Search">
     <button class="btn btn-outline-warning" type="submit">Search</button>
 </form>
@@ -11,8 +11,20 @@
 
 {% block main %}
 <form action="/new-member">
-    <button class="member-button">Add Member</button>
+    <button class="button btn-members">Add New Member</button>
 </form>
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show" role="alert">
+        <span class="error">{{ message }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
 <ul class="note">
     <li>In order to edit member details, select the member's field you wish to amend.
     To save desired changes please select the 'Edit' button at the far right of the member's row.</li>
@@ -32,15 +44,15 @@
     </thead>
     <tbody>
         {% for member in members %}
-        <tr>
+        <tr class="row-data">
             <form action="/members" method="POST" onsubmit="return confirm('Are you sure you want to proceed?')">
                 <td><input type="text" name="id" value="{{ member.member_id }}" hidden>{{ member.member_id }}</td>
                 <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="name" rows="1" cols="30">{{ member.name }}</textarea></td>
                 <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="email" rows="1" cols="30">{{ member.email }}</textarea></td> 
                 <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="address" rows="1" cols="40">{{ member.address }}</textarea></td>
                 <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="phone" rows="1" cols="15">{{ member.phone }}</textarea></td>
-                <td><button name="button" value="edit" class="table-button" style="padding: 0 0.8rem">Edit</button></td>
-                <td><button name="button" value="delete" class="table-button">Remove</button></td>
+                <td><button name="button" value="edit" class="button btn-edit">Edit</button></td>
+                <td><button name="button" value="delete" class="button">Remove</button></td>
             </form>
         </tr>
         {% endfor %}

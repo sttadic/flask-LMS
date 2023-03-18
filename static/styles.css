@@ -42,12 +42,6 @@ nav {
     color: rgb(240, 189, 33);;
 }
 
-.search {
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.3rem;
-}
-
 footer {
     background-image: linear-gradient(0deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     margin-top: auto;
@@ -64,6 +58,11 @@ footer {
 }
 
 /* Flash messages styling */
+.container {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
 .error {
     margin: auto;
     font-family: "Bookman Old Style", Verdana;
@@ -146,7 +145,18 @@ footer {
     margin-left: 2rem;    
 }
 
+.user span {
+    font-style: italic; 
+    padding-left: 0.5rem;
+}
+
 /* Books & members templates */
+.search {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+}
+
 .wrapper {
     overflow: hidden;
     overflow-x: auto;
@@ -160,26 +170,26 @@ th {
     font: caption;
 }
 
-.table-button {
+.button {
     color: white;
     background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     border-radius: 0.5rem;
 }
 
-.table-button:hover {
-    border-color: rgb(240, 189, 33);
-    color: rgb(240, 189, 33);
-}
-
-.member-button {
-    color: white;
-    background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
-    border-radius: 0.5rem;
+.btn-members {
     padding: 0.5rem;
-    margin-bottom: 3rem;
 }
 
-.member-button:hover {
+.btn-books {
+    margin-bottom: 3rem;
+    padding: 0.5rem;
+}
+
+.btn-edit {
+    padding: 0 0.8rem; 
+}
+
+.button:hover {
     border-color: rgb(240, 189, 33);
     color: rgb(240, 189, 33);
 }
@@ -202,11 +212,14 @@ textarea:hover {
 }
 
 .note {
-    
     text-align: left;
     font-size: 1.1rem;
-    margin-bottom: 2rem;
-    background-color: rgb(240, 189, 33);
-    outline: 0.05rem solid black;
+    margin-bottom: 1.5rem;
+    background-color: rgb(240, 189, 33, 0.8);
+    padding: 0.5rem 2rem;
     border-radius: 0.4rem;
+}
+
+.row-data:hover  {
+    background-color: rgb(240, 189, 33, 0.3);
 }

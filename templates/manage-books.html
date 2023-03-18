@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}Books{% endblock %}
+
+{% block search %}
+<form class="d-flex" role="search">
+    <input class="search me-2" type="search" name="query" autocomplete="off" placeholder="ID, Title or Author" aria-label="Search">
+    <button class="btn btn-outline-warning" type="submit">Search</button>
+</form>
+{% endblock %}
+
+{% block main %}
+<form action="/new-book">
+    <button class="button btn-books">Add New Book</button>
+</form>
+<div class="wrapper">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>            
+            <th scope="col">TITLE</th>
+            <th scope="col">AUTHOR</th>
+            <th scope="col">GENRE</th>          
+            <th scope="col">PUBLISHED</th>
+            <th scope="col">STOCK</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr class="row-data">
+            <form action="/manage-books" method="POST" onsubmit="return confirm('Are you sure you want to proceed?')">
+                <td><input type="text" name="id" value="{{ book.id }}" hidden>{{ book.id }}</td>
+                <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="name" rows="1" cols="60">{{ book.title }}</textarea></td>
+                <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="name" rows="1" cols="30">{{ book.author }}</textarea></td> 
+                <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="name" rows="1" cols="15">{{ book.genre }}</textarea></td>           
+                <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="name" rows="1" cols="5">{{ book.year }}</textarea></td>
+                <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="name" rows="1" cols="3">{{ book.stock }}</textarea></td>
+                <td><button name="button" class="button btn-edit">Edit</button></td>
+                <td><button name="button" value="edit" class="button">Remove</button></td>
+            </form>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
