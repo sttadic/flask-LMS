@@ -207,6 +207,10 @@ def books():
         # Query database for title, author and id (id requires precise search query) based on the search input and render template with results
         books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', q)
         return render_template('books.html', name=name, books=books)
+    
+    # User reached route from navbar - query database for books and sort by title
+    books = db.execute('SELECT * FROM books ORDER BY title ASC')
+    return render_template('books.html', books=books, name=name)
 
 
 @app.route('/members', methods = ['GET', 'POST'])
@@ -242,12 +246,15 @@ def members():
         
         # If clicked on delete
         if button == 'delete':
+            
+            # Query databas for the name of a deleted member
+            removed = db.execute('SELECT name FROM members WHERE member_id == ?', request.form.get('id'))[0]['name']
 
             # Delete member
-            db.execute('DELETE FROM members WHERE member_id == ?', request.form.get('id'))
+            db.execute('DELETE FROM members WHERE member_id == ?', request.form.get('id'))            
 
             # Flash a message that memeber is removed
-            flash('Member removed!')
+            flash(f'Member {removed} has been removed.')
 
             # Query database for members
             members = db.execute('SELECT * FROM members ORDER BY name ASC')

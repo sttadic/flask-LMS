@@ -10,6 +10,12 @@
 {% endblock %}
 
 {% block main %}
+<div class="sort">
+    <span class="sort-by">Sort by:</span>
+    <a href="/books?sort=title"><button class="button">Title</button></a>
+    <a href="/books?sort=author"><button class="button">Author</button></a>
+    <a href="/books?sort=genre"><button class="button">Genre</button></a>
+</div>
 <div class="wrapper">
 <table class="table table-striped">
     <thead>

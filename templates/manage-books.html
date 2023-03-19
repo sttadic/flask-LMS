@@ -10,9 +10,21 @@
 {% endblock %}
 
 {% block main %}
-<form action="/new-book">
-    <button class="button btn-books">Add New Book</button>
-</form>
+<p>
+    <button class="button btn-members" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Instructions
+    </button>
+</p>
+<div class="collapse" id="collapseExample">
+    <div class="note">
+        <ul>
+            <li>In order to edit book details, select the book's field you wish to amend.
+            To save desired changes please select the 'Edit' button at the far right of the books's row.</li>
+            <li>To delete a book select 'Remove' button. Please note that this is a permanent action and
+            cannot be undone!</li>
+        </ul>
+    </div>
+</div>
 <div class="wrapper">
 <table class="table table-striped">
     <thead>

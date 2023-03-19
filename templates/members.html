@@ -10,9 +10,21 @@
 {% endblock %}
 
 {% block main %}
-<form action="/new-member">
-    <button class="button btn-members">Add New Member</button>
-</form>
+<p>
+    <button class="button btn-members" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Instructions
+    </button>
+</p>
+<div class="collapse" id="collapseExample">
+    <div class="note">
+        <ul>
+            <li>In order to edit member details, select the member's field you wish to amend.
+            To save desired changes please select the 'Edit' button at the far right of the member's row.</li>
+            <li>To delete a member select 'Remove' button. Please note that this is a permanent action and
+            cannot be undone!</li>
+        </ul>
+    </div>
+</div>
 <div class="container">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -25,21 +37,17 @@
     {% endif %}
     {% endwith %}
 </div>
-<ul class="note">
-    <li>In order to edit member details, select the member's field you wish to amend.
-    To save desired changes please select the 'Edit' button at the far right of the member's row.</li>
-    <li>To delete a member select 'Remove' button. Please note that this is a permanent action and
-    cannot be undone!</li>
-</ul>
 <div class="wrapper">
 <table class="table table-striped" spellcheck="false">
-    <thead>
+    <thead class="sticky-top table-top">
         <tr>
-            <th scope="col">ID</th>
+            <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>
             <th scope="col">NAME</th>
             <th scope="col">EMAIL</th>
             <th scope="col">ADDRESS</th>
             <th scope="col">PHONE</th>
+            <th scope="col"></th>
+            <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
         </tr>
     </thead>
     <tbody>

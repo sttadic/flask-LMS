@@ -7,6 +7,7 @@ body {
     flex-direction: column;
     background-position: center center; 
     background-size: cover;
+    overflow: hidden;
 }
 
 nav {
@@ -21,6 +22,12 @@ nav {
 .nav-item {
     padding: 0.5rem 1rem;
 }
+
+@media only screen and (max-width: 1185px) {
+    .nav-item {
+      padding: 0;
+    }
+  }
 
 .navbar-brand {
     margin-right: 3rem;
@@ -60,7 +67,7 @@ footer {
 /* Flash messages styling */
 .container {
     margin-top: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .error {
@@ -157,13 +164,30 @@ footer {
     padding: 0.3rem;
 }
 
+.sort {
+    margin-bottom: 2rem;
+}
+
+.sort-by {
+    font-size: 1.1rem;
+    padding-right: .2rem;
+}
+
 .wrapper {
     overflow: hidden;
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 60vh;
 }
 
 .table {
     font-weight: bold;
+    
+}
+
+.table-top {
+    background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
+    color: white;
 }
 
 th {
@@ -216,7 +240,7 @@ textarea:hover {
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
     background-color: rgb(240, 189, 33, 0.8);
-    padding: 0.5rem 2rem;
+    padding: 0.9rem 2rem 0.05rem 2rem;
     border-radius: 0.4rem;
 }
 
