@@ -66,7 +66,6 @@ footer {
 
 /* Flash messages styling */
 .container {
-    margin-top: 1rem;
     margin-bottom: 1rem;
 }
 
@@ -233,6 +232,11 @@ textarea {
 textarea:hover {
     outline: 0.1rem solid rgb(240, 189, 33);
     box-shadow: 0 0 2rem rgb(240, 189, 33);
+    background-color:antiquewhite;
+}
+
+textarea:focus {
+    background-color: white;
 }
 
 .note {

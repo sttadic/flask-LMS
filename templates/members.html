@@ -10,6 +10,18 @@
 {% endblock %}
 
 {% block main %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show" role="alert">
+        <span class="error">{{ message }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
 <p>
     <button class="button btn-members" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
         Instructions
@@ -24,18 +36,6 @@
             cannot be undone!</li>
         </ul>
     </div>
-</div>
-<div class="container">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-dismissible fade show" role="alert">
-        <span class="error">{{ message }}</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
 </div>
 <div class="wrapper">
 <table class="table table-striped" spellcheck="false">
@@ -60,7 +60,7 @@
                 <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="address" rows="1" cols="40">{{ member.address }}</textarea></td>
                 <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="phone" rows="1" cols="15">{{ member.phone }}</textarea></td>
                 <td><button name="button" value="edit" class="button btn-edit">Edit</button></td>
-                <td><button name="button" value="delete" class="button">Remove</button></td>
+                <td><button name="button" value="remove" class="button">Remove</button></td>
             </form>
         </tr>
         {% endfor %}

@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}New book{% endblock %}
+
+{% block main %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show" role="alert">
+        <span class="error">{{ message }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+<form class="forms" action="/new-book" method="post" onsubmit="return confirm('Please confirm that all details are correct.')">
+    <h4 class="form_name">NEW BOOK FORM</h4>
+    <div class="input-group">
+        <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+        <input class="form-control" type="text" name="title" autocomplete="off" autofocus>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text" id="inputGroup-sizing-default">Author</span>
+        <input class="form-control" type="text" name="author" autocomplete="off">
+    </div>
+    <div class="input-group">
+        <span class="input-group-text" id="inputGroup-sizing-default">Genre</span>
+        <input class="form-control" type="text" name="genre" autocomplete="off">
+    </div>
+    <div class="input-group">
+        <span class="input-group-text" id="inputGroup-sizing-default">Year Published</span>
+        <input class="form-control" type="text" name="year" autocomplete="off">
+    </div>
+    <div class="input-group">
+        <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
+        <input class="form-control" type="number" name="stock" autocomplete="off">
+    </div>
+    <button class="input-button" type="submit">Add Book</button>
+</form>
+{% endblock %}

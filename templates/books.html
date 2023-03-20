@@ -10,6 +10,18 @@
 {% endblock %}
 
 {% block main %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show" role="alert">
+        <span class="error">{{ message }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
 <div class="sort">
     <span class="sort-by">Sort by:</span>
     <a href="/books?sort=title"><button class="button">Title</button></a>
@@ -18,14 +30,15 @@
 </div>
 <div class="wrapper">
 <table class="table table-striped">
-    <thead>
+    <thead class="sticky-top table-top">
         <tr>
-            <th scope="col">ID</th>            
+            <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>            
             <th scope="col">TITLE</th>
             <th scope="col">AUTHOR</th>
             <th scope="col">GENRE</th>          
             <th scope="col">PUBLISHED</th>
             <th scope="col">STOCK</th>
+            <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
         </tr>
     </thead>
     <tbody>
