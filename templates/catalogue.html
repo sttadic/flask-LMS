@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}Catalogue{% endblock %}
+
+{% block search %}
+<form class="d-flex" role="search">
+    <input class="search me-2" type="search" name="query" autocomplete="off" placeholder="ID, Title or Author" aria-label="Search">
+    <button class="btn btn-outline-warning" type="submit">Search</button>
+</form>
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show" role="alert">
+        <span class="error">{{ message }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+<div class="sort">
+    <span class="sort-by">Sort by:</span>
+    <a href="/catalogue?sort=title"><button class="button">Title</button></a>
+    <a href="/catalogue?sort=author"><button class="button">Author</button></a>
+    <a href="/catalogue?sort=genre"><button class="button">Genre</button></a>
+</div>
+<div class="wrapper">
+<table class="table table-striped">
+    <thead class="sticky-top table-top">
+        <tr>
+            <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>            
+            <th scope="col">TITLE</th>
+            <th scope="col">AUTHOR</th>
+            <th scope="col">GENRE</th>          
+            <th scope="col">PUBLISHED</th>
+            <th scope="col">STOCK</th>
+            <th scope="col" style="border-radius: 0 0.7rem 0 0;"> AVAILABLE</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr class="row-data">
+            <td>{{ book.id }}</td>            
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td> 
+            <td>{{ book.genre }}</td>           
+            <td>{{ book.year }}</td>
+            <td>{{ book.stock }}</td>
+            <td>{{ availability }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

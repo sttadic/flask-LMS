@@ -167,10 +167,10 @@ def index():
     return render_template('index.html', name=name)
 
 
-@app.route('/books')
+@app.route('/catalogue')
 @login_required
-def books():
-    '''Books sorted alphabetically by title, author or genre. Search and issue book features'''
+def catalogue():
+    '''Books sorted alphabetically by title, author or genre. Current stock and search books feature'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -178,26 +178,25 @@ def books():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
-    # User reached route via 'By Title' link
+    # Sort by title
     if request.args.get('sort') == 'title':
         
-        # Query database for books and sort by title
-        books = db.execute('SELECT * FROM books ORDER BY title ASC')
-        return render_template('books.html', books=books, name=name)
+        # Redirect to catalogue route - default is sorted by title
+        return redirect('/catalogue')
     
-    # User reached route via 'By Author' link
+    # Sort by author
     elif request.args.get('sort') == 'author':
         
         # Query database for books and sort by author
         books = db.execute('SELECT * FROM books ORDER BY author ASC')
-        return render_template('books.html', books=books, name=name)
+        return render_template('catalogue.html', books=books, name=name)
     
-    # User reached route via 'By Genre' link
+    # Sort by genre
     elif request.args.get('sort') == 'genre':
         
         # Query database for books and sort by genre
         books = db.execute('SELECT * FROM books ORDER BY genre ASC')
-        return render_template('books.html', books=books, name=name)
+        return render_template('catalogue.html', books=books, name=name)
     
     # Search books query by user
     q = request.args.get('query')
@@ -206,11 +205,145 @@ def books():
     if q:
         # Query database for title, author and id (id requires precise search query) based on the search input and render template with results
         books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', q)
-        return render_template('books.html', name=name, books=books)
+        return render_template('catalogue.html', name=name, books=books)
     
     # User reached route from navbar - query database for books and sort by title
     books = db.execute('SELECT * FROM books ORDER BY title ASC')
-    return render_template('books.html', books=books, name=name)
+    return render_template('catalogue.html', books=books, name=name)
+
+
+@app.route('/books', methods = ['GET', 'POST'])
+@login_required
+def books():
+    '''Books management'''
+
+    # Get user_id from session
+    user_id =  session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # Query database for books and sort by title
+    books = db.execute('SELECT * FROM books ORDER BY title ASC')
+
+    # User reached route via GET
+    if request.method == 'GET':
+        
+        # Search books query by user
+        q = request.args.get('query')
+
+        # Search query submitted
+        if q:
+            # Query database for title, author and id (id requires precise search query) based on the search input and render template with results
+            books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', q)
+            return render_template('books.html', name=name, books=books)
+        
+        # Render manage books template
+        return render_template('books.html', books=books, name=name)       
+    
+    # User reached route via POST
+    else:
+        # Get the value of the button user clicked on
+        button = request.form.get('button')
+        
+        # Remove button selected
+        if button == 'remove':
+            
+            # Query database for the title of the book to be removed
+            removed = db.execute('SELECT title FROM books WHERE id == ?', request.form.get('id'))[0]['title']
+
+            # Delete book
+            db.execute('DELETE FROM books WHERE id == ?', request.form.get('id'))            
+
+            # Flash book is removed message
+            flash(f'Book "{removed}" has been successfully removed!')
+
+            # Redirect to books route with updated table
+            return redirect('/books')
+        
+        # Update button selected on popup form
+        elif button == 'update':
+
+            # User input
+            id = request.form.get('form_id')
+            title = request.form.get('title') 
+            author = request.form.get('author')
+            genre = request.form.get('genre')
+            year = request.form.get('year')
+
+            # Ensure valid input for stock levels
+            try:
+                stock = int(request.form.get('stock'))
+                if stock < 1:
+                    flash('Invalid stock input')
+                    return render_template('books.html', name=name, books=books)
+            except:
+                flash('Invalid stock input')
+                return render_template('books.html', name=name, books=books)
+            
+            # Ensure all details are provided
+            if not title or not author or not genre or not year:
+                flash('All fields are required')
+                return render_template('books.html', name=name, books=books)
+
+            # Update books table
+            db.execute('UPDATE books SET title = ?, author = ?, genre = ?, year = ?, stock = ? WHERE id == ?', title, author, genre, year, stock, id)
+
+            # Flash a message
+            flash(f'Book ID:{id} details updated!')
+
+            # Redirect to books route with updated table
+            return redirect('/books')
+        
+
+@app.route('/new-book', methods = ['GET', 'POST'])
+@login_required
+def new_book():
+    '''Add new book'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # User reached route via GET
+    if request.method == 'GET':
+
+        # Render new_book template
+        return render_template('new-book.html', name=name)
+    
+    # User reached route via POST
+    else:
+        # User input
+        title = request.form.get('title') 
+        author = request.form.get('author')
+        genre = request.form.get('genre')
+        year = request.form.get('year')
+        
+        # Ensure all details are provided
+        if not title or not author or not genre or not year:
+            flash('All fields are required')
+            return render_template('new-book.html', name=name)
+
+        # Ensure valid input for stock
+        try:
+            stock = int(request.form.get('stock'))
+            if stock < 1:
+                flash('Invalid stock input')
+                return render_template('new-book.html', name=name)
+        except:
+            flash('Invalid stock input')
+            return render_template('new-book.html', name=name)    
+
+        # Insert new book details into books table
+        db.execute('INSERT INTO books (title, author, genre, year, stock) VALUES (?, ?, ?, ?, ?)', title, author, genre, year, stock)
+        
+        # Flash book added message on redirect
+        flash(f'A book "{title}" by "{author}" has been added.')
+       
+        # Redirect to manage books route
+        return redirect('/books')
 
 
 @app.route('/members', methods = ['GET', 'POST'])
@@ -266,6 +399,7 @@ def members():
         elif button == 'update':
 
             # User input
+            id = request.form.get("form_id")
             member = request.form.get('name')
             email = request.form.get('email')
             address = request.form.get('address')
@@ -277,19 +411,18 @@ def members():
                 return render_template('members.html', name=name, members=members)
 
             # Update members table
-            db.execute('UPDATE members SET name = ?, email = ?, address = ?, phone = ? WHERE member_id == ?', member, email, address, phone, request.form.get("form_id"))
+            db.execute('UPDATE members SET name = ?, email = ?, address = ?, phone = ? WHERE member_id == ?', member, email, address, phone, id)
             
-            flash('Member details changed.')
+            flash(f'Member ID:{id} details updated!')
             
             # Redirect to members route with updated table
             return redirect('/members')
         
      
-
 @app.route('/new-member', methods = ['GET', 'POST'])
 @login_required
 def new_member():
-    '''New member form'''
+    '''Add new member'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -322,143 +455,7 @@ def new_member():
        
         # Redirect to members route
         return redirect('/members')
-    
-
-@app.route('/manage-books', methods = ['GET', 'POST'])
-@login_required
-def manage_books():
-    '''Books management'''
-
-    # Get user_id from session
-    user_id =  session['user_id']
-
-    # Query database for librarian name
-    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
-
-    # Query database for books and sort by title
-    books = db.execute('SELECT * FROM books ORDER BY title ASC')
-
-    # User reached route via GET
-    if request.method == 'GET':
         
-        # Search books query by user
-        q = request.args.get('query')
-
-        # Search query submitted
-        if q:
-            # Query database for title, author and id (id requires precise search query) based on the search input and render template with results
-            books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', q)
-            return render_template('manage-books.html', name=name, books=books)
-        
-        # Render manage books template
-        return render_template('manage-books.html', books=books, name=name)       
-    
-    # User reached route via POST
-    else:
-        # Get the value of the button user clicked on
-        button = request.form.get('button')
-        
-        # Remove button selected
-        if button == 'remove':
-            
-            # Query database for the title of the book to be removed
-            removed = db.execute('SELECT title FROM books WHERE id == ?', request.form.get('id'))[0]['title']
-
-            # Delete book
-            db.execute('DELETE FROM books WHERE id == ?', request.form.get('id'))            
-
-            # Flash book is removed message
-            flash(f'A book "{removed}" has been removed.')
-
-            # Query database for books
-            books = db.execute('SELECT * FROM books ORDER BY title ASC')
-   
-            # Render updated manage-books.html template
-            return render_template('manage-books.html', name=name, books=books)
-        
-        # Edit button selected
-        elif button == 'edit':
-
-            # User input
-            title = request.form.get('title') 
-            author = request.form.get('author')
-            genre = request.form.get('genre')
-            year = request.form.get('year')
-
-            # Ensure valid input for stock levels
-            try:
-                stock = int(request.form.get('stock'))
-                if stock < 1:
-                    flash('Invalid stock input')
-                    return render_template('manage-books.html', name=name, books=books)
-            except:
-                flash('Invalid stock input')
-                return render_template('manage-books.html', name=name, books=books)
-            
-            # Update books table
-            db.execute('UPDATE books SET title = ?, author = ?, genre = ?, year = ?, stock = ? WHERE id == ?', title, author, genre, year, stock, request.form.get('id'))
-
-            # Flash a message
-            flash('Book details changed!')
-
-            # Query database for books
-            books = db.execute('SELECT * FROM books ORDER BY title ASC')
-   
-            # Render updated members.html template
-            return render_template('manage-books.html', name=name, books=books)
-        
-
-@app.route('/new-book', methods = ['GET', 'POST'])
-@login_required
-def new_book():
-    '''New book form'''
-
-    # Get user_id from session
-    user_id = session['user_id']
-
-    # Query database for librarian name
-    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
-
-    # User reached route via GET
-    if request.method == 'GET':
-
-        # Render new_book template
-        return render_template('new-book.html', name=name)
-    
-    # User reached route via POST
-    else:
-        # User input
-        title = request.form.get('title') 
-        author = request.form.get('author')
-        genre = request.form.get('genre')
-        year = request.form.get('year')
-        
-        # Ensure all details are provided
-        if not title or not author or not genre or not year:
-            flash('All fields are required')
-            return render_template('new-book.html', name=name)
-
-        # Ensure valid input for stock
-        try:
-            stock = int(request.form.get('stock'))
-            if stock < 1:
-                flash('Invalid stock input')
-                return render_template('new-book.html', name=name)
-        except:
-            flash('Invalid stock input')
-            return render_template('new-book.html', name=name)    
-
-        # Insert new book details into books table
-        db.execute('INSERT INTO books (title, author, genre, year, stock) VALUES (?, ?, ?, ?, ?)', title, author, genre, year, stock)
-        
-        # Flash book added message on redirect
-        flash(f'A book "{title}" by "{author}" has been added.')
-       
-        # Redirect to manage books route
-        return redirect('/manage-books')
-
-
-    
 
 
 # Main driver function

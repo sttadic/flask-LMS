@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Members{% endblock %}
+{% block title %}Members Management{% endblock %}
 
 {% block search %}
 <form class="d-flex aaa" role="search">
@@ -31,47 +31,42 @@
     <div class="note">
         <ul>
             <li>In order to edit member details, select the 'Edit' button at the far right of the member's row.
-            A form will open where you can make desired changes. To save those changes please select the 'Update' button</li>
-            <li>To delete a member select corresponding 'Remove' button. You will be prompted to confirm your choice. Please note that this is a permanent action and
-            cannot be undone!</li>
+                A form will open where you can make desired changes. To save those changes please select the 'Update' button.</li>
+            <li>To delete a member select corresponding 'Remove' button. You will be prompted to confirm your choice. Make sure that 
+                all books from selected member have been returned to library before proceeding. Please note that this is a PERMANENT
+                ACTION and CANNOT BE UNDONE!</li>
         </ul>
     </div>
 </div>
-
-
-
 <div class="wrapper" id="blur">
-<table class="table table-striped" spellcheck="false">
-    <thead class="sticky-top table-top">
-        <tr>
-            <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>
-            <th scope="col">NAME</th>
-            <th scope="col">EMAIL</th>
-            <th scope="col">ADDRESS</th>
-            <th scope="col">PHONE</th>
-            <th scope="col"></th>
-            <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for member in members %}
-        <form action="/members" method="POST" onsubmit="return confirm('Remove member {{ member.name }}?')">
-            <tr class="row-data">            
-                <td id="id"><input type="text" name="id" value="{{ member.member_id }}" hidden>{{ member.member_id }}</td>
-                <td id="name">{{ member.name }}</td>
-                <td id="email">{{ member.email }}</td> 
-                <td id="address">{{ member.address }}</td>
-                <td id="phone">{{ member.phone }}</td>
-                <td><button name="button" value="remove" class="button">Remove</button></td> 
-            </form>
-            
-                <td><button class="button btn-edit" onclick='toggle(); editForm("{{ member.member_id }}", "{{ member.name }}", "{{ member.email }}", "{{ member.address }}", "{{ member.phone }}")'>Edit</button></td>   
-                              
+    <table class="table table-striped" spellcheck="false">
+        <thead class="sticky-top table-top">
+            <tr>
+                <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>
+                <th scope="col">NAME</th>
+                <th scope="col">EMAIL</th>
+                <th scope="col">ADDRESS</th>
+                <th scope="col">PHONE</th>
+                <th scope="col"></th>
+                <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
             </tr>
-        
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for member in members %}
+            <form action="/members" method="POST" onsubmit="return confirm('Completely remove member {{ member.name }}, (member ID: {{ member.member_id }}) and all their details from library database?')">
+                <tr class="row-data">            
+                    <td id="id"><input type="text" name="id" value="{{ member.member_id }}" hidden>{{ member.member_id }}</td>
+                    <td id="name">{{ member.name }}</td>
+                    <td id="email">{{ member.email }}</td> 
+                    <td id="address">{{ member.address }}</td>
+                    <td id="phone">{{ member.phone }}</td>
+                    <td><button name="button" value="remove" class="button">Remove</button></td> 
+            </form>            
+                    <td><button class="button btn-edit" onclick='toggle(); editForm("{{ member.member_id }}", "{{ member.name }}", "{{ member.email }}", "{{ member.address }}", "{{ member.phone }}")'>Edit</button></td>                              
+                </tr>        
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 <div id="popup">
     <form class="forms" action="/members" method="post" onsubmit="return confirm('Please confirm that all details are correct.')">
@@ -79,7 +74,7 @@
         <textarea hidden name="form_id" id="form_id"></textarea>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Full Name</span>
-            <textarea class="form-control" id="form_name" name="name" autocomplete="off" rows="1"></textarea>
+            <textarea class="form-control" name="name" id="form_name" autocomplete="off" rows="1"></textarea>
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">E-mail</span>
@@ -99,7 +94,7 @@
     
 </div>
 <script>
-    // Javascript to toggle popup
+    // Javascript toggle blur & popup
     function toggle(){
         var blur = document.getElementById('blur');
         blur.classList.toggle('active');
@@ -107,7 +102,7 @@
         popup.classList.toggle('active');
     }
 
-    // Populate popup form fields with corresponding values for a particular member
+    // Populate popup form fields with corresponding values of a selected member
     function editForm(member_id, name, email, address, phone){
         document.getElementById("form_id").value = member_id;
         document.getElementById("form_name").value = name;
