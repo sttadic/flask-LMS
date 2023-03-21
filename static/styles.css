@@ -89,7 +89,7 @@ footer {
 .forms {
     margin: 3rem auto;
     padding-bottom: 2rem;
-    width: 30%;
+    width: fit-content;
     min-width: 15rem;
     border-radius: 0.6rem;
     border: black solid;
@@ -220,23 +220,21 @@ th {
 textarea {
     border: none;
     resize: none;
-    padding: 0;
+    min-width: fit-content;
     background-color: transparent;
-    text-align: center;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-    cursor: pointer;
+    text-align: left;
+    
 }
 
 textarea:hover {
     outline: 0.1rem solid rgb(240, 189, 33);
     box-shadow: 0 0 2rem rgb(240, 189, 33);
-    background-color:antiquewhite;
+    background-color:white;
 }
 
 textarea:focus {
     background-color: white;
+    font-weight: bold;
 }
 
 .note {

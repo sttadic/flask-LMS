@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Books{% endblock %}
+{% block title %}Books Management{% endblock %}
 
 {% block search %}
 <form class="d-flex" role="search">
@@ -31,7 +31,7 @@
     <div class="note">
         <ul>
             <li>In order to edit book details, select the book's field you wish to amend.
-            To save desired changes please select the 'Edit' button at the far right of the books's row.</li>
+            To save desired changes please select the 'Update' button at the far right of the books's row.</li>
             <li>To delete a book select 'Remove' button. Please note that this is a permanent action and
             cannot be undone!</li>
         </ul>
@@ -61,7 +61,7 @@
                 <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="genre" rows="1" cols="15">{{ book.genre }}</textarea></td>           
                 <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="year" rows="1" cols="5">{{ book.year }}</textarea></td>
                 <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="stock" rows="1" cols="3">{{ book.stock }}</textarea></td>
-                <td><button name="button" value="edit" class="button btn-edit">Edit</button></td>
+                <td><button name="button" value="edit" class="button btn-edit">Update</button></td>
                 <td><button name="button" value="remove" class="button">Remove</button></td>
             </form>
         </tr>

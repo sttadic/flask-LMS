@@ -1,0 +1,40 @@
+.wrapper#blur.active {
+    filter:blur(0.1rem);
+    pointer-events: none;
+    user-select: none;
+}
+
+#popup {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+#popup .forms {
+    background-image: url("pattern.jpg");
+}
+
+#popup.active {
+    visibility: visible;
+    opacity: 1;
+    transition: 0.5s;
+    top: 50%;
+    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+    padding-right: 0.2rem;
+}
+
+.close:hover {
+    color: rgb(240, 189, 33);
+}

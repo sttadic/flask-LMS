@@ -30,14 +30,17 @@
 <div class="collapse" id="collapseExample">
     <div class="note">
         <ul>
-            <li>In order to edit member details, select the member's field you wish to amend.
-            To save desired changes please select the 'Edit' button at the far right of the member's row.</li>
-            <li>To delete a member select 'Remove' button. Please note that this is a permanent action and
+            <li>In order to edit member details, select the 'Edit' button at the far right of the member's row.
+            A form will open where you can make desired changes. To save those changes please select the 'Update' button</li>
+            <li>To delete a member select corresponding 'Remove' button. You will be prompted to confirm your choice. Please note that this is a permanent action and
             cannot be undone!</li>
         </ul>
     </div>
 </div>
-<div class="wrapper">
+
+
+
+<div class="wrapper" id="blur">
 <table class="table table-striped" spellcheck="false">
     <thead class="sticky-top table-top">
         <tr>
@@ -52,19 +55,65 @@
     </thead>
     <tbody>
         {% for member in members %}
-        <tr class="row-data">
-            <form action="/members" method="POST" onsubmit="return confirm('Are you sure you want to proceed?')">
-                <td><input type="text" name="id" value="{{ member.member_id }}" hidden>{{ member.member_id }}</td>
-                <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="name" rows="1" cols="30">{{ member.name }}</textarea></td>
-                <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="email" rows="1" cols="30">{{ member.email }}</textarea></td> 
-                <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="address" rows="1" cols="40">{{ member.address }}</textarea></td>
-                <td><textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' name="phone" rows="1" cols="15">{{ member.phone }}</textarea></td>
-                <td><button name="button" value="edit" class="button btn-edit">Edit</button></td>
-                <td><button name="button" value="remove" class="button">Remove</button></td>
+        <form action="/members" method="POST" onsubmit="return confirm('Remove member {{ member.name }}?')">
+            <tr class="row-data">            
+                <td id="id"><input type="text" name="id" value="{{ member.member_id }}" hidden>{{ member.member_id }}</td>
+                <td id="name">{{ member.name }}</td>
+                <td id="email">{{ member.email }}</td> 
+                <td id="address">{{ member.address }}</td>
+                <td id="phone">{{ member.phone }}</td>
+                <td><button name="button" value="remove" class="button">Remove</button></td> 
             </form>
-        </tr>
+            
+                <td><button class="button btn-edit" onclick='toggle(); editForm("{{ member.member_id }}", "{{ member.name }}", "{{ member.email }}", "{{ member.address }}", "{{ member.phone }}")'>Edit</button></td>   
+                              
+            </tr>
+        
         {% endfor %}
     </tbody>
 </table>
 </div>
+<div id="popup">
+    <form class="forms" action="/members" method="post" onsubmit="return confirm('Please confirm that all details are correct.')">
+        <h4 class="form_name">EDIT MEMBER<span class="close" onclick="toggle()"><sup>X</sup></span></h4>
+        <textarea hidden name="form_id" id="form_id"></textarea>
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">Full Name</span>
+            <textarea class="form-control" id="form_name" name="name" autocomplete="off" rows="1"></textarea>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">E-mail</span>
+            <textarea class="form-control" name="email" id="form_email" autocomplete="off" rows="1"></textarea>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">Address</span>
+            <textarea class="form-control" name="address" id="form_address" autocomplete="off" rows="1"></textarea>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">Phone Number</span>
+            <textarea class="form-control" name="phone" id="form_phone" autocomplete="off" rows="1"></textarea>
+        </div>
+        <button class="input-button" type="submit" name="button" value="update">Update</button>
+        
+    </form>
+    
+</div>
+<script>
+    // Javascript to toggle popup
+    function toggle(){
+        var blur = document.getElementById('blur');
+        blur.classList.toggle('active');
+        var popup = document.getElementById('popup');
+        popup.classList.toggle('active');
+    }
+
+    // Populate popup form fields with corresponding values for a particular member
+    function editForm(member_id, name, email, address, phone){
+        document.getElementById("form_id").value = member_id;
+        document.getElementById("form_name").value = name;
+        document.getElementById("form_email").value = email;
+        document.getElementById("form_address").value = address;
+        document.getElementById("form_phone").value = phone;
+    }
+</script>
 {% endblock %}

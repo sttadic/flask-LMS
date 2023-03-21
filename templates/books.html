@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Books{% endblock %}
+{% block title %}Catalogue{% endblock %}
 
 {% block search %}
 <form class="d-flex" role="search">
@@ -38,7 +38,7 @@
             <th scope="col">GENRE</th>          
             <th scope="col">PUBLISHED</th>
             <th scope="col">STOCK</th>
-            <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
+            <th scope="col" style="border-radius: 0 0.7rem 0 0;"> AVAILABLE</th>
         </tr>
     </thead>
     <tbody>
@@ -50,7 +50,7 @@
             <td>{{ book.genre }}</td>           
             <td>{{ book.year }}</td>
             <td>{{ book.stock }}</td>
-            <td><button action="/issue" class="button">Issue book</button></td>
+            <td>{{ availability }}</td>
         </tr>
         {% endfor %}
     </tbody>

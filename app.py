@@ -259,33 +259,32 @@ def members():
             # Flash a message that memeber is removed
             flash(f'Member {removed} has been removed.')
 
-            # Query database for members
-            members = db.execute('SELECT * FROM members ORDER BY name ASC')
-   
-            # Render updated members.html template
-            return render_template('members.html', name=name, members=members)
+            # Redirect to members route with updated table
+            return redirect('/members')
         
-        # If clicked on edit
-        elif button == 'edit':
+        # Update button selceted on a popup form
+        elif button == 'update':
 
             # User input
             member = request.form.get('name')
             email = request.form.get('email')
             address = request.form.get('address')
             phone = request.form.get('phone')
-            
+
+            # Ensure all details provided
+            if not member or not email or not address or not phone:
+                flash('All fields are required')
+                return render_template('members.html', name=name, members=members)
+
             # Update members table
-            db.execute('UPDATE members SET name = ?, email = ?, address = ?, phone = ? WHERE member_id == ?', member, email, address, phone, request.form.get('id'))
-
-            # Flash a message
-            flash('Member details changed!')
-
-            # Query database for members
-            members = db.execute('SELECT * FROM members ORDER BY name ASC')
-   
-            # Render updated members.html template
-            return render_template('members.html', name=name, members=members)
+            db.execute('UPDATE members SET name = ?, email = ?, address = ?, phone = ? WHERE member_id == ?', member, email, address, phone, request.form.get("form_id"))
+            
+            flash('Member details changed.')
+            
+            # Redirect to members route with updated table
+            return redirect('/members')
         
+     
 
 @app.route('/new-member', methods = ['GET', 'POST'])
 @login_required
@@ -304,7 +303,7 @@ def new_member():
     
     # User reached route via POST
     else:
-        # Get user input
+        # User input
         member = request.form.get('name')
         email = request.form.get('email')
         address = request.form.get('address')
