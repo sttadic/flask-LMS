@@ -40,6 +40,9 @@ def login_required(f):
     return decorated_function
 
 
+GENRES = ['Autobiography', 'Biography', 'Business', 'Children', 'Drama', 'Fantasy', 'Fiction', 'Historical Fiction', 'Horror', 'Humor', 'Memoir', 'Mystery', 'Non-fiction', 'Poetry', 'Romance', 'Science Fiction', 'Self-help', 'Spiritual/Religious', 'Thriller', 'Travel']
+
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     '''Librarian login'''
@@ -239,7 +242,7 @@ def books():
             return render_template('books.html', name=name, books=books)
         
         # Render manage books template
-        return render_template('books.html', books=books, name=name)       
+        return render_template('books.html', books=books, name=name, genres=GENRES)       
     
     # User reached route via POST
     else:
@@ -276,15 +279,15 @@ def books():
                 stock = int(request.form.get('stock'))
                 if stock < 1:
                     flash('Invalid stock input')
-                    return render_template('books.html', name=name, books=books)
+                    return redirect('/books')
             except:
                 flash('Invalid stock input')
-                return render_template('books.html', name=name, books=books)
+                return redirect('/books')
             
             # Ensure all details are provided
             if not title or not author or not genre or not year:
                 flash('All fields are required')
-                return render_template('books.html', name=name, books=books)
+                return redirect('/books')
 
             # Update books table
             db.execute('UPDATE books SET title = ?, author = ?, genre = ?, year = ?, stock = ? WHERE id == ?', title, author, genre, year, stock, id)
@@ -311,7 +314,7 @@ def new_book():
     if request.method == 'GET':
 
         # Render new_book template
-        return render_template('new-book.html', name=name)
+        return render_template('new-book.html', name=name, genres=GENRES)
     
     # User reached route via POST
     else:
@@ -324,17 +327,17 @@ def new_book():
         # Ensure all details are provided
         if not title or not author or not genre or not year:
             flash('All fields are required')
-            return render_template('new-book.html', name=name)
+            return redirect('/new-book')
 
         # Ensure valid input for stock
         try:
             stock = int(request.form.get('stock'))
             if stock < 1:
                 flash('Invalid stock input')
-                return render_template('new-book.html', name=name)
+                return redirect('/new-book')
         except:
             flash('Invalid stock input')
-            return render_template('new-book.html', name=name)    
+            return redirect('/new-book')  
 
         # Insert new book details into books table
         db.execute('INSERT INTO books (title, author, genre, year, stock) VALUES (?, ?, ?, ?, ?)', title, author, genre, year, stock)

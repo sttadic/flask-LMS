@@ -32,7 +32,7 @@
         <ul>
             <li>In order to edit book details, select the 'Edit' button at the far right of the book's row.
                 A form will open where you can make desired changes. To save those changes please select the 'Update' button.</li>
-            <li>To delete a book select corresponding 'Remove' button. You will be prompted to confirm your choice. This will completely remove all book's stock and details from the system.
+            <li>To delete a book select corresponding 'Remove' button. You will be prompted to confirm your choice. This completely removes all book's stock and details from the system.
                 Make sure that all copies of the book have been returned before proceeding. Please note that this is a PERMANENT ACTION and CANNOT BE UNDONE!</li>
         </ul>
     </div>
@@ -53,7 +53,7 @@
         </thead>
         <tbody>
             {% for book in books %}
-            <form action="/books" method="POST" onsubmit="return confirm('Completely remove \'{{ book.title }}\' by {{ book.author }}, (book ID: {{ book.id }}) and all of its stock from library database?')">
+            <form action="/books" method="POST" onsubmit="return confirm('Completely remove \'{{ book.title }}\' by {{ book.author }} (book ID: {{ book.id }}) and all of its stock from library database?')">
                 <tr class="row-data">           
                     <td id="id"><input type="text" name="id" value="{{ book.id }}" hidden>{{ book.id }}</td>
                     <td id="title">{{ book.title }}</td>
@@ -83,7 +83,11 @@
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Genre</span>
-            <textarea class="form-control" name="genre" id="form_genre" autocomplete="off" rows="1"></textarea>
+            <select class="form-control" name="genre" id="form_genre">
+                {% for genre in genres %}
+                <option>{{ genre }}</option>
+                {% endfor %}
+            </select>     
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Published</span>

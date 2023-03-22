@@ -7,7 +7,6 @@ body {
     flex-direction: column;
     background-position: center center; 
     background-size: cover;
-    overflow: hidden;
 }
 
 nav {
@@ -176,12 +175,9 @@ footer {
     overflow: hidden;
     overflow-x: auto;
     overflow-y: auto;
-    max-height: 60vh;
-}
-
-.table {
+    max-height: 56vh;
+    box-shadow: 0 1rem 1rem 0;
     font-weight: bold;
-    
 }
 
 .table-top {
@@ -249,3 +245,8 @@ textarea:focus {
 .row-data:hover  {
     background-color: rgb(240, 189, 33, 0.3);
 }
+
+option {
+    background-color: rgb(240, 189, 33, 0.3);
+}
+

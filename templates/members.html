@@ -53,7 +53,7 @@
         </thead>
         <tbody>
             {% for member in members %}
-            <form action="/members" method="POST" onsubmit="return confirm('Completely remove member {{ member.name }}, (member ID: {{ member.member_id }}) and all their details from library database?')">
+            <form action="/members" method="POST" onsubmit="return confirm('Completely remove member {{ member.name }} (member ID: {{ member.member_id }}) and all their details from library database?')">
                 <tr class="row-data">            
                     <td id="id"><input type="text" name="id" value="{{ member.member_id }}" hidden>{{ member.member_id }}</td>
                     <td id="name">{{ member.name }}</td>

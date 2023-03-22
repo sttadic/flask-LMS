@@ -26,8 +26,12 @@
         <input class="form-control" type="text" name="author" autocomplete="off">
     </div>
     <div class="input-group">
-        <span class="input-group-text" id="inputGroup-sizing-default">Genre</span>
-        <input class="form-control" type="text" name="genre" autocomplete="off">
+        <span class="input-group-text" id="inputGroup-sizing-default">Genre</span>        
+        <select style="size: 5; overflow-y: auto;" class="form-control" name="genre">
+            {% for genre in genres %}
+            <option>{{ genre }}</option>
+            {% endfor %}
+        </select>        
     </div>
     <div class="input-group">
         <span class="input-group-text" id="inputGroup-sizing-default">Year Published</span>
