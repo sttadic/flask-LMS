@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 
 <html land="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
 
@@ -15,7 +13,6 @@
     <link href="../static/popups.css" rel="stylesheet">
 
     <title>LMS: {% block title %}{% endblock %}</title>
-
 </head>
 
 <body>
@@ -37,8 +34,6 @@
                                 <li><a class="dropdown-item text-white" href="/new-member">Add New Member</a></li>
                             </ul>
                         </li>
-                        
-                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Books</a>
                             <ul class="dropdown-menu bg-black bg-gradient">
@@ -48,7 +43,7 @@
                                 <li><a class="dropdown-item text-white" href="/new-book">Add Books</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item"><a class="nav-link" aria-current="page" href="#">Account Mangement</a></li>
+                        <li class="nav-item"><a class="nav-link" aria-current="page" href="/checkout">Checkout</a></li>
                         <li class="nav-item"><a class="nav-link" aria-current="page" href="/logout">Log Out</a></li>                        
                     </ul>
                     {% block search %}{% endblock %}
@@ -62,8 +57,12 @@
         {% endblock %}
     </main>
     <footer>
-        Copyright 2023 by Stjepan Tadic. All Rights Reserved.<br>
-        LMS is supported by CS50.
+        <div class="footer-item">
+            <div><a class="nav-link" aria-current="page" href="/management">System Management</a></div>
+            <div><a class="nav-link" aria-current="page" href="/faq">FAQ</a></div>
+        </div>
+        <p>Copyright 2023 by Stjepan Tadic. All Rights Reserved.<br>
+        LMS is supported by CS50.</p>
     </footer>
 </body>
 </html>

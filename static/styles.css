@@ -48,6 +48,13 @@ nav {
     color: rgb(240, 189, 33);;
 }
 
+.navbar-toggler {
+    background-color:rgb(240, 189, 33);
+    font-size: 1rem;
+}
+
+
+/* Footer styles */
 footer {
     background-image: linear-gradient(0deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     margin-top: auto;
@@ -58,10 +65,28 @@ footer {
     border-top: solid black 0.1rem;
 }
 
-.navbar-toggler {
-    background-color:rgb(240, 189, 33);
+.footer-item {
+    float: left;
+    margin: auto;
     font-size: 1rem;
+    position: absolute;
+    text-align: left;
 }
+
+.footer-item div {
+    padding: 0.1rem;
+    margin-left: 2rem;
+}
+
+@media only screen and (max-width: 1185px) {
+    .footer-item {
+      text-align: unset;
+      float: none;
+      margin: auto;
+      position: relative;
+    }
+  }
+
 
 /* Flash messages styling */
 .container {
