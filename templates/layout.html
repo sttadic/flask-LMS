@@ -44,7 +44,11 @@
                             </ul>
                         </li>
                         <li class="nav-item"><a class="nav-link" aria-current="page" href="/checkout">Checkout</a></li>
-                        <li class="nav-item"><a class="nav-link" aria-current="page" href="/logout">Log Out</a></li>                        
+                        <li class="nav-item">
+                            <form aria-current="page" action="/logout" onsubmit="return confirm('Do you want to log out of this device?')">
+                                <button class="logout"><a class="nav-link">Log Out</a></button>
+                            </form>
+                        </li>                        
                     </ul>
                     {% block search %}{% endblock %}
                     <div class="nav-item user">Librarian: <span>{{ name }}</span></div>
@@ -58,7 +62,7 @@
     </main>
     <footer>
         <div class="footer-item">
-            <div><a class="nav-link" aria-current="page" href="/management">System Management</a></div>
+            <div><a class="nav-link" aria-current="page" href="/management">LMS Management</a></div>
             <div><a class="nav-link" aria-current="page" href="/faq">FAQ</a></div>
         </div>
         <p>Copyright 2023 by Stjepan Tadic. All Rights Reserved.<br>
