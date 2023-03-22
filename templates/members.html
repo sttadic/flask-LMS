@@ -71,22 +71,22 @@
 <div id="popup">
     <form class="forms" action="/members" method="post" onsubmit="return confirm('Please confirm that all details are correct.')">
         <h4 class="form_name">EDIT MEMBER<span class="close" onclick="toggle()"><sup>X</sup></span></h4>
-        <textarea hidden name="form_id" id="form_id"></textarea>
+        <input hidden name="form_id" id="form_id">
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Full Name</span>
-            <textarea class="form-control" name="name" id="form_name" autocomplete="off" rows="1"></textarea>
+            <input class="form-control" name="name" id="form_name" autocomplete="off">
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">E-mail</span>
-            <textarea class="form-control" name="email" id="form_email" autocomplete="off" rows="1"></textarea>
+            <input class="form-control" name="email" id="form_email" autocomplete="off">
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Address</span>
-            <textarea class="form-control" name="address" id="form_address" autocomplete="off" rows="1"></textarea>
+            <input class="form-control" name="address" id="form_address" autocomplete="off">
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Phone Number</span>
-            <textarea class="form-control" name="phone" id="form_phone" autocomplete="off" rows="1"></textarea>
+            <input class="form-control" name="phone" id="form_phone" autocomplete="off">
         </div>
         <button class="input-button" type="submit" name="button" value="update">Update</button>
         

@@ -72,14 +72,14 @@
 <div id="popup">
     <form class="forms" action="/books" method="post" onsubmit="return confirm('Please confirm that all details are correct.')">
         <h4 class="form_name">EDIT BOOK<span class="close" onclick="toggle()"><sup>X</sup></span></h4>
-        <textarea hidden name="form_id" id="form_id"></textarea>
+        <input hidden name="form_id" id="form_id">
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
-            <textarea class="form-control" name="title" id="form_title" autocomplete="off" rows="1"></textarea>
+            <input class="form-control" name="title" id="form_title" autocomplete="off">
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Author</span>
-            <textarea class="form-control" name="author" id="form_author" autocomplete="off" rows="1"></textarea>
+            <input class="form-control" name="author" id="form_author" autocomplete="off">
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Genre</span>
@@ -91,11 +91,11 @@
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Published</span>
-            <textarea class="form-control" name="year" id="form_year" autocomplete="off" rows="1"></textarea>
+            <input class="form-control" name="year" id="form_year" autocomplete="off">
         </div>
         <div class="input-group">
             <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
-            <textarea class="form-control" name="stock" id="form_stock" autocomplete="off" rows="1"></textarea>
+            <input class="form-control" name="stock" id="form_stock" autocomplete="off">
         </div>
         <button class="input-button" type="submit" name="button" value="update">Update</button>
         
@@ -103,7 +103,7 @@
     
 </div>
 <script>
-    // Javascript toggle blur & popup
+    // Javascript toggle blur & popup script
     function toggle(){
         var blur = document.getElementById('blur');
         blur.classList.toggle('active');
