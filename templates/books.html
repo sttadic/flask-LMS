@@ -3,10 +3,13 @@
 {% block title %}Books Management{% endblock %}
 
 {% block search %}
-<form class="d-flex" role="search">
-    <input class="search me-2" type="search" name="query" autocomplete="off" placeholder="ID, Title or Author" aria-label="Search">
-    <button class="btn btn-outline-warning" type="submit">Search</button>
-</form>
+<input id="search" class="search me-2" onkeyup="search()" type="search" name="query" autocomplete="off" placeholder="Serach" aria-label="Search">
+<span class="by">by</span>
+<select name="field" id="field" class="select">
+    <option value="title">Title</option>
+    <option value="author">Author</option>
+    <option value="id">ID</option>
+</select>
 {% endblock %}
 
 {% block main %}
@@ -38,7 +41,7 @@
     </div>
 </div>
 <div class="wrapper" id="blur">
-    <table class="table table-striped" spellcheck="false">
+    <table id='books' class="table table-striped" spellcheck="false">
         <thead class="sticky-top table-top">
             <tr>
                 <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>            
@@ -120,5 +123,29 @@
         document.getElementById("form_year").value = year;
         document.getElementById("form_stock").value = stock;
     }
+
+    // Dynamic search with AJAX and jQuerry
+    function search() {
+    var query = $('#search').val();
+    var field = $('#field').val();
+    $.get('/books', {'query': query, 'field': field}, function(data) {
+        var table = $('#books tbody');
+        table.empty();
+        if (query === '') {  // if query empty
+            window.location.reload();  // reload template
+        } else {
+            data.forEach(function(book) {
+                var row = $('<tr></tr>');
+                row.append($('<td></td>').text(book.id));
+                row.append($('<td></td>').text(book.title));
+                row.append($('<td></td>').text(book.author));
+                row.append($('<td></td>').text(book.genre));
+                row.append($('<td></td>').text(book.year));
+                row.append($('<td></td>').text(book.stock));
+                table.append(row);
+            });
+        }
+    });
+}
 </script>
 {% endblock %}

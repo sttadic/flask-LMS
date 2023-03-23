@@ -1,6 +1,6 @@
 import os
 from cs50 import SQL
-from flask import Flask, redirect, render_template, request, session, flash
+from flask import Flask, redirect, render_template, request, session, flash, jsonify
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -228,21 +228,23 @@ def books():
 
     # Query database for books and sort by title
     books = db.execute('SELECT * FROM books ORDER BY title ASC')
+    
 
     # User reached route via GET
     if request.method == 'GET':
         
-        # Search books query by user
-        q = request.args.get('query')
+        # Search books query and selected field
+        query = request.args.get('query')
+        field = request.args.get('field')
 
-        # Search query submitted
-        if q:
-            # Query database for title, author and id (id requires precise search query) based on the search input and render template with results
-            books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', q)
-            return render_template('books.html', name=name, books=books)
+        # If query exists
+        if query:
+            # Populate matches list and return JSON response with matching items
+            matches = [book for book in books if query.lower() in str(book[field]).lower()]
+            return jsonify(matches)  
         
-        # Render manage books template
-        return render_template('books.html', books=books, name=name, genres=GENRES)       
+        # Render books template 
+        return render_template('books.html', books=books, name=name, genres=GENRES)  
     
     # User reached route via POST
     else:
@@ -297,6 +299,8 @@ def books():
 
             # Redirect to books route with updated table
             return redirect('/books')
+        
+    
         
 
 @app.route('/new-book', methods = ['GET', 'POST'])
