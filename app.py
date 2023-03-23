@@ -150,7 +150,7 @@ def register():
         session['user_id'] = id[0]['staff_id']
 
         # Redirect user to a home page
-        return redirect('/')    
+        return redirect('/')
 
 
 @app.route('/')
@@ -458,6 +458,40 @@ def new_member():
        
         # Redirect to members route
         return redirect('/members')
+    
+
+@app.route('/checkout', methods = ['GET', 'POST'])
+@login_required
+def checkout():
+    '''Lending books to members'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # Query database for members ordered by name
+    members = db.execute('SELECT * FROM members ORDER BY name ASC')  
+
+    # User reached route via GET
+    if request.method == 'GET':      
+
+        # Search members query by user
+        q = request.args.get('query')
+
+        # Search query submitted
+        if q:
+            # Query database for id and name of members based on the search input and render template with results
+            members = db.execute('SELECT * FROM members WHERE member_id LIKE ? OR name LIKE ?', q, '%' + q + '%')
+            return render_template('checkout.html', name=name, members=members)
+        
+         # Render checkout template
+        return render_template('checkout.html', name=name, members=members)
+    
+    # User reached route via POST
+    else:
+        return
         
 
 

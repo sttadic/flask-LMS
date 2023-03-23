@@ -64,10 +64,11 @@ footer {
     background-image: linear-gradient(0deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     margin-top: auto;
     padding: 1.5rem;
-    color: rgb(240, 189, 33);;
+    color: rgb(240, 189, 33);
     font-size: smaller;
     text-align: center;
     border-top: solid black 0.1rem;
+    z-index: 2;
 }
 
 .footer-item {
@@ -280,3 +281,21 @@ option {
     background-color: rgb(240, 189, 33, 0.3);
 }
 
+/* Checkout */
+
+.checkout {
+    background-color: black;
+    min-height: 100%;
+    position: absolute;
+    z-index: 1;    
+    width: 40%;
+    border: 0.1rem solid white;
+    box-shadow: 0.2rem 0 0 0;
+    color: white;
+    padding-top: 11vh;
+}
+
+.checkout p {
+    
+    margin-left: 15vw;
+}
