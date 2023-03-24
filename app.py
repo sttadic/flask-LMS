@@ -301,8 +301,6 @@ def books():
             return redirect('/books')
         
     
-        
-
 @app.route('/new-book', methods = ['GET', 'POST'])
 @login_required
 def new_book():

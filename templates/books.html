@@ -55,17 +55,18 @@
             </tr>
         </thead>
         <tbody>
-            {% for book in books %}
-            <form action="/books" method="POST" onsubmit="return confirm('Completely remove \'{{ book.title }}\' by {{ book.author }} (book ID: {{ book.id }}) and all of its stock from library database?')">
-                <tr class="row-data">           
-                    <td id="id"><input type="text" name="id" value="{{ book.id }}" hidden>{{ book.id }}</td>
+            {% for book in books %}            
+                <tr class="row-data">                            
+                    <td id="id">{{ book.id }}</td>
                     <td id="title">{{ book.title }}</td>
                     <td id="author">{{ book.author }}</td> 
                     <td id="genre">{{ book.genre }}</td>           
                     <td id="year">{{ book.year }}</td>
-                    <td id="stock">{{ book.stock }}</td>                
-                    <td><button name="button" value="remove" class="button">Remove</button></td>
-            </form>
+                    <td id="stock">{{ book.stock }}</td>
+                    <form action="/books" method="POST" onsubmit="return confirm('Completely remove \'{{ book.title }}\' by {{ book.author }} (book ID: {{ book.id }}) and all of its stock from library database?')">
+                        <td><form action="/books" method="POST" onsubmit="return confirm('Completely remove \'{{ book.title }}\' by {{ book.author }} (book ID: {{ book.id }}) and all of its stock from library database?')">
+                        <input name="id" value="{{ book.id }}" hidden><button name="button" value="remove" class="button">Remove</button>
+                    </form></td>
                     <td><button class="button btn-edit" onclick='toggle(); editForm("{{ book.id }}", "{{ book.title }}", "{{ book.author }}", "{{ book.genre }}", "{{ book.year }}", "{{ book.stock }}")'>Edit</button></td>
                 </tr>
             {% endfor %}
@@ -131,8 +132,8 @@
     $.get('/books', {'query': query, 'field': field}, function(data) {
         var table = $('#books tbody');
         table.empty();
-        if (query === '') {  // if query empty
-            window.location.reload();  // reload template
+        if (query === '') {  // If query empty
+            window.location.reload();  // Reload template
         } else {
             data.forEach(function(book) {
                 var row = $('<tr></tr>');
@@ -142,6 +143,22 @@
                 row.append($('<td></td>').text(book.genre));
                 row.append($('<td></td>').text(book.year));
                 row.append($('<td></td>').text(book.stock));
+                
+                form = $('<form></form>').attr('action', '/books').attr('method', 'POST').on('click', function(e) {
+                    if (!confirm('Completely remove \'' + book.title + '\' by ' + book.author + ' (book ID: ' + book.id + ') and all of its stock from library database?')) {
+                        e.preventDefault();  // Prevent form submission if user cancels
+                    }
+                });
+                input = $('<input>').attr("name", 'id').attr('value', book.id).hide()
+                button = $('<button></button>').text('Remove').addClass('button').attr('name', 'button').attr('value','remove');
+
+                form.append(input).append(button);  // Input & button inside form element
+                
+                row.append($('<td></td>').append(form));
+                row.append($('<td></td>').append($('<button></button>').text('Edit').addClass('button btn-edit').click(function() {
+                    toggle();
+                    editForm(book.id, book.title, book.author, book.genre, book.year, book.stock);
+                })));   // Toggle and editForm functions appended along with Edit button class
                 table.append(row);
             });
         }
