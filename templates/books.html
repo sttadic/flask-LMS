@@ -3,7 +3,7 @@
 {% block title %}Books Management{% endblock %}
 
 {% block search %}
-<input id="search" class="search me-2" onkeyup="search()" type="search" name="query" autocomplete="off" placeholder="Serach" aria-label="Search">
+<input id="search" class="search me-2" onkeyup="search()" type="search" name="query" autocomplete="off" placeholder="Serach" aria-label="Search" autofocus>
 <span class="by">by</span>
 <select name="field" id="field" class="select">
     <option value="title">Title</option>
@@ -63,10 +63,12 @@
                     <td id="genre">{{ book.genre }}</td>           
                     <td id="year">{{ book.year }}</td>
                     <td id="stock">{{ book.stock }}</td>
-                    <form action="/books" method="POST" onsubmit="return confirm('Completely remove \'{{ book.title }}\' by {{ book.author }} (book ID: {{ book.id }}) and all of its stock from library database?')">
-                        <td><form action="/books" method="POST" onsubmit="return confirm('Completely remove \'{{ book.title }}\' by {{ book.author }} (book ID: {{ book.id }}) and all of its stock from library database?')">
-                        <input name="id" value="{{ book.id }}" hidden><button name="button" value="remove" class="button">Remove</button>
-                    </form></td>
+                    <td>
+                        <form action="/books" method="POST" onsubmit='return confirm("Completely remove \"{{ book.title }}\" by {{ book.author }} (book ID: {{ book.id }}) and all of its stock from library database?")'>
+                            <input name="id" value="{{ book.id }}" hidden>
+                            <button name="button" value="remove" class="button">Remove</button>
+                        </form>
+                    </td>
                     <td><button class="button btn-edit" onclick='toggle(); editForm("{{ book.id }}", "{{ book.title }}", "{{ book.author }}", "{{ book.genre }}", "{{ book.year }}", "{{ book.stock }}")'>Edit</button></td>
                 </tr>
             {% endfor %}
@@ -125,7 +127,7 @@
         document.getElementById("form_stock").value = stock;
     }
 
-    // Dynamic search with AJAX and jQuerry
+    // Dynamic search with AJAX and jQuery
     function search() {
     var query = $('#search').val();
     var field = $('#field').val();

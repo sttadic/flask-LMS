@@ -244,7 +244,7 @@ def books():
             return jsonify(matches)  
         
         # Render books template 
-        return render_template('books.html', books=books, name=name, genres=GENRES)  
+        return render_template('books.html', books=books, name=name, genres=GENRES)
     
     # User reached route via POST
     else:
@@ -366,18 +366,19 @@ def members():
     members = db.execute('SELECT * FROM members ORDER BY name ASC')  
 
     # User reached route via GET
-    if request.method == 'GET':      
+    if request.method == 'GET':
 
-        # Search members query by user
-        q = request.args.get('query')
+        # Search members query and selected field
+        query = request.args.get('query')
+        field = request.args.get('field')
 
-        # Search query submitted
-        if q:
-            # Query database for id and name of members based on the search input and render template with results
-            members = db.execute('SELECT * FROM members WHERE member_id LIKE ? OR name LIKE ?', q, '%' + q + '%')
-            return render_template('members.html', name=name, members=members)
+        # If query exists
+        if query:
+            # Populate matches list and return JSON response with matching items
+            matches = [member for member in members if query.lower() in str(member[field]).lower()]
+            return jsonify(matches)
         
-         # Render members.html
+        # Render members.html
         return render_template('members.html', name=name, members=members)
 
     # User reached route via POST
