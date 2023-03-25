@@ -3,7 +3,7 @@
 {% block title %}Members Management{% endblock %}
 
 {% block search %}
-<input id="search" class="search me-2" onkeyup="search()" type="search" name="query" autocomplete="off" placeholder="Serach" aria-label="Search" autofocus>
+<input id="search" class="search me-2" onkeyup="searchMember()" type="search" name="query" autocomplete="off" placeholder="Serach" aria-label="Search" autofocus>
 <span class="by">by</span>
 <select name="field" id="field" class="select">
     <option value="name">Name</option>
@@ -67,7 +67,7 @@
                             <button name="button" value="remove" class="button">Remove</button>
                         </form>  
                     </td>                              
-                    <td><button class="button btn-edit" onclick='toggle(); editForm("{{ member.member_id }}", "{{ member.name }}", "{{ member.email }}", "{{ member.address }}", "{{ member.phone }}")'>Edit</button></td>                              
+                    <td><button class="button btn-edit" onclick='toggle(); editMember("{{ member.member_id }}", "{{ member.name }}", "{{ member.email }}", "{{ member.address }}", "{{ member.phone }}")'>Edit</button></td>                              
                 </tr>        
             {% endfor %}
         </tbody>
@@ -93,66 +93,7 @@
             <span class="input-group-text" id="inputGroup-sizing-default">Phone Number</span>
             <input class="form-control" name="phone" id="form_phone" autocomplete="off">
         </div>
-        <button class="input-button" type="submit" name="button" value="update">Update</button>
-        
+        <button class="input-button" type="submit" name="button" value="update">Update</button>        
     </form>
-    
 </div>
-<script>
-    // Javascript toggle blur & popup
-    function toggle(){
-        var blur = document.getElementById('blur');
-        blur.classList.toggle('active');
-        var popup = document.getElementById('popup');
-        popup.classList.toggle('active');
-    }
-
-    // Populate popup form fields with corresponding values of a selected member
-    function editForm(member_id, name, email, address, phone){
-        document.getElementById("form_id").value = member_id;
-        document.getElementById("form_name").value = name;
-        document.getElementById("form_email").value = email;
-        document.getElementById("form_address").value = address;
-        document.getElementById("form_phone").value = phone;
-    }
-
-    // Dynamic search with AJAX and jQuery
-    function search() {
-    var query = $('#search').val(); 
-    var field = $('#field').val();
-    $.get('/members', {'query': query, 'field': field}, function(data) {
-        var table = $('#members tbody');
-        table.empty();
-        if (query === '') {  // If query empty
-            window.location.reload();  // Reload template
-        } else {
-            data.forEach(function(member) {
-                var row = $('<tr></tr>');
-                row.append($('<td></td>').text(member.member_id));
-                row.append($('<td></td>').text(member.name));
-                row.append($('<td></td>').text(member.email));
-                row.append($('<td></td>').text(member.address));
-                row.append($('<td></td>').text(member.phone));
-                
-                form = $('<form></form>').attr('action', '/members').attr('method', 'POST').on('click', function(e) {
-                    if (!confirm("Completely remove member " + member.name + " (member ID: " + member.member_id + ") and all their details from library database?")) {
-                        e.preventDefault();  // Prevent form submission if user cancels
-                    }
-                });
-                input = $('<input>').attr("name", 'id').attr('value', member.member_id).hide()
-                button = $('<button></button>').text('Remove').addClass('button').attr('name', 'button').attr('value','remove');
-
-                form.append(input).append(button);  // Input & button inside form element
-                
-                row.append($('<td></td>').append(form));
-                row.append($('<td></td>').append($('<button></button>').text('Edit').addClass('button btn-edit').click(function() {
-                    toggle();
-                    editForm(member_id, name, email, address, phone);
-                })));   // Toggle and editForm functions appended along with Edit button class
-                table.append(row);
-            });
-        }
-    });
-}
-</script>
 {% endblock %}
