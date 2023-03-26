@@ -3,15 +3,67 @@
 {% block title %}Checkout{% endblock %}
 
 {% block search %}
-<form class="d-flex aaa" role="search">
-    <input class="search me-2" type="search" name="query" autocomplete="off" placeholder="ID or Name" aria-label="Search">
-    <button class="btn btn-outline-warning" type="submit">Search</button>
-</form>
+
 {% endblock %}
 
 {% block main %}
+<div class="container-ch">
+    <form role="search" action="/checkout">
+        <input class="search-member-ch me-2" type="search" name="query" autocomplete="off" placeholder="Member ID" aria-label="Search">
+        <button class="btn btn-outline-warning" type="submit">Find</button>
+    </form>
 
-<div class="top-50 start-0 translate-middle checkout">
-    <p>Ovdje ce biti checkout</p>
+    <div class="wrapper" id="blur">
+        <table class="table" spellcheck="false">
+            <thead class="sticky-top table-top">
+                <tr>
+                    <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">EMAIL</th>
+                    <th scope="col">ADDRESS</th>
+                    <th scope="col" style="border-radius: 0 0.7rem 0 0;">PHONE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in member %}
+                    <tr class="row-data row-ch" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        <td id="id"><input name="id" value="{{ m.member_id }}" hidden> {{ m.member_id }}</td>
+                        <td id="name">{{ m.name }}</td>
+                        <td id="email">{{ m.email }}</td>
+                        <td id="address">{{ m.address }}</td>
+                        <td id="phone">{{ m.phone }}</td>
+                    </tr>    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--Collapse https://getbootstrap.com/docs/5.3/components/collapse/-->
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+    </div>
+</div>
+
+<!-- Toogle offcanvas button:
+
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+        Toggle static offcanvas
+    </button>
+    
+-->
+
+<!--Checkout https://getbootstrap.com/docs/5.3/components/offcanvas/-->
+<div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Books Checkout</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        
+        Content...
+
+    </div>
 </div>
 {% endblock %}

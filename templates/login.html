@@ -5,6 +5,19 @@ Log In
 {% endblock %}
 
 {% block main %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show" role="alert">
+        <span class="error">{{ message }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+
 <form class="forms" action="/login" method="post">
     <h4 class="form_name">LOG IN</h4>
     <div class="input-group">
@@ -17,16 +30,4 @@ Log In
     </div>
     <button class="input-button" type="submit">Log In</button>
 </form>
-<div calss="container">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-dismissible fade show" role="alert">
-        <span class="error">{{ message }}</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-</div>
 {% endblock %}

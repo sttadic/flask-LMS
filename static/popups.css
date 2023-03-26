@@ -6,12 +6,10 @@
 
 #popup {
     position: fixed;
-    top: 30%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    visibility: hidden;
-    opacity: 0;
-    transition: 0.5s;
+    display: none;
 }
 
 #popup .forms {
@@ -19,14 +17,12 @@
 }
 
 #popup.active {
-    visibility: visible;
-    opacity: 1;
-    transition: 0.5s;
-    top: 50%;
+    display: block;
     overflow: hidden;
     overflow-x: auto;
     overflow-y: auto;
     max-height: 90vh;
+    z-index: 3;
 }
 
 .close {

@@ -16,6 +16,7 @@ nav {
 
 .navbar {
     font-size: large;
+    z-index: 2;
 }
 
 .nav-item {
@@ -38,7 +39,11 @@ nav {
 }
 
 .dropdown-item:hover {
-    background-color: rgb(240, 189, 33);;
+    background-color: rgb(240, 189, 33);
+}
+
+.drobdown-menu {
+    z-index: 2;
 }
 
 .nav-link {
@@ -75,6 +80,7 @@ nav {
     color: rgb(240, 189, 33);
     padding: 0 0.5rem 0 0.2rem;
 }
+
 
 /* Footer styles */
 footer {
@@ -113,7 +119,7 @@ footer {
 
 /* Flash messages styling */
 .container {
-    margin-bottom: 1rem;
+    margin: 0 auto 2rem auto;
 }
 
 .error {
@@ -134,7 +140,7 @@ footer {
 
 /* Forms styling */
 .forms {
-    margin: 3rem auto;
+    margin: auto;
     padding-bottom: 2rem;
     width: fit-content;
     min-width: 15rem;
@@ -175,6 +181,7 @@ footer {
 .form-control:focus {
     box-shadow: 0 0 0.3rem rgb(240, 189, 33);
     border: 0.01rem black;
+    z-index: 0!important;
 }
 
 .input-button {
@@ -237,6 +244,7 @@ footer {
 .table-top {
     background-image: linear-gradient(180deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     color: white;
+    z-index: 1;
 }
 
 th {
@@ -267,26 +275,6 @@ th {
     color: rgb(240, 189, 33);
 }
 
-textarea {
-    border: none;
-    resize: none;
-    min-width: fit-content;
-    background-color: transparent;
-    text-align: left;
-    
-}
-
-textarea:hover {
-    outline: 0.1rem solid rgb(240, 189, 33);
-    box-shadow: 0 0 2rem rgb(240, 189, 33);
-    background-color:white;
-}
-
-textarea:focus {
-    background-color: white;
-    font-weight: bold;
-}
-
 .note {
     text-align: left;
     font-size: 1.1rem;
@@ -305,21 +293,31 @@ option {
 }
 
 /* Checkout */
-
-.checkout {
+.container-ch {
     background-color: black;
-    min-height: 100%;
-    position: absolute;
-    z-index: 1;    
-    width: 40%;
-    border: 0.1rem solid white;
-    box-shadow: 0.2rem 0 0 0;
+    min-height: fit-content;
+    width: 100%;
+    border: 0.1rem solid rgb(240, 189, 33);
+    box-shadow: 0.2rem 0.2rem 0 0;
+    padding-top: 2rem;
+}
+
+.container-ch form {
+    max-width: fit-content;
+    margin: 0;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.search-member-ch {    
+    vertical-align: middle;
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+    outline: 0.1rem solid rgb(240, 189, 33);
+}
+
+.row-ch {
     color: white;
-    padding-top: 11vh;
+    cursor: pointer;
 }
-
-.checkout p {
-    
-    margin-left: 15vw;
-}
-

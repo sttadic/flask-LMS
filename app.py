@@ -227,8 +227,7 @@ def books():
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
     # Query database for books and sort by title
-    books = db.execute('SELECT * FROM books ORDER BY title ASC')
-    
+    books = db.execute('SELECT * FROM books ORDER BY title ASC')    
 
     # User reached route via GET
     if request.method == 'GET':
@@ -260,7 +259,7 @@ def books():
             # Delete book
             db.execute('DELETE FROM books WHERE id == ?', request.form.get('id'))            
 
-            # Flash book is removed message
+            # Flash book removed message
             flash(f'Book "{removed}" has been successfully removed!')
 
             # Redirect to books route with updated table
@@ -297,7 +296,7 @@ def books():
             # Flash a message
             flash(f'Book ID:{id} details updated!')
 
-            # Redirect to books route with updated table
+            # Redirect to books route and show updated table
             return redirect('/books')
         
     
@@ -395,7 +394,7 @@ def members():
             # Delete member
             db.execute('DELETE FROM members WHERE member_id == ?', request.form.get('id'))            
 
-            # Flash a message that memeber is removed
+            # Flash a message
             flash(f'Member {removed} has been removed.')
 
             # Redirect to members route with updated table
@@ -421,7 +420,7 @@ def members():
             
             flash(f'Member ID:{id} details updated!')
             
-            # Redirect to members route with updated table
+            # Redirect to members route and show updated table
             return redirect('/members')
         
      
@@ -474,23 +473,20 @@ def checkout():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
-    # Query database for members ordered by name
-    members = db.execute('SELECT * FROM members ORDER BY name ASC')  
-
     # User reached route via GET
-    if request.method == 'GET':      
+    if request.method == 'GET':
 
-        # Search members query by user
+        # Sarch query
         q = request.args.get('query')
 
-        # Search query submitted
+        # Query submitted
         if q:
-            # Query database for id and name of members based on the search input and render template with results
-            members = db.execute('SELECT * FROM members WHERE member_id LIKE ? OR name LIKE ?', q, '%' + q + '%')
-            return render_template('checkout.html', name=name, members=members)
+            # Query database for member id based on user input and render template with result
+            member = db.execute('SELECT * FROM members WHERE member_id == ?', q)
+            return render_template('checkout.html', name=name, member=member)
         
          # Render checkout template
-        return render_template('checkout.html', name=name, members=members)
+        return render_template('checkout.html', name=name)
     
     # User reached route via POST
     else:
