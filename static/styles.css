@@ -317,7 +317,38 @@ option {
     outline: 0.1rem solid rgb(240, 189, 33);
 }
 
-.row-ch {
+.row-member-ch {
     color: white;
     cursor: pointer;
 }
+
+.card {
+    background-color:rgba(0, 0, 0, 0.215);
+}
+
+.search-book-ch {    
+    vertical-align: middle;
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+    outline: 0.1rem solid black;
+}
+
+.search-book-ch:focus {
+    box-shadow: 0rem 0rem 1rem rgb(240, 189, 33);
+}
+
+.btn-book-ch {
+    color: white;
+    background-color: black;
+}
+
+.btn-book-ch:hover {
+    outline: 0.1rem solid black;
+}
+
+.table-book-ch {
+    margin-top: 1rem;
+}
+
+

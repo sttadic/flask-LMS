@@ -9,11 +9,11 @@
 {% block main %}
 <div class="container-ch">
     <form role="search" action="/checkout">
-        <input class="search-member-ch me-2" type="search" name="query" autocomplete="off" placeholder="Member ID" aria-label="Search">
+        <input class="search-member-ch me-2" type="search" name="query" autocomplete="off" placeholder="Member ID" aria-label="Search" autofocus>
         <button class="btn btn-outline-warning" type="submit">Find</button>
     </form>
 
-    <div class="wrapper" id="blur">
+    <div class="wrapper">
         <table class="table" spellcheck="false">
             <thead class="sticky-top table-top">
                 <tr>
@@ -26,7 +26,7 @@
             </thead>
             <tbody>
                 {% for m in member %}
-                    <tr class="row-data row-ch" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    <tr class="row-data row-member-ch" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                         <td id="id"><input name="id" value="{{ m.member_id }}" hidden> {{ m.member_id }}</td>
                         <td id="name">{{ m.name }}</td>
                         <td id="email">{{ m.email }}</td>
@@ -42,9 +42,43 @@
 <!--Collapse https://getbootstrap.com/docs/5.3/components/collapse/-->
 <div class="collapse" id="collapseExample">
     <div class="card card-body">
-        Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+        <div>
+            <input id="search" name="query_books" class="search-book-ch me-2" onclick="searchBookCh()" type="search" autocomplete="off" placeholder="Book ID" aria-label="Search">
+            <button class="btn btn-book-ch" type="submit">Find</button>
+        </div>
+        <div class="wrapper table-book-ch">
+            <table id='book' class="table">
+                <thead class="sticky-top table-top">
+                    <tr>
+                        <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>            
+                        <th scope="col">TITLE</th>
+                        <th scope="col">AUTHOR</th>
+                        <th scope="col">GENRE</th>          
+                        <th scope="col">PUBLISHED</th>                        
+                        <th scope="col">AVAILABLE</th>
+                        <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr class="row-data">
+                        <td>{{ book.id }}</td>            
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td> 
+                        <td>{{ book.genre }}</td>           
+                        <td>{{ book.year }}</td>    
+                        <td>{{ book.availability }}</td>
+                        <td><button class="button btn-edit">Add Book</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
     </div>
 </div>
+
+
+
 
 <!-- Toogle offcanvas button:
 
@@ -66,4 +100,25 @@
 
     </div>
 </div>
+
+
+<script>
+function searchBookCh() {
+  var query = $('#search').val();
+  $.get('/checkout', {'query_books': query}, function(e) { 
+    var table = $('#book tbody');
+    $(function(book) {  
+      var row = $('<tr></tr>');
+      console.log('id', book.id);
+      row.append($('<td></td>').text(book.id));
+      row.append($('<td></td>').text(book.title));
+      row.append($('<td></td>').text(book.author));
+      row.append($('<td></td>').text(book.genre));
+      row.append($('<td></td>').text(book.year));
+      row.append($('<td></td>').text(book.availability));
+      table.append(row);
+    });
+  });
+}
+</script>
 {% endblock %}
