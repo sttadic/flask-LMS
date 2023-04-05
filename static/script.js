@@ -25,7 +25,7 @@ function searchBook() {
     $.get('/books', {'query': query, 'field': field}, function(data) {
         let table = $('#books tbody');
         table.empty();
-        if (query === '') {                 // If query empty
+        if (!query) {                       // If query empty
             window.location.reload();       // Reload template
         } else {
             data.forEach(function(book) {
@@ -104,7 +104,7 @@ function searchMember() {
     $.get('/members', {'query': query, 'field': field}, function(data) {
         let table = $('#members tbody');
         table.empty();
-        if (query === '') {                 // If query empty
+        if (!query) {                       // If query empty
             window.location.reload();       // Reload template
         } else {
             data.forEach(function(member) {

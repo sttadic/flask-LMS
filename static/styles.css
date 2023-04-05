@@ -351,4 +351,11 @@ option {
     margin-top: 1rem;
 }
 
+#cancelMember{
+    border-radius: 0.5rem 0.5rem;
+}
+#cancelMember:hover { 
+   background-color: rgb(240, 189, 33);
+}
+
 

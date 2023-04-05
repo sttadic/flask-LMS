@@ -376,9 +376,9 @@ def members():
             # Populate matches list and return JSON response with matching items
             matches = [member for member in members if query.lower() in str(member[field]).lower()]
             return jsonify(matches)
-        
-        # Render members.html
-        return render_template('members.html', name=name, members=members)
+        else:
+            # Render members.html
+            return render_template('members.html', name=name, members=members)
 
     # User reached route via POST
     else:
@@ -473,23 +473,28 @@ def checkout():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
+    members = db.execute('SELECT * FROM members')
+    books = db.execute('SELECT * FROM books')
+
     # User reached route via GET
     if request.method == 'GET':
 
-        # Sarch query
-        q = request.args.get('query')
-
-        # Query submitted
-        if q:
-            # Query database for member id based on user input and render template with result
-            member = db.execute('SELECT * FROM members WHERE member_id == ?', q)
-            return render_template('checkout.html', name=name, member=member)
-        
-         # Render checkout template
+        # Render checkout template
         return render_template('checkout.html', name=name)
     
     # User reached route via POST
     else:
+        # Sarch query
+        qm = request.form.get('query_member')
+      # qb = request.args.get('query_book')
+
+        if qm:
+            # Populate matches list and return JSON response with matching items
+            matches = [member for member in members if qm == str(member['member_id'])]
+            return jsonify(matches)
+        else:
+            return jsonify({})
+        
         return
         
 
