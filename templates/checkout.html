@@ -102,9 +102,15 @@ $('#findMember').click(function(e) {
     $('.collapse').show();
     let query = $('#searchMember').val();    
     $.post('/checkout', {'query_member': query}).done(function(data) {   
-        let row = $('<tr></tr>').addClass('row-data row-member-ch');
-        if (!query) {                         // If query empty
+        let row = $('<tr></tr>').addClass('row-member-ch');
+        if (!query) {                         // Query empty
+            $('.collapse').hide();            // Hide collapsable element
             $('#member tbody').empty();       // Clear table's body element
+        } 
+        else if(!query.indexOf(data)) {       // Query (member Id) is not in database
+            $('.collapse').hide();
+            $('#member tbody').empty();
+            alert('Member ID does not exist in library database!');     // Show alert
         } else {
             data.forEach(function(member) {
                 row.append($('<td></td>').text(member.member_id));
