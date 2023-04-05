@@ -484,16 +484,18 @@ def checkout():
     
     # User reached route via POST
     else:
-        # Sarch query
-        qm = request.form.get('query_member')
-      # qb = request.args.get('query_book')
 
-        if qm:
-            # Populate matches list and return JSON response with matching items
-            matches = [member for member in members if qm == str(member['member_id'])]
-            return jsonify(matches)
-        else:
-            return jsonify({})
+        if request.headers['Content-Type'] == 'application/x-www-form-urlencoded; charset=UTF-8':
+            # Sarch query
+            qm = request.form.get('query_member')
+        # qb = request.args.get('query_book')
+
+            if qm:
+                # Populate matches list and return JSON response with matching items
+                matches = [member for member in members if qm == str(member['member_id'])]
+                return jsonify(matches)
+            else:
+                return jsonify({})
         
         return
         
