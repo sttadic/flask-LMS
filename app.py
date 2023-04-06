@@ -479,24 +479,21 @@ def checkout():
     # User reached route via GET
     if request.method == 'GET':
 
+        # Sarch query
+        qm = request.form.get('query_member')
+        matches = []
+        
+        for member in members:
+            if qm and str(member['member_id']) == qm:
+                matches.append(member)
+                return jsonify(matches)
+
         # Render checkout template
         return render_template('checkout.html', name=name)
     
     # User reached route via POST
     else:
 
-        if request.headers['Content-Type'] == 'application/x-www-form-urlencoded; charset=UTF-8':
-            # Sarch query
-            qm = request.form.get('query_member')
-        # qb = request.args.get('query_book')
-
-            if qm:
-                # Populate matches list and return JSON response with matching items
-                matches = [member for member in members if qm == str(member['member_id'])]
-                return jsonify(matches)
-            else:
-                return jsonify({})
-        
         return
         
 
