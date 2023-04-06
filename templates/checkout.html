@@ -8,8 +8,9 @@
 
 {% block main %}
 <div class="container-ch">
+
     <input class="search-member-ch me-2" id="searchMember" type="search" name="queryMember" autocomplete="off" placeholder="Member ID" aria-label="Search" autofocus>
-    <button class="btn btn-outline-warning" id="memberButton" onclick="checkoutMemberSearch()">Find</button>
+    <button class="btn btn-outline-warning" onclick="checkoutMemberSearch()">Find</button>
     
     <div class="wrapper">
         <table id="member" class="table" spellcheck="false">
@@ -24,7 +25,7 @@
                 </tr>
             </thead>
             <tbody>                
-                    <tr class="row-data row-member-ch" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="collapseExample">                        
+                    <tr>                        
                     </tr>                   
             </tbody>
         </table>
@@ -121,7 +122,7 @@ function checkoutMemberSearch() {
                 row.append($('<td></td>').text(element.address));
                 row.append($('<td></td>').text(element.phone));
                 row.append($('<td></td>').html('<button id="cancelMember">Cancel</button>'));
-                // Add/replace existing content of inner element (so only one member will show at time) 
+                // Add to/replace existing content of tbody element (so only one member will show at time) 
                 $('#member tbody').html(row);
                 // Set found variable to true
                 found = true; 
@@ -131,13 +132,14 @@ function checkoutMemberSearch() {
         if (!found) {
             $('.collapse').hide();
             $('#member tbody').empty();
+            $('#searchMember').val('');
             alert('Member ID does not exist in library database!');
         }
         // Remove member (clear table's body element) if cancel selected
         $('#cancelMember').click(function() {
             $('.collapse').hide();
             $('#member tbody').empty();
-            row.removeAttr('data-bs-target','#collapseExample');
+            $('#searchMember').val('');
         });
     });
 }

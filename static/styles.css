@@ -302,13 +302,6 @@ option {
     padding-top: 2rem;
 }
 
-.container-ch form {
-    max-width: fit-content;
-    margin: 0;
-    display: inline-block;
-    margin-bottom: 1rem;
-}
-
 .search-member-ch {    
     vertical-align: middle;
     background-color: white;
@@ -319,7 +312,6 @@ option {
 
 .row-member-ch {
     color: white;
-    cursor: pointer;
 }
 
 .card {
