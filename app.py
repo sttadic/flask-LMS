@@ -371,7 +371,7 @@ def members():
         query = request.args.get('query')
         field = request.args.get('field')
 
-        # If query exists
+        # Query exists
         if query:
             # Populate matches list and return JSON response with matching items
             matches = [member for member in members if query.lower() in str(member[field]).lower()]
@@ -480,16 +480,16 @@ def checkout():
     if request.method == 'GET':
 
         # Sarch query
-        qm = request.form.get('query_member')
-        matches = []
-        
-        for member in members:
-            if qm and str(member['member_id']) == qm:
-                matches.append(member)
-                return jsonify(matches)
+        q = request.args.get('queryMember')
 
-        # Render checkout template
-        return render_template('checkout.html', name=name)
+        # Query exists
+        if q:
+            # Return entire list of members as JSON response
+            return jsonify(members)
+        
+        else:
+            # Render checkout template
+            return render_template('checkout.html', name=name)
     
     # User reached route via POST
     else:
