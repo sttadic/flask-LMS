@@ -479,17 +479,23 @@ def checkout():
     # User reached route via GET
     if request.method == 'GET':
 
-        # Sarch query
-        q = request.args.get('queryMember')
+        # Sarch queries
+        queryMember = request.args.get('queryMember')
+        queryBook = request.args.get('queryBook')
 
-        # Query exists
-        if q:
+        # User searched for members
+        if queryMember:
             # Return entire list of members as JSON response
             return jsonify(members)
         
-        else:
-            # Render checkout template
-            return render_template('checkout.html', name=name)
+        # User searched for books
+        if queryBook:
+            # Return entire list of books as JSON response
+            return jsonify(books)
+        
+        
+        # Render checkout template
+        return render_template('checkout.html', name=name)
     
     # User reached route via POST
     else:
