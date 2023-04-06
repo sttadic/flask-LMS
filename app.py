@@ -485,7 +485,7 @@ def checkout():
     # User reached route via POST
     else:
 
-        if request.headers['Content-Type'] == 'application/x-www-form-urlencoded; charset=UTF-8':
+        if 'Content-Type' in request.headers and request.headers['Content-Type'] == 'application/x-www-form-urlencoded; charset=UTF-8':
             # Sarch query
             qm = request.form.get('query_member')
         # qb = request.args.get('query_book')
