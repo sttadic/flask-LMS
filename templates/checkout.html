@@ -25,19 +25,20 @@
                 </tr>
             </thead>
             <tbody>                
-                    <tr>                        
-                    </tr>                   
+                  
             </tbody>
         </table>
     </div>
 </div>
 
+
+
 <!--Collapse https://getbootstrap.com/docs/5.3/components/collapse/-->
 <div class="collapse" id="collapseExample">
     <div class="card card-body">
         <div>
-            <input id="searchBook" name="queryBook" class="search-book-ch me-2" onclick="searchBookCh()" type="search" autocomplete="off" placeholder="Book ID" aria-label="Search">
-            <button class="btn btn-book-ch" type="submit">Find</button>
+            <input id="searchBook" name="queryBook" class="search-book-ch me-2" type="search" autocomplete="off" placeholder="Book ID" aria-label="Search">
+            <button class="btn btn-book-ch" onclick="checkoutBookSearch()">Find</button>
         </div>
         <div class="wrapper table-book-ch">
             <table id='book' class="table">
@@ -49,24 +50,28 @@
                         <th scope="col">GENRE</th>          
                         <th scope="col">PUBLISHED</th>                        
                         <th scope="col">AVAILABLE</th>
+                        <th scope="col"></th>
                         <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for book in books %}
-                    <tr class="row-data">
-                        <td>{{ book.id }}</td>            
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.author }}</td> 
-                        <td>{{ book.genre }}</td>           
-                        <td>{{ book.year }}</td>    
-                        <td>{{ book.availability }}</td>
-                        <td><button class="button btn-edit">Add Book</button></td>
-                    </tr>
-                    {% endfor %}
+
                 </tbody>
             </table>
-            </div>
+        </div>
+        <br>
+        
+        <div class="wrapper table-book-ch">
+            <table id="addedBooks" class="table table-added-books">
+                <thead>
+                    <h5>Added Books:</h5>
+                    <hr>                
+                </thead>
+                <tbody>
+      
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -94,56 +99,4 @@
     </div>
 </div>
 
-
-<script>
-function checkoutMemberSearch() {
-    let query = $('#searchMember').val();
-    // Query empty
-    if (!query) {                         
-        $('.collapse').hide();         // Hide collapsable element
-        $('#member tbody').empty();    // Clear table's body element
-        $('#searchMember').focus();    // Focus back (caret) on input element
-        return                            
-    }
-    $.get('/checkout', {'queryMember': query}, function(data) {
-        let found = false;
-        // Assign a row element and its class to a row variable
-        let row = $('<tr></tr>').addClass('row-member-ch');
-        // Show collapsable element
-        $('.collapse').show();
-        // Iterate over data response (array of objects)
-        data.forEach(function(element) {
-            // Query exists in data
-            if(query == element.member_id) {
-                       
-                // Populate rows with members details and add cancel button
-                row.append($('<td></td>').text(element.member_id));
-                row.append($('<td></td>').text(element.name));
-                row.append($('<td></td>').text(element.email));
-                row.append($('<td></td>').text(element.address));
-                row.append($('<td></td>').text(element.phone));
-                row.append($('<td></td>').html('<button id="cancelMember">Cancel</button>'));
-                // Add to/replace existing content of tbody element (so only one member will show at time) 
-                $('#member tbody').html(row);
-                // Set found variable to true
-                found = true; 
-            }
-        });  
-        // Query doesn't exists in data
-        if (!found) {
-            $('.collapse').hide();
-            $('#member tbody').empty();
-            $('#searchMember').val('');
-            alert('Member ID does not exist in library database!');
-        }
-        // Remove member (clear table's body element) if cancel selected
-        $('#cancelMember').click(function() {
-            $('.collapse').hide();
-            $('#member tbody').empty();
-            $('#searchMember').val('');
-            $('#searchMember').focus();
-        });
-    });
-}
-</script>
 {% endblock %}

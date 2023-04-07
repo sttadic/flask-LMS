@@ -336,18 +336,49 @@ option {
 }
 
 .btn-book-ch:hover {
-    outline: 0.1rem solid black;
+    outline: 0.2rem solid black;
+    background-color: transparent;
+    color: black;
 }
 
 .table-book-ch {
     margin-top: 1rem;
 }
 
-#cancelMember{
+.btn-cancel-member{
     border-radius: 0.5rem 0.5rem;
 }
-#cancelMember:hover { 
+
+.btn-cancel-member:hover { 
    background-color: rgb(240, 189, 33);
 }
+
+.btn-cancel-book {
+    color: white;
+    background-color: black;
+    border-radius: 0.5rem 0.5rem;
+}
+
+.btn-cancel-book:hover {
+    background-color: rgb(240, 189, 33);
+    color: black;
+}
+
+.btn-add-book {
+    color: white;
+    background-color: black;
+    border-radius: 0.5rem 0.5rem;
+}
+
+.btn-add-book:hover {
+    background-color: rgb(240, 189, 33);
+    color: black;
+}
+
+.table-added-books {
+    background-color: rgba(240, 188, 33, 0.164);
+}
+
+
 
 
