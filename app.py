@@ -499,8 +499,8 @@ def checkout():
     
     # User reached route via POST
     else:
-
-        return
+        
+        return redirect('/')
         
 
 

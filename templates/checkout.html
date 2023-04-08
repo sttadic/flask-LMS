@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block main %}
+
 <div class="container-ch">
 
     <input class="search-member-ch me-2" id="searchMember" type="search" name="queryMember" autocomplete="off" placeholder="Member ID" aria-label="Search" autofocus>
@@ -73,30 +74,9 @@
             </table>
         </div>
     </div>
-</div>
-
-
-
-
-<!-- Toogle offcanvas button:
-
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
-        Toggle static offcanvas
-    </button>
-    
--->
-
-<!--Checkout https://getbootstrap.com/docs/5.3/components/offcanvas/-->
-<div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Books Checkout</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        
-        Content...
-
-    </div>
+    <form action="/checkout" method="post">
+        <button class="btn-checkout">Checkout</button>
+    </form>
 </div>
 
 {% endblock %}

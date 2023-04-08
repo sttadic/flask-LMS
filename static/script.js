@@ -227,8 +227,8 @@ function checkoutBookSearch() {
                 row.append($('<td></td>').text(element.genre));
                 row.append($('<td></td>').text(element.year));
                 row.append($('<td></td>').text(element.stock));  // Have to change this to availability when implemented
-                row.append($('<td></td>').html('<button class="btn-add-book" id="addBook">Add Book</button>'));
-                row.append($('<td></td>').html('<button class="btn-cancel-book" id="cancelBook">Cancel</button>'));
+                row.append($('<td></td>').html('<button class="btn-book" id="addBook">Add Book</button>'));
+                row.append($('<td></td>').html('<button class="btn-book" id="cancelBook">Cancel</button>'));
                 // Add to/replace existing content of tbody element (so only one book will show at time) 
                 $('#book tbody').html(row);
                 // Set found variable to true
@@ -236,43 +236,55 @@ function checkoutBookSearch() {
 
 
                 // Add books block           
-                let rowAdded = $('<tr></tr>').addClass('row-data');
 
                 $('#addBook').click(function() {
-                     // Prevent adding same book multiple times
-                    if(element.id != $('#checkId').text()) {
-                        rowAdded.append($('<td id="checkId"></td>').text(element.id));
+                    let alreadyAdded = false;
+                    // Loop through each row in the table to check if book has already been added
+                    $('#addedBooks tbody tr').each(function() {                        
+                        if ($(this).find('.check-Id').text() == element.id) {
+                            alreadyAdded = true;
+                            // As soon as book match found break out of the loop
+                            return false; 
+                        }
+                    });
+                
+                    if (alreadyAdded) {
+                        alert('Book already added!');
+                    } else {
+                        // Add book to table
+                        let rowAdded = $('<tr></tr>').addClass('row-data');
+                        rowAdded.append($('<td class="check-Id"></td>').text(element.id));
                         rowAdded.append($('<td></td>').text(element.title));
                         rowAdded.append($('<td></td>').text(element.author));
                         rowAdded.append($('<td></td>').text(element.genre));
                         rowAdded.append($('<td></td>').text(element.year));
-                        rowAdded.append($('<td></td>').html('<button class="btn-cancel-book">Remove</button>'));                        
+                        rowAdded.append($('<td></td>').html('<button class="btn-remove-book">Remove</button>'));                        
                         $('#addedBooks tbody').append(rowAdded);
-                        // Clear search result
+                
+                        // Clear search result and move focus back to search 
                         $('#book tbody').empty();
-                     // If book already added show alert
-                    } else {
-                        alert('Book already added!')
+                        $('#searchBook').val('');
+                        $('#searchBook').focus();
                     }
-
-                    // Empty the closest row to remove button if remove selected
-                    $('#addedBooks tbody').on('click', '.btn-cancel-book', function() {
-                        $(this).closest('tr').empty(); 
-                    });
                 });
             }
         });
+        // Remove added book by emptying the closest row to remove button
+        $('#addedBooks tbody').on('click', '.btn-remove-book', function() {
+            $(this).closest('tr').remove(); 
+        });
+
         // Query doesn't exists in data
         if (!found) {
             $('#book tbody').empty();
             $('#searchBook').val('');
             alert('Book ID does not exist in library database!');
         }
-        // Remove book (clear table's body element) if cancel selected
+        // Cancel book search (clear table's body element) if cancel selected
         $('#cancelBook').click(function() {
             $('#book tbody').empty();
             $('#searchBook').val('');
             $('#searchBook').focus();
-        });        
+        }); 
     });
 }

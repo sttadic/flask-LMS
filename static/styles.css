@@ -353,30 +353,43 @@ option {
    background-color: rgb(240, 189, 33);
 }
 
-.btn-cancel-book {
+.btn-remove-book {
     color: white;
     background-color: black;
     border-radius: 0.5rem 0.5rem;
 }
 
-.btn-cancel-book:hover {
+.btn-remove-book:hover {
     background-color: rgb(240, 189, 33);
     color: black;
 }
 
-.btn-add-book {
+.btn-book {
     color: white;
     background-color: black;
     border-radius: 0.5rem 0.5rem;
 }
 
-.btn-add-book:hover {
+.btn-book:hover {
     background-color: rgb(240, 189, 33);
     color: black;
 }
 
 .table-added-books {
     background-color: rgba(240, 188, 33, 0.164);
+}
+
+.btn-checkout {
+    margin-top: 0.8rem;
+    font-size: 1.3rem;
+    color: white;
+    background-color: black;
+    border-radius: 0.5rem 0.5rem;
+}
+
+.btn-checkout:hover {
+    outline: 0.2rem solid rgb(240, 189, 33);
+    
 }
 
 
