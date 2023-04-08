@@ -499,6 +499,9 @@ def checkout():
     
     # User reached route via POST
     else:
+        # Get an array and variable sent by post request
+        bookIds = request.form.getlist('bookIds')
+        memberId = request.form.get('memberId')
         
         return redirect('/')
         

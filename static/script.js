@@ -161,7 +161,7 @@ function checkoutMemberSearch() {
             if(query == element.member_id) {
                        
                 // Populate rows with members details and add cancel button
-                row.append($('<td></td>').text(element.member_id));
+                row.append($('<td id="memberId"></td>').text(element.member_id));
                 row.append($('<td></td>').text(element.name));
                 row.append($('<td></td>').text(element.email));
                 row.append($('<td></td>').text(element.address));
@@ -287,4 +287,38 @@ function checkoutBookSearch() {
             $('#searchBook').focus();
         }); 
     });
+}
+
+
+function checkout() {
+    // Assign value of of an element with id=memberId to variable memberId
+    let memberId = $("#memberId").text();
+    let bookIds = [];
+
+    // Iterate over added books and push their values into an array bookIds
+    $('.check-Id').each(function() {
+        bookIds.push($(this).text());
+    });
+    // Check if books added
+    if(bookIds.length === 0) {
+        alert('No books added yet!')
+    }
+    // Send both variables in the same HTTP request to the server's checkout endpoint
+    $.ajax({
+        url: '/checkout',
+        method: 'POST',
+        data: {
+            'bookIds': bookIds,
+            'memberId': memberId
+        },
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+
+    console.log(memberId);
+    console.log(bookIds);
 }
