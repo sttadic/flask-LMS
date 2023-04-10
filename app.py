@@ -491,21 +491,35 @@ def checkout():
         # User searched for books
         if queryBook:
             # Return entire list of books as JSON response
-            return jsonify(books)
-        
+            return jsonify(books)        
         
         # Render checkout template
         return render_template('checkout.html', name=name)
     
     # User reached route via POST
     else:
-        # Get an array and variable sent by post request
-        bookIds = request.form.getlist('bookIds')
+        # Get a list of book ids and member id from user input      
         memberId = request.form.get('memberId')
+        bookIds = request.form.getlist('bookId')
+        type = 'foo'
         
+        # Iterate over bookIds
+        for id in bookIds:
+
+            # Insert all data into transactions table
+            db.execute('INSERT INTO transactions (borrower_id, employee_id, book_id, type) VALUES (?, ?, ?, ?)', memberId, user_id, id, type)
+        
+        # Query for member's name from database
+        member_name = db.execute('SELECT * FROM members WHERE member_id=?', memberId)[0]['name']
+
+        # Flash a message
+        flash(f'Books successfully checked out to {member_name}')
+
+        # Redirect to index page
         return redirect('/')
         
-
+        
+        
 
 # Main driver function
 if __name__ == '__main__':

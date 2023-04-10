@@ -167,6 +167,9 @@ function checkoutMemberSearch() {
                 row.append($('<td></td>').text(element.address));
                 row.append($('<td></td>').text(element.phone));
                 row.append($('<td></td>').html('<button class="btn-cancel-member" id="cancelMember">Cancel</button>'));
+                // Add hidden input element with member id value to the form element at the bottom of the template
+                $('#checkout').append($('<input name="memberId" hidden>').attr('value', element.member_id));
+
                 // Add to/replace existing content of tbody element (so only one member will show at time) 
                 $('#member tbody').html(row);
                 // Set found variable to true
@@ -260,7 +263,8 @@ function checkoutBookSearch() {
                         rowAdded.append($('<td></td>').text(element.year));
                         rowAdded.append($('<td></td>').html('<button class="btn-remove-book">Remove</button>'));                        
                         $('#addedBooks tbody').append(rowAdded);
-                
+                        // Add hidden input elements with book id values to the form element
+                        $('#checkout').append($('<input name="bookId" hidden>').attr('value', element.id));
                         // Clear search result and move focus back to search 
                         $('#book tbody').empty();
                         $('#searchBook').val('');
@@ -289,36 +293,32 @@ function checkoutBookSearch() {
     });
 }
 
+// Check if any books are added in checkout process
+$(document).ready(function() { 
+    $('#checkout').submit(function(event) {         
+        
+        let bookIds = [];
 
-function checkout() {
-    // Assign value of of an element with id=memberId to variable memberId
-    let memberId = $("#memberId").text();
-    let bookIds = [];
+        // Iterate over added books and push their values into an array bookIds
+        $('.check-Id').each(function() {
+            bookIds.push($(this).text());
+        });
 
-    // Iterate over added books and push their values into an array bookIds
-    $('.check-Id').each(function() {
-        bookIds.push($(this).text());
-    });
-    // Check if books added
-    if(bookIds.length === 0) {
-        alert('No books added yet!')
-    }
-    // Send both variables in the same HTTP request to the server's checkout endpoint
-    $.ajax({
-        url: '/checkout',
-        method: 'POST',
-        data: {
-            'bookIds': bookIds,
-            'memberId': memberId
-        },
-        success: function(response) {
-            console.log(response);
-        },
-        error: function(error) {
-            console.log(error);
+        // No books added
+        if(bookIds.length === 0) {
+            // Show alert and prevent submission
+            alert('No books added yet!')
+            event.preventDefault();
+        }
+        // Else prompt for confirmation
+        else {
+            // If ok selected, let the back-end take over from here on
+            if(confirm('Confirm checkout')) {
+                
+            } else {
+                // Prevent submisson
+                event.preventDefault();
+            }
         }
     });
-
-    console.log(memberId);
-    console.log(bookIds);
-}
+});
