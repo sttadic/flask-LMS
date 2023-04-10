@@ -237,7 +237,6 @@ function checkoutBookSearch() {
                 // Set found variable to true
                 found = true; 
 
-
                 // Add books block           
 
                 $('#addBook').click(function() {
@@ -293,7 +292,7 @@ function checkoutBookSearch() {
     });
 }
 
-// Check if any books are added in checkout process
+// Check if books added in checkout process and prompt for confirmation
 $(document).ready(function() { 
     $('#checkout').submit(function(event) {         
         
@@ -312,11 +311,10 @@ $(document).ready(function() {
         }
         // Else prompt for confirmation
         else {
-            // If ok selected, let the back-end take over from here on
+            // If ok selected back-end will take over
             if(confirm('Confirm checkout')) {
-                
+            // If cancel selected prevent submission
             } else {
-                // Prevent submisson
                 event.preventDefault();
             }
         }
