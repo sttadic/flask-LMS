@@ -40,7 +40,7 @@ def login_required(f):
     return decorated_function
 
 
-GENRES = ['Autobiography', 'Biography', 'Business', 'Children', 'Drama', 'Fantasy', 'Fiction', 'Historical Fiction', 'Horror', 'Humor', 'Memoir', 'Mystery', 'Non-fiction', 'Poetry', 'Romance', 'Science Fiction', 'Self-help', 'Spiritual/Religious', 'Thriller', 'Travel']
+GENRES = ['Art', 'Autobiography', 'Biography', 'Business', 'Children', 'Comics', 'Cookbooks', 'Drama', 'Fantasy', 'Fiction', 'Graphic Novel', 'Historical Fiction', 'History', 'Horror', 'Humor', 'Memoir', 'Music', 'Mystery', 'Non-fiction', 'Other', 'Poetry', 'Psychology', 'Romance', 'Science', 'Science Fiction', 'Self-help', 'Spiritual/Religious', 'Sports', 'Thriller', 'Travel']
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -201,15 +201,6 @@ def catalogue():
         books = db.execute('SELECT * FROM books ORDER BY genre ASC')
         return render_template('catalogue.html', books=books, name=name)
     
-    # Search books query by user
-    q = request.args.get('query')
-
-    # Search query submitted
-    if q:
-        # Query database for title, author and id (id requires precise search query) based on the search input and render template with results
-        books = db.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR id LIKE ?', '%' + q + '%', '%' + q + '%', q)
-        return render_template('catalogue.html', name=name, books=books)
-    
     # User reached route from navbar - query database for books and sort by title
     books = db.execute('SELECT * FROM books ORDER BY title ASC')
     return render_template('catalogue.html', books=books, name=name)
@@ -254,10 +245,10 @@ def books():
         if button == 'remove':
             
             # Query database for the title of the book to be removed
-            removed = db.execute('SELECT title FROM books WHERE id == ?', request.form.get('id'))[0]['title']
+            removed = db.execute('SELECT title FROM books WHERE id = ?', request.form.get('id'))[0]['title']
 
             # Delete book
-            db.execute('DELETE FROM books WHERE id == ?', request.form.get('id'))            
+            db.execute('DELETE FROM books WHERE id = ?', request.form.get('id'))            
 
             # Flash book removed message
             flash(f'Book "{removed}" has been successfully removed!')
@@ -291,7 +282,7 @@ def books():
                 return redirect('/books')
 
             # Update books table
-            db.execute('UPDATE books SET title = ?, author = ?, genre = ?, year = ?, stock = ? WHERE id == ?', title, author, genre, year, stock, id)
+            db.execute('UPDATE books SET title = ?, author = ?, genre = ?, year = ?, stock = ? WHERE id = ?', title, author, genre, year, stock, id)
 
             # Flash a message
             flash(f'Book ID:{id} details updated!')
@@ -341,7 +332,7 @@ def new_book():
             return redirect('/new-book')  
 
         # Insert new book details into books table
-        db.execute('INSERT INTO books (title, author, genre, year, stock) VALUES (?, ?, ?, ?, ?)', title, author, genre, year, stock)
+        db.execute('INSERT INTO books (title, author, genre, year, stock, available) VALUES (?, ?, ?, ?, ?, ?)', title, author, genre, year, stock, stock)
         
         # Flash book added message on redirect
         flash(f'A book "{title}" by "{author}" has been added.')
@@ -371,7 +362,7 @@ def members():
         query = request.args.get('query')
         field = request.args.get('field')
 
-        # If query exists
+        # Query exists
         if query:
             # Populate matches list and return JSON response with matching items
             matches = [member for member in members if query.lower() in str(member[field]).lower()]
@@ -389,10 +380,10 @@ def members():
         if button == 'remove':
             
             # Query database for a name of a member to be deleted
-            removed = db.execute('SELECT name FROM members WHERE member_id == ?', request.form.get('id'))[0]['name']
+            removed = db.execute('SELECT name FROM members WHERE member_id = ?', request.form.get('id'))[0]['name']
 
             # Delete member
-            db.execute('DELETE FROM members WHERE member_id == ?', request.form.get('id'))            
+            db.execute('DELETE FROM members WHERE member_id = ?', request.form.get('id'))            
 
             # Flash a message
             flash(f'Member {removed} has been removed.')
@@ -416,7 +407,7 @@ def members():
                 return render_template('members.html', name=name, members=members)
 
             # Update members table
-            db.execute('UPDATE members SET name = ?, email = ?, address = ?, phone = ? WHERE member_id == ?', member, email, address, phone, id)
+            db.execute('UPDATE members SET name = ?, email = ?, address = ?, phone = ? WHERE member_id = ?', member, email, address, phone, id)
             
             flash(f'Member ID:{id} details updated!')
             
@@ -453,7 +444,7 @@ def new_member():
             return render_template('new-member.html', name=name)        
 
         # Insert new member details into members table
-        db.execute('INSERT INTO members (name, email, address, phone) VALUES (?, ?, ?, ?)', member, email, address, phone)
+        db.execute('INSERT INTO members (name, email, address, phone, borrowed) VALUES (?, ?, ?, ?, ?)', member, email, address, phone, 0)
         
         # Flash member added message on redirect
         flash(f'A member {member} joins the library.')
@@ -479,26 +470,55 @@ def checkout():
     # User reached route via GET
     if request.method == 'GET':
 
+        # Sarch queries
+        queryMember = request.args.get('queryMember')
+        queryBook = request.args.get('queryBook')
+
+        # User searched for members
+        if queryMember:
+            # Return entire list of members as JSON response
+            return jsonify(members)
+        
+        # User searched for books
+        if queryBook:
+            # Return entire list of books as JSON response
+            return jsonify(books)        
+        
         # Render checkout template
         return render_template('checkout.html', name=name)
     
     # User reached route via POST
     else:
-
-        if 'Content-Type' in request.headers and request.headers['Content-Type'] == 'application/x-www-form-urlencoded; charset=UTF-8':
-            # Sarch query
-            qm = request.form.get('query_member')
-        # qb = request.args.get('query_book')
-
-            if qm:
-                # Populate matches list and return JSON response with matching items
-                matches = [member for member in members if qm == str(member['member_id'])]
-                return jsonify(matches)
-            else:
-                return jsonify({})
+        # Get a list of book ids and member id from user input      
+        memberId = request.form.get('memberId')
+        bookIds = request.form.getlist('bookId')
+        type = 'borrow'
         
-        return
         
+        # Iterate over bookIds
+        for id in bookIds:
+
+            # Query database for book availability and number of books borrowed for a particular member
+            available = db.execute('SELECT available FROM books WHERE id = ?', id)[0]['available']
+            borrowed = db.execute('SELECT borrowed FROM members WHERE member_id = ?', memberId)[0]['borrowed']
+
+            # Insert all data into transactions table
+            db.execute('INSERT INTO transactions (borrower_id, book_id, type, employee_id) VALUES (?, ?, ?, ?)', memberId, id, type, user_id)
+
+            # Update books availability in books table and number of books borrowed in members table
+            db.execute('UPDATE books SET available = ? WHERE id = ?', available - 1, id)
+            db.execute('UPDATE members SET borrowed = ? WHERE member_id = ?', borrowed + 1, memberId)
+        
+        # Query for member's name from database
+        member_name = db.execute('SELECT * FROM members WHERE member_id = ?', memberId)[0]['name']
+
+        # Flash a message
+        flash(f'Books successfully checked out to {member_name}')
+
+        # Redirect to index page
+        return redirect('/')
+
+
 
 
 # Main driver function
