@@ -28,6 +28,7 @@ function searchBook() {
         if (!query) {                       // If query empty
             window.location.reload();       // Reload template
         } else {
+            // Iterate over data and populate rows
             data.forEach(function(book) {
                 let row = $('<tr></tr>');
                 row.append($('<td></td>').text(book.id));
@@ -61,7 +62,7 @@ function searchBook() {
 }
 
 
-// Dynamic search with AJAX (catalogue.html)
+// Dynamic search with AJAX using json response from books endpoint (catalogue.html)
 function searchCatalogue() {
     let query = $('#search').val();
     let field = $('#field').val();
@@ -71,6 +72,7 @@ function searchCatalogue() {
         if (query === '') {                 // if query empty
             window.location.reload();       // reload template
         } else {
+            // Iterate over data and populate rows
             data.forEach(function(book) {
                 let row = $('<tr></tr>');
                 row.append($('<td></td>').text(book.id));
@@ -79,7 +81,7 @@ function searchCatalogue() {
                 row.append($('<td></td>').text(book.genre));
                 row.append($('<td></td>').text(book.year));
                 row.append($('<td></td>').text(book.stock));
-                row.append($('<td></td>').text(book.availability));
+                row.append($('<td></td>').text(book.available));
                 table.append(row);
             });
         }
@@ -107,6 +109,7 @@ function searchMember() {
         if (!query) {                       // If query empty
             window.location.reload();       // Reload template
         } else {
+            // Iterate over data and populate rows
             data.forEach(function(member) {
                 let row = $('<tr></tr>');
                 row.append($('<td></td>').text(member.member_id));
@@ -138,6 +141,7 @@ function searchMember() {
     });
 }
 
+
 // CHECKOUT FUNCTIONS
 
 function checkoutMemberSearch() {
@@ -166,6 +170,9 @@ function checkoutMemberSearch() {
                 row.append($('<td></td>').text(element.email));
                 row.append($('<td></td>').text(element.address));
                 row.append($('<td></td>').text(element.phone));
+                // Also used in script below to check max amount of books that can be issued to a member (6):
+                row.append($('<td id="borrowed"></td>').text(element.borrowed));
+                // Cancel button
                 row.append($('<td></td>').html('<button class="btn-cancel-member" id="cancelMember">Cancel</button>'));
                 // Add hidden input element with member id value to the form element at the bottom of the template
                 $('#checkout').append($('<input name="memberId" hidden>').attr('value', element.member_id));
@@ -229,16 +236,15 @@ function checkoutBookSearch() {
                 row.append($('<td></td>').text(element.author));
                 row.append($('<td></td>').text(element.genre));
                 row.append($('<td></td>').text(element.year));
-                row.append($('<td></td>').text(element.stock));  // Have to change this to availability when implemented
+                row.append($('<td class="available"></td>').text(element.available));
                 row.append($('<td></td>').html('<button class="btn-book" id="addBook">Add Book</button>'));
                 row.append($('<td></td>').html('<button class="btn-book" id="cancelBook">Cancel</button>'));
                 // Add to/replace existing content of tbody element (so only one book will show at time) 
                 $('#book tbody').html(row);
                 // Set found variable to true
                 found = true; 
-
-                // Add books block           
-
+                
+                // Add books block
                 $('#addBook').click(function() {
                     let alreadyAdded = false;
                     // Loop through each row in the table to check if book has already been added
@@ -249,9 +255,12 @@ function checkoutBookSearch() {
                             return false; 
                         }
                     });
-                
+                    // Book already added
                     if (alreadyAdded) {
                         alert('Book already added!');
+                    // Book current stock == 0
+                    } else if($('.available').text() <= 0) {
+                        alert('Book currently unavailable')
                     } else {
                         // Add book to table
                         let rowAdded = $('<tr></tr>').addClass('row-data');
@@ -292,29 +301,37 @@ function checkoutBookSearch() {
     });
 }
 
-// Check if books added in checkout process and prompt for confirmation
+
+// Check different parameters before submiting
 $(document).ready(function() { 
     $('#checkout').submit(function(event) {         
         
-        let bookIds = [];
+        let counter = 0;
 
-        // Iterate over added books and push their values into an array bookIds
+        // Iterate over added books and increment counter
         $('.check-Id').each(function() {
-            bookIds.push($(this).text());
+            counter++;
         });
 
         // No books added
-        if(bookIds.length === 0) {
+        if(counter == 0) {
             // Show alert and prevent submission
-            alert('No books added yet!')
+            alert('No books added yet!');
+            event.preventDefault();
+
+        // Member can not have more than 6 books at a time. Books that are previously borrowed but not returned yet are taken into account
+        } else if((parseInt($('#borrowed').text()) + counter) > 6) {
+            alert('Maximum number of books a member can hold at a time is 6!');
             event.preventDefault();
         }
         // Else prompt for confirmation
         else {
-            // If ok selected back-end will take over
+            // If ok selected -> submit and back-end will take over
             if(confirm('Confirm checkout')) {
+            
+            }
             // If cancel selected prevent submission
-            } else {
+            else {
                 event.preventDefault();
             }
         }
