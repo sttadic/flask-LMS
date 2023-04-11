@@ -190,7 +190,7 @@ function checkoutMemberSearch() {
             $('.collapse').hide();
             $('#member tbody').empty();
             $('#searchMember').val('');
-            alert('Member ID does not exist in library database!');
+            alert('Member ID does not exist in library database');
             $('#searchMember').focus();
             // If book in collapseable element already searched for, clear that element and search value
             $('#book tbody').empty();
@@ -257,7 +257,7 @@ function checkoutBookSearch() {
                     });
                     // Book already added
                     if (alreadyAdded) {
-                        alert('Book already added!');
+                        alert('Book already added');
                     // Book current stock == 0
                     } else if($('.available').text() <= 0) {
                         alert('Book currently unavailable')
@@ -290,7 +290,7 @@ function checkoutBookSearch() {
         if (!found) {
             $('#book tbody').empty();
             $('#searchBook').val('');
-            alert('Book ID does not exist in library database!');
+            alert('Book ID does not exist in library database');
         }
         // Cancel book search (clear table's body element) if cancel selected
         $('#cancelBook').click(function() {
@@ -316,12 +316,12 @@ $(document).ready(function() {
         // No books added
         if(counter == 0) {
             // Show alert and prevent submission
-            alert('No books added yet!');
+            alert('No books added yet');
             event.preventDefault();
 
         // Member can not have more than 6 books at a time. Books that are previously borrowed but not returned yet are taken into account
         } else if((parseInt($('#borrowed').text()) + counter) > 6) {
-            alert('Maximum number of books a member can hold at a time is 6!');
+            alert('Maximum number of books a member can hold at a time is 6');
             event.preventDefault();
         }
         // Else prompt for confirmation
