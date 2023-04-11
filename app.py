@@ -40,7 +40,7 @@ def login_required(f):
     return decorated_function
 
 
-GENRES = ['Autobiography', 'Biography', 'Business', 'Children', 'Drama', 'Fantasy', 'Fiction', 'Historical Fiction', 'Horror', 'Humor', 'Memoir', 'Mystery', 'Non-fiction', 'Poetry', 'Romance', 'Science Fiction', 'Self-help', 'Spiritual/Religious', 'Thriller', 'Travel']
+GENRES = ['Art', 'Autobiography', 'Biography', 'Business', 'Children', 'Comics', 'Cookbooks', 'Drama', 'Fantasy', 'Fiction', 'Graphic Novel', 'Historical Fiction', 'History', 'Horror', 'Humor', 'Memoir', 'Music', 'Mystery', 'Non-fiction', 'Other', 'Poetry', 'Psychology', 'Romance', 'Science', 'Science Fiction', 'Self-help', 'Spiritual/Religious', 'Sports', 'Thriller', 'Travel']
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -341,7 +341,7 @@ def new_book():
             return redirect('/new-book')  
 
         # Insert new book details into books table
-        db.execute('INSERT INTO books (title, author, genre, year, stock) VALUES (?, ?, ?, ?, ?)', title, author, genre, year, stock)
+        db.execute('INSERT INTO books (title, author, genre, year, stock, available) VALUES (?, ?, ?, ?, ?, ?)', title, author, genre, year, stock, stock)
         
         # Flash book added message on redirect
         flash(f'A book "{title}" by "{author}" has been added.')
@@ -453,7 +453,7 @@ def new_member():
             return render_template('new-member.html', name=name)        
 
         # Insert new member details into members table
-        db.execute('INSERT INTO members (name, email, address, phone) VALUES (?, ?, ?, ?)', member, email, address, phone)
+        db.execute('INSERT INTO members (name, email, address, phone, borrowed) VALUES (?, ?, ?, ?, ?)', member, email, address, phone, 0)
         
         # Flash member added message on redirect
         flash(f'A member {member} joins the library.')
