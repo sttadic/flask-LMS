@@ -1,6 +1,6 @@
 /* Layout styling */
 body {
-    background-image: url("pattern.jpg");
+    background-image: url("book.jpg");
     background-attachment: fixed;
     min-height: 100vh;
     display: flex;
