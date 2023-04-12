@@ -1,20 +1,22 @@
- // Javascript toggle blur & popup function (books.html/members.html)
+ // BOOKS, MEMBERS, CATALOGUE
+ 
+ // Toggle blur & popup function (books.html/members.html)
  function toggle() {
-    let blur = document.querySelector('#blur');
-    blur.classList.toggle('active');
-    let popup = document.querySelector('#popup');
-    popup.classList.toggle('active');
+    let blur = $('#blur');
+    blur.toggleClass('active');
+    let popup = $('#popup');
+    popup.toggleClass('active');
 }
 
 
 // Populate popup form fields with corresponding values of a selected book (books.html)
 function editBook(id, title, author, genre, year, stock) {
-    document.querySelector("#form_id").value = id;
-    document.querySelector("#form_title").value = title;
-    document.querySelector("#form_author").value = author;
-    document.querySelector("#form_genre").value = genre;
-    document.querySelector("#form_year").value = year;
-    document.querySelector("#form_stock").value = stock;
+    $("#form_id").val(id);
+    $("#form_title").val(title);
+    $("#form_author").val(author);
+    $("#form_genre").val(genre);
+    $("#form_year").val(year);
+    $("#form_stock").val(stock);
 }
 
 
@@ -91,11 +93,11 @@ function searchCatalogue() {
 
 // Populate popup form fields with corresponding values of a selected member (members.html)
 function editMember(member_id, name, email, address, phone) {
-    document.querySelector("#form_id").value = member_id;
-    document.querySelector("#form_name").value = name;
-    document.querySelector("#form_email").value = email;
-    document.querySelector("#form_address").value = address;
-    document.querySelector("#form_phone").value = phone;
+    $("#form_id").val(member_id);
+    $("#form_name").val(name);
+    $("#form_email").val(email);
+    $("#form_address").val(address);
+    $("#form_phone").val(phone);
 }
 
 
@@ -142,7 +144,7 @@ function searchMember() {
 }
 
 
-// CHECKOUT FUNCTIONS
+// CHECKOUT
 
 function checkoutMemberSearch() {
     let query = $('#searchMember').val();
