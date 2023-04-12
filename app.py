@@ -156,18 +156,36 @@ def register():
 @app.route('/')
 @login_required
 def index():
-    '''Index page: show list of currently issued books'''
+    '''Index page: show list of currently issued books. Reurn functionality'''
 
     # Get user_id from session
     user_id = session['user_id']
 
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+    
+    # Query database for all books that are borrowed
+    transactions = db.execute('SELECT * FROM transactions WHERE type = ?', 'borrow')
+    members = db.execute('SELECT * FROM members')
 
-    #
+    # User reached route via GET
+    if request.method == 'GET':
+        member_due = []
 
-    # Render index.html
-    return render_template('index.html', name=name)
+        # Iterate over members dict
+        for member in members:
+            # Append member to the member_due list if one has any number of borrowed books
+            if member['borrowed'] > 0:
+                member_due.append(member)
+        
+        # Render index.html
+        return render_template('index.html', name=name, members=member_due)
+
+    # User reached route via POST
+    else:
+
+        # Render index.html
+        return render_template('index.html', name=name)
 
 
 @app.route('/catalogue')

@@ -1,4 +1,4 @@
-/* Layout styling */
+/* Layout % general style */
 body {
     background-image: url("book.jpg");
     background-attachment: fixed;
@@ -82,7 +82,8 @@ nav {
 }
 
 
-/* Footer styles */
+/* Footer */
+
 footer {
     background-image: linear-gradient(0deg, rgba(0,0,0,1) 62%, rgba(121,121,121,1) 100%);
     margin-top: auto;
@@ -117,7 +118,8 @@ footer {
   }
 
 
-/* Flash messages styling */
+/* Flash messages */
+
 .container {
     margin: 0 auto 2rem auto;
 }
@@ -138,7 +140,8 @@ footer {
     box-shadow: 0.7rem 0.7rem; 
 }
 
-/* Forms styling */
+/* Forms */
+
 .forms {
     margin: auto;
     padding-bottom: 2rem;
@@ -217,6 +220,7 @@ footer {
 }
 
 /* Books & members templates */
+
 .search {
     background-color: white;
     border-radius: 0.5rem;
@@ -392,6 +396,9 @@ option {
     
 }
 
+/* Index page */
 
-
-
+.row-data-index:hover {
+    background-color: rgb(240, 189, 33, 0.3);
+    cursor: pointer;
+}

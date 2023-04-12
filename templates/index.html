@@ -15,4 +15,40 @@
     {% endif %}
     {% endwith %}
 </div>
+<h4 style="margin-bottom:2rem;">BOOK RETURNS</h4>
+<div class="wrapper">
+    <table class="table table-striped">
+        <thead class="sticky-top table-top">
+            <tr>
+                <th scope="col" style="border-radius: 0.7rem 0 0 0;"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}            
+                <tr class="row-data-index" id="{{ member.member_id }}" data-bs-toggle="collapse" data-bs-target="#{{ member.member_id }}">            
+                    <td class="mId">{{ member.member_id }}</td>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.email }}</td> 
+                    <td>{{ member.address }}</td>
+                    <td>{{ member.phone }}</td>
+                    <td>{{ member.time }}</td>
+                    
+                </tr>
+                
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!--Collapsable element
+<div class="collapse" id=" member.member_id ">
+    Content
+</div> -->
+
+
 {% endblock %}

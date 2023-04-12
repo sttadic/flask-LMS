@@ -308,12 +308,8 @@ function checkoutBookSearch() {
 $(document).ready(function() { 
     $('#checkout').submit(function(event) {         
         
-        let counter = 0;
-
-        // Iterate over added books and increment counter
-        $('.check-Id').each(function() {
-            counter++;
-        });
+        // Number of rows (added books)
+        let counter = $('.check-Id').length;
 
         // No books added
         if(counter == 0) {
@@ -328,7 +324,7 @@ $(document).ready(function() {
         }
         // Else prompt for confirmation
         else {
-            // If ok selected -> submit and back-end will take over
+            // If ok selected -> submit and let backend do the rest
             if(confirm('Confirm checkout')) {
             
             }
@@ -337,5 +333,15 @@ $(document).ready(function() {
                 event.preventDefault();
             }
         }
+    });
+});
+
+
+// INDEX
+
+$(document).ready(function() {
+    
+    $('.row-data-index').click(function () {  
+        console.log($(this).text())
     });
 });
