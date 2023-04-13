@@ -31,7 +31,7 @@
         <tbody>
             {% for member in members %} 
                 <tr class="row-data-index" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom"> 
-                    <td>{{ member.member_id }}</td>
+                    <td class="memId">{{ member.member_id }}</td>
                     <td>{{ member.name }}</td>
                     <td>{{ member.email }}</td> 
                     <td>{{ member.address }}</td>
@@ -48,10 +48,23 @@
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasBottomLabel">Offcanvas header</h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body small">
-      Content
-    </div>
-  </div>
+    </div>    
+    <table id="borrowed" class="table">
+        <thead class="sticky-top table-top">
+            <tr>
+                <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>            
+                <th scope="col">TITLE</th>
+                <th scope="col">AUTHOR</th>
+                <th scope="col">GENRE</th>          
+                <th scope="col">PUBLISHED</th>   
+                <th scope="col"></th>
+                <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <button class="btn-return-all">Return All</button>
+</div>
 
 {% endblock %}

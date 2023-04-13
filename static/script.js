@@ -341,11 +341,38 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     
-    $('.row-data-index').click(function () {  
-        // Ajax post request
+    $('.row-data-index').click(function () {
+        // Get child of a row clicked on with a class .memId
+        let memId = $(this).find('.memId').text();
+
+       
+
+        // Ajax post request (response are two lists of books and transactions)
         $.post('/', dataType="json", function(data) {
-            // Console log only secong list from json response (transactions)
-            console.log(data[1])
+            
+            let borrowedBooks = []
+            // Iterate over transactions and push all book's ids that a certain member borrowed into list
+            data[1].forEach(function(transaction) {
+                if(memId == transaction.borrower_id) {
+                    borrowedBooks.push(transaction.book_id);
+                }                
+            });
+            // Iterate over borrowedBooks list and compare ids with list of books ids, if match append
+            borrowedBooks.forEach(function(id) {
+                data[0].forEach(function(books) {
+                    if(id == books.id) {
+                        console.log(books.title);
+                        let row = $('<tr></tr>').addClass('row-return');
+                        row.append($('<td></td>').text(books.id));
+                        row.append($('<td></td>').text(books.title));
+                        row.append($('<td></td>').text(books.author));
+                        row.append($('<td></td>').text(books.genre));
+                        row.append($('<td></td>').text(books.year));
+                        row.append($('<td></td>').html('<button class="btn-return-book">Return</button>'));
+                        $('#borrowed tbody').append(row);
+                    }
+                });
+            });
         });        
     });
 });

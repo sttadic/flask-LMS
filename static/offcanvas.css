@@ -1,0 +1,44 @@
+.offcanvas {
+    background-image: url("book.jpg");
+    color: rgb(0, 0, 0);
+    min-height: 40%;
+    height: auto!important;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.row-return {
+    font-weight: bold;
+    border: 0.05rem solid black;
+}
+
+.row-return:hover {
+    background-color: rgba(240, 188, 33, 0.5);
+}
+
+.btn-return-book {
+    color: white;
+    background-color: black;
+    border-radius: 0.5rem 0.5rem;
+}
+
+.btn-return-book:hover {
+    background-color: rgb(240, 189, 33);
+    color: black;
+}
+
+.btn-return-all {
+    color: white;
+    background-color: black;
+    border-radius: 0.5rem 0.5rem;
+    font-size: 1.2rem;
+    max-width: fit-content;
+    margin: auto;
+    margin-bottom: 2rem;
+}
+
+.btn-return-all:hover {
+    background-color: rgb(240, 189, 33);
+    color: black;
+    font-weight: 600;
+}
