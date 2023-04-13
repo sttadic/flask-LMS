@@ -342,6 +342,10 @@ $(document).ready(function() {
 $(document).ready(function() {
     
     $('.row-data-index').click(function () {  
-        console.log($(this).text())
+        // Ajax post request
+        $.post('/', dataType="json", function(data) {
+            // Console log only secong list from json response (transactions)
+            console.log(data[1])
+        });        
     });
 });

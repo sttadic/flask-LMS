@@ -153,7 +153,7 @@ def register():
         return redirect('/')
 
 
-@app.route('/')
+@app.route('/', methods = ['GET', 'POST'])
 @login_required
 def index():
     '''Index page: show list of currently issued books. Reurn functionality'''
@@ -164,9 +164,10 @@ def index():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
     
-    # Query database for all books that are borrowed
+    # Query database for transactions, members and books
     transactions = db.execute('SELECT * FROM transactions WHERE type = ?', 'borrow')
     members = db.execute('SELECT * FROM members')
+    books = db.execute('SELECT * FROM books')
 
     # User reached route via GET
     if request.method == 'GET':
@@ -177,15 +178,17 @@ def index():
             # Append member to the member_due list if one has any number of borrowed books
             if member['borrowed'] > 0:
                 member_due.append(member)
-        
+       
         # Render index.html
         return render_template('index.html', name=name, members=member_due)
 
     # User reached route via POST
     else:
-
-        # Render index.html
-        return render_template('index.html', name=name)
+         
+         # Check request header from client and send whole list of books and transations as json response
+         if request.headers['Content-Type'] == 'application/x-www-form-urlencoded; charset=UTF-8':
+            return jsonify(books, transactions)
+        
 
 
 @app.route('/catalogue')
