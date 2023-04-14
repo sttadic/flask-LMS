@@ -24,11 +24,14 @@ function editBook(id, title, author, genre, year, stock) {
 function searchBook() {
     let query = $('#search').val();
     let field = $('#field').val();
+
     $.get('/books', {'query': query, 'field': field}, function(data) {
         let table = $('#books tbody');
         table.empty();
-        if (!query) {                       // If query empty
-            window.location.reload();       // Reload template
+
+        // Reload template if query empty
+        if (!query) {
+            window.location.reload();
         } else {
             // Iterate over data and populate rows
             data.forEach(function(book) {
@@ -40,23 +43,26 @@ function searchBook() {
                 row.append($('<td></td>').text(book.year));
                 row.append($('<td></td>').text(book.stock));
                 
-                form = $('<form></form>').attr('action', '/books').attr('method', 'POST').on('click', function(e) {
+                // Form, input and button elements
+                let form = $('<form></form>').attr('action', '/books').attr('method', 'POST').on('click', function(e) {
                     if (!confirm('Completely remove \'' + book.title + '\' by ' + book.author + ' (book ID: ' + book.id + ') and all of its stock from library database?')) {
-                        // Prevent form submission (default behavior) if user cancels
+                        // Prevent form submission if user cancels
                         e.preventDefault();
                     }
                 });
-                input = $('<input>').attr("name", 'id').attr('value', book.id).hide();
-                button = $('<button></button>').text('Remove').addClass('button').attr('name', 'button').attr('value','remove');
-                // Input & button inside form element
-                form.append(input).append(button);
+                let input = $('<input>').attr("name", 'id').attr('value', book.id).hide();
+                let button = $('<button></button>').text('Remove').addClass('button').attr('name', 'button').attr('value','remove');
                 
-                row.append($('<td></td>').append(form));
+                // Append form along with input and button elements to a row
+                row.append($('<td></td>').append(form.append(input).append(button)));
+
                 // Toggle and editBook functions appended to a table row along with Edit button and its class
                 row.append($('<td></td>').append($('<button></button>').text('Edit').addClass('button btn-edit').click(function() {
                     toggle();
                     editBook(book.id, book.title, book.author, book.genre, book.year, book.stock);
                 })));
+
+                // Add row to a table
                 table.append(row);
             });
         }
@@ -71,8 +77,10 @@ function searchCatalogue() {
     $.get('/books', {'query': query, 'field': field}, function(data) {
         let table = $('#books tbody');
         table.empty();
-        if (query === '') {                 // if query empty
-            window.location.reload();       // reload template
+
+        // Reload template if query empty
+        if (query === '') {
+            window.location.reload();
         } else {
             // Iterate over data and populate rows
             data.forEach(function(book) {
@@ -108,8 +116,10 @@ function searchMember() {
     $.get('/members', {'query': query, 'field': field}, function(data) {
         let table = $('#members tbody');
         table.empty();
-        if (!query) {                       // If query empty
-            window.location.reload();       // Reload template
+
+        // Reload template if query empty
+        if (!query) {
+            window.location.reload();
         } else {
             // Iterate over data and populate rows
             data.forEach(function(member) {
@@ -120,23 +130,26 @@ function searchMember() {
                 row.append($('<td></td>').text(member.address));
                 row.append($('<td></td>').text(member.phone));
                 
-                form = $('<form></form>').attr('action', '/members').attr('method', 'POST').on('click', function(e) {
+                // Form, input and button elements
+                let form = $('<form></form>').attr('action', '/members').attr('method', 'POST').on('click', function(e) {
                     if (!confirm("Completely remove member " + member.name + " (member ID: " + member.member_id + ") and all their details from library database?")) {
                         // Prevent form submission if user cancels
                         e.preventDefault();
                     }
                 });
-                input = $('<input>').attr("name", 'id').attr('value', member.member_id).hide();                
-                button = $('<button></button>').text('Remove').addClass('button').attr('name', 'button').attr('value','remove');
-                // Input & button inside form element
-                form.append(input).append(button);
+                let input = $('<input>').attr("name", 'id').attr('value', member.member_id).hide();                
+                let button = $('<button></button>').text('Remove').addClass('button').attr('name', 'button').attr('value','remove');
                 
-                row.append($('<td></td>').append(form));
+                // Append form along with input and button elements to a row
+                row.append($('<td></td>').append(form.append(input).append(button)));
+
                 // Toggle and editMember functions appended along with Edit button and its class
                 row.append($('<td></td>').append($('<button></button>').text('Edit').addClass('button btn-edit').click(function() {
                     toggle();
                     editMember(member.member_id, member.name, member.email, member.address, member.phone);
                 })));
+
+                // Add row to a table
                 table.append(row);
             });
         }
@@ -337,42 +350,65 @@ $(document).ready(function() {
 });
 
 
-// INDEX
+// INDEX (BOOK RETURNS)
 
 $(document).ready(function() {
     
     $('.row-data-index').click(function () {
-        // Get child of a row clicked on with a class .memId
+
+        // Clear table body element and remove all hidden input elements (in case they were already populated from previous click)
+        $('#borrowed tbody').empty();
+        $('.inputAll').remove();
+
+        let idList = []
+
+        // Get child's value (member id) of a row clicked on
         let memId = $(this).find('.memId').text();
 
-       
-
-        // Ajax post request (response are two lists of books and transactions)
+        // Ajax post request (endpoint response: books and transactions lists)
         $.post('/', dataType="json", function(data) {
             
             let borrowedBooks = []
-            // Iterate over transactions and push all book's ids that a certain member borrowed into list
+            // Iterate over transactions and push all book's ids that a certain member borrowed into a list
             data[1].forEach(function(transaction) {
                 if(memId == transaction.borrower_id) {
                     borrowedBooks.push(transaction.book_id);
                 }                
             });
-            // Iterate over borrowedBooks list and compare ids with list of books ids, if match append
+            // Iterate over borrowedBooks list and compare its ids with list of books ids
             borrowedBooks.forEach(function(id) {
                 data[0].forEach(function(books) {
                     if(id == books.id) {
-                        console.log(books.title);
                         let row = $('<tr></tr>').addClass('row-return');
                         row.append($('<td></td>').text(books.id));
                         row.append($('<td></td>').text(books.title));
                         row.append($('<td></td>').text(books.author));
                         row.append($('<td></td>').text(books.genre));
                         row.append($('<td></td>').text(books.year));
-                        row.append($('<td></td>').html('<button class="btn-return-book">Return</button>'));
+
+                        // Initialize form, input and button variables
+                        let form = $('<form></form>').attr('action', '/').attr('method', 'POST').on('click', function(e) {
+                            if (!confirm("Return book " + books.title + "?")) {
+                                // Prevent form submission if user cancels
+                                e.preventDefault();
+                            }
+                        });
+                        let input = $('<input>').attr("name", 'id').attr('value', books.id).hide();                
+                        let button = $('<button></button>').text('Return').addClass('btn-return-book');
+                        
+                        // Append form along with input and button elements to a row
+                        row.append($('<td></td>').append(form.append(input).append(button)));
+
+                        // Add row to a tbody element
                         $('#borrowed tbody').append(row);
+
+                        // Push all book ids into a list
+                        idList.push(books.id)                        
                     }
                 });
-            });
+            }); 
+            // Add input element(s) to a form with id="returnAll" along with its name and value (which is a list of book ids)
+            $('#returnAll').append(($('<input>')).attr('class','inputAll').attr('name', 'all_ids').attr('value', idList).hide());           
         });        
     });
 });

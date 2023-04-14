@@ -57,14 +57,16 @@
                 <th scope="col">AUTHOR</th>
                 <th scope="col">GENRE</th>          
                 <th scope="col">PUBLISHED</th>   
-                <th scope="col"></th>
+                
                 <th scope="col" style="border-radius: 0 0.7rem 0 0;"></th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    <button class="btn-return-all">Return All</button>
+    <form action="/" method="post" id="returnAll" onclick='return confirm("Return all books?")'>
+        <button class="btn-return-all">Return All</button>
+    </form>
 </div>
 
 {% endblock %}

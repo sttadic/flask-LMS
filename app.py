@@ -185,10 +185,20 @@ def index():
     # User reached route via POST
     else:
          
-         # Check request header from client and send whole list of books and transations as json response
-         if request.headers['Content-Type'] == 'application/x-www-form-urlencoded; charset=UTF-8':
+        # Check request header from client and send whole list of books and transations as json response
+        if request.headers['Content-Type'] == 'application/x-www-form-urlencoded; charset=UTF-8':
             return jsonify(books, transactions)
+         
+        book_id = request.form.get('id')
+        book_ids = request.form.get('all_ids')
         
+        if book_id:
+            print(book_id)
+            return redirect('/')
+        
+        if book_ids:
+            print(book_ids)
+            return redirect('/')
 
 
 @app.route('/catalogue')
