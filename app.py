@@ -156,7 +156,7 @@ def register():
 @app.route('/', methods = ['GET', 'POST'])
 @login_required
 def index():
-    '''Index page: show list of currently issued books. Reurn functionality'''
+    '''Index page: show list of currently issued books. Return functionality'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -185,19 +185,63 @@ def index():
     # User reached route via POST
     else:
          
-        # Check request header from client and send whole list of books and transations as json response
+        # Check request header and send whole list of books and transactions as json response
         if request.headers['Content-Type'] == 'application/x-www-form-urlencoded; charset=UTF-8':
             return jsonify(books, transactions)
-         
-        book_id = request.form.get('id')
-        book_ids = request.form.get('all_ids')
         
+        # User selection
+        book_id = request.form.get('id')
+        book_ids = request.form.getlist('all_ids')
+        member_id = request.form.get('memberId')
+
         if book_id:
-            print(book_id)
+
+            # Query database for number of books borrowed by a particular member
+            borrowed = db.execute('SELECT borrowed FROM members WHERE member_id = ?', member_id)[0]['borrowed']
+
+            # Query database for book availability
+            available = db.execute('SELECT available FROM books WHERE id = ?', book_id)[0]['available']
+
+            # Update transaction type from borrow to borrowed (so fronted script can filter out books that are not in the possesion of a member anymore, and table can be used for transactions history)
+            db.execute('UPDATE transactions SET type = ? WHERE borrower_id = ? AND book_id = ?', 'borrowed', member_id, book_id)
+
+            # Insert new data into transactions table
+            db.execute('INSERT INTO transactions (borrower_id, book_id, type, employee_id) VALUES (?, ?, ?, ?)', member_id, book_id, 'returned', user_id)
+
+            # Update book availability
+            db.execute('UPDATE books SET available = ? WHERE id = ?', available + 1, book_id)
+
+            # Update number of books borrowed by a member
+            db.execute('UPDATE members SET borrowed = ? WHERE member_id = ?', borrowed - 1, member_id)
+
+            flash('Book returned')
+            
             return redirect('/')
         
         if book_ids:
-            print(book_ids)
+            # Iterate over list of book ids
+            for book_id in book_ids:
+
+                # Query database for number of books borrowed by a particular member
+                borrowed = db.execute('SELECT borrowed FROM members WHERE member_id = ?', member_id)[0]['borrowed']
+
+                # Query database for book availability
+                available = db.execute('SELECT available FROM books WHERE id = ?', book_id)[0]['available']
+
+                # Update transaction type from borrow to borrowed (so fronted script can filter out books that are not in the possesion of a member anymore, and table can be used for transactions history)
+                db.execute('UPDATE transactions SET type = ? WHERE borrower_id = ? AND book_id = ?', 'borrowed', member_id, book_id)
+
+                # Insert new data into transactions table
+                db.execute('INSERT INTO transactions (borrower_id, book_id, type, employee_id) VALUES (?, ?, ?, ?)', member_id, book_id, 'returned', user_id)
+
+                # Update book availability
+                db.execute('UPDATE books SET available = ? WHERE id = ?', available + 1, book_id)
+
+                # Update number of books borrowed by a member
+                db.execute('UPDATE members SET borrowed = ? WHERE member_id = ?', borrowed - 1, member_id)
+
+            flash('All books returned')
+            
             return redirect('/')
 
 

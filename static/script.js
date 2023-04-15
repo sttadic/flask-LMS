@@ -358,9 +358,9 @@ $(document).ready(function() {
 
         // Clear table body element and remove all hidden input elements (in case they were already populated from previous click)
         $('#borrowed tbody').empty();
+        $('#inputMemId').remove();
         $('.inputAll').remove();
-
-        let idList = []
+        
 
         // Get child's value (member id) of a row clicked on
         let memId = $(this).find('.memId').text();
@@ -371,7 +371,7 @@ $(document).ready(function() {
             let borrowedBooks = []
             // Iterate over transactions and push all book's ids that a certain member borrowed into a list
             data[1].forEach(function(transaction) {
-                if(memId == transaction.borrower_id) {
+                if(memId == transaction.borrower_id && transaction.type == 'borrow') {
                     borrowedBooks.push(transaction.book_id);
                 }                
             });
@@ -393,22 +393,24 @@ $(document).ready(function() {
                                 e.preventDefault();
                             }
                         });
-                        let input = $('<input>').attr("name", 'id').attr('value', books.id).hide();                
+                        let inputBook = $('<input>').attr("name", 'id').attr('value', books.id).hide(); 
+                        let inputMember = $('<input>').attr("name", 'memberId').attr('value', memId).hide();
                         let button = $('<button></button>').text('Return').addClass('btn-return-book');
                         
-                        // Append form along with input and button elements to a row
-                        row.append($('<td></td>').append(form.append(input).append(button)));
+                        // Append form along with inputs and button elements to a row
+                        row.append($('<td></td>').append(form.append(inputBook).append(inputMember).append(button)));
 
                         // Add row to a tbody element
                         $('#borrowed tbody').append(row);
 
-                        // Push all book ids into a list
-                        idList.push(books.id)                        
+                        // Add input element(s) to a form (id="returnAll") with borrowed book(s) id(s)
+                        $('#returnAll').append(($('<input>')).attr('class','inputAll').attr('name', 'all_ids').attr('value', books.id).hide());  
                     }
                 });
             }); 
-            // Add input element(s) to a form with id="returnAll" along with its name and value (which is a list of book ids)
-            $('#returnAll').append(($('<input>')).attr('class','inputAll').attr('name', 'all_ids').attr('value', idList).hide());           
+            // Add input elements to a form (id="returnAll") with values member Id and list of all borrowed books ids
+            $('#returnAll').append(($('<input>')).attr('id','inputMemId').attr('name', 'memberId').attr('value', memId).hide());
+                     
         });        
     });
 });
