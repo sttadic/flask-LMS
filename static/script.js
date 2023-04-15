@@ -165,7 +165,7 @@ function checkoutMemberSearch() {
 
     // Query empty
     if (!query) {                         
-        $('.collapse').hide();         // Hide collapsable element
+        $('.collapseCh').hide();         // Hide collapsable element
         $('#member tbody').empty();    // Clear table's body element
         $('#searchMember').focus();    // Focus back (caret) on input element
         return                            
@@ -175,7 +175,7 @@ function checkoutMemberSearch() {
         // Assign a row element and its class to a row variable
         let row = $('<tr></tr>').addClass('row-member-ch');
         // Show collapsable element
-        $('.collapse').show();
+        $('.collapseCh').show();
         // Iterate over data response (array of objects)
         data.forEach(function(element) {
             // Query exists in data
@@ -204,7 +204,7 @@ function checkoutMemberSearch() {
         });  
         // Query doesn't exists in data
         if (!found) {
-            $('.collapse').hide();
+            $('.collapseCh').hide();
             $('#member tbody').empty();
             $('#searchMember').val('');
             alert('Member ID does not exist in library database');
@@ -215,7 +215,7 @@ function checkoutMemberSearch() {
         }
         // Remove member (clear table's body element) if cancel selected
         $('#cancelMember').click(function() {
-            $('.collapse').hide();
+            $('.collapseCh').hide();
             $('#member tbody').empty();
             $('#searchMember').val('');
             $('#searchMember').focus();

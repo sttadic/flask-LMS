@@ -5,6 +5,7 @@
     height: auto!important;
     overflow: hidden;
     overflow-y: auto;
+    overflow-x: auto;
 }
 
 .row-return {
