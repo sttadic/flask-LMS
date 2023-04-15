@@ -160,7 +160,9 @@ function searchMember() {
 // CHECKOUT
 
 function checkoutMemberSearch() {
+
     let query = $('#searchMember').val();
+
     // Query empty
     if (!query) {                         
         $('.collapse').hide();         // Hide collapsable element
@@ -228,7 +230,9 @@ function checkoutMemberSearch() {
 
 
 function checkoutBookSearch() {
+
     let query = $('#searchBook').val();
+
     // Query empty
     if (!query) {                         
         $('#book tbody').empty();    // Clear table's body element
@@ -240,8 +244,8 @@ function checkoutBookSearch() {
         // Assign a row element and its class to a row variable
         let row = $('<tr></tr>');
         
-        // Iterate over data response (array of objects)
-        data.forEach(function(element) {
+        // Iterate over data response (books)
+        data[0].forEach(function(element) {
             // Query exists in data
             if(query == element.id) {
                        
@@ -259,10 +263,14 @@ function checkoutBookSearch() {
                 // Set found variable to true
                 found = true; 
                 
+
                 // Add books block
                 $('#addBook').click(function() {
+
                     let alreadyAdded = false;
-                    // Loop through each row in the table to check if book has already been added
+                    let alreadyBorrowed = false;
+
+                    // Loop through each row of added books and check if book already added
                     $('#addedBooks tbody tr').each(function() {                        
                         if ($(this).find('.check-Id').text() == element.id) {
                             alreadyAdded = true;
@@ -270,11 +278,23 @@ function checkoutBookSearch() {
                             return false; 
                         }
                     });
+                    // Iterate over transactions list and check if book with the same id has already being borrowed but not returned
+                    data[1].forEach(function(t) {
+                        if(t.borrower_id == $('#memberId').text() && t.book_id == element.id && t.type == 'borrow') {
+                           alreadyBorrowed = true;
+                           return false;
+                        }
+                    });
+                    // Book already borrowed
+                    if (alreadyBorrowed) {
+                        alert('Book has already been checked out to this member')
+                    }
                     // Book already added
-                    if (alreadyAdded) {
+                    else if (alreadyAdded) {
                         alert('Book already added');
+                    } 
                     // Book current stock == 0
-                    } else if($('.available').text() <= 0) {
+                    else if($('.available').text() <= 0) {
                         alert('Book currently unavailable')
                     } else {
                         // Add book to table
@@ -298,7 +318,7 @@ function checkoutBookSearch() {
         });
         // Remove added book by emptying the closest row to remove button
         $('#addedBooks tbody').on('click', '.btn-remove-book', function() {
-            $(this).closest('tr').remove(); 
+            $(this).closest('tr').remove();
         });
 
         // Query doesn't exists in data
