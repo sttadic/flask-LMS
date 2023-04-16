@@ -385,26 +385,36 @@ $(document).ready(function() {
         // Get child's value (member id) of a row clicked on
         let memId = $(this).find('.memId').text();
 
-        // Ajax post request (endpoint response: books and transactions lists)
+        // Ajax post request (json response: books and transactions lists)
         $.post('/', dataType="json", function(data) {
             
-            let borrowedBooks = []
-            // Iterate over transactions and push all book's ids that a certain member borrowed into a list
+           
+            // Iterate over transactions list and compare its borrowed books ids with list of books ids for a selected member
             data[1].forEach(function(transaction) {
-                if(memId == transaction.borrower_id && transaction.type == 'borrow') {
-                    borrowedBooks.push(transaction.book_id);
-                }                
-            });
-            // Iterate over borrowedBooks list and compare its ids with list of books ids
-            borrowedBooks.forEach(function(id) {
                 data[0].forEach(function(books) {
-                    if(id == books.id) {
+                    if(memId == transaction.borrower_id && transaction.type == 'borrow' && books.id == transaction.book_id) {
+                        // Assaign date object to a date variable
+                        let date = new Date(transaction.time);
+                        // Set due date (3 weeks after book is borrowed)
+                        date.setDate(date.getDate() + 21);
+                        // Get date portion of a date object
+                        let dueDate = date.toDateString()
+                        // Current time's date portion
+                        let currentDate = new Date($.now()).toDateString();
+                        
                         let row = $('<tr></tr>').addClass('row-return');
                         row.append($('<td></td>').text(books.id));
                         row.append($('<td></td>').text(books.title));
                         row.append($('<td></td>').text(books.author));
                         row.append($('<td></td>').text(books.genre));
                         row.append($('<td></td>').text(books.year));
+                        // If due date or past due date show date in red color
+                        if(currentDate >= dueDate){
+                            row.append($('<td class="red"></td>').text(dueDate));
+                        }
+                        else {
+                            row.append($('<td></td>').text(dueDate));
+                        }
 
                         // Initialize form, input and button variables
                         let form = $('<form></form>').attr('action', '/').attr('method', 'POST').on('click', function(e) {
