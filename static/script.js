@@ -20,6 +20,27 @@ function editBook(id, title, author, genre, year, stock) {
 }
 
 
+// Populate popup form fields with corresponding values of a selected member (members.html)
+function editMember(member_id, name, email, address, phone) {
+    $("#form_id").val(member_id);
+    $("#form_name").val(name);
+    $("#form_email").val(email);
+    $("#form_address").val(address);
+    $("#form_phone").val(phone);
+}
+
+
+// Show a warning if field in any popup form left empty (books and members)
+$(document).ready(function() {
+    $('#form_title, #form_author, #form_year, #form_stock, #form_name, #form_email, #form_address, #form_phone').blur(function() {
+        if(!$(this).val()) {
+            alert('All fields are required')
+            return false
+        }
+    });
+});
+
+
 // Dynamic search with AJAX (books.html)
 function searchBook() {
     let query = $('#search').val();
@@ -96,16 +117,6 @@ function searchCatalogue() {
             });
         }
     });
-}
-
-
-// Populate popup form fields with corresponding values of a selected member (members.html)
-function editMember(member_id, name, email, address, phone) {
-    $("#form_id").val(member_id);
-    $("#form_name").val(name);
-    $("#form_email").val(email);
-    $("#form_address").val(address);
-    $("#form_phone").val(phone);
 }
 
 
@@ -438,7 +449,7 @@ $(document).ready(function() {
                     }
                 });
             }); 
-            // Add input elements to a form (id="returnAll") with values member Id and list of all borrowed books ids
+            // Add input element to a form (id="returnAll") with member id
             $('#returnAll').append(($('<input>')).attr('id','inputMemId').attr('name', 'memberId').attr('value', memId).hide());
                      
         });        
