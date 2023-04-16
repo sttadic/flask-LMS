@@ -47,3 +47,10 @@
 .red {
     color: red;
 }
+
+.search-index {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+    width: 10rem;
+}

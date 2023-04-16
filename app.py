@@ -173,12 +173,21 @@ def index():
     if request.method == 'GET':
         member_due = []
 
+        # User query
+        q = request.args.get('query')
+
         # Iterate over members dict
         for member in members:
             # Append member to the member_due list if one has any number of borrowed books
             if member['borrowed'] > 0:
                 member_due.append(member)
-       
+
+        # Query exists
+        if q:
+            # Query database for a member whose id is equal to query and has any number of borrowed books
+            mem_search = db.execute('SELECT * FROM members WHERE member_id = ? AND borrowed > ?', q, 0)
+            return render_template('index.html', name=name, members=mem_search)
+            
         # Render index.html
         return render_template('index.html', name=name, members=member_due)
 

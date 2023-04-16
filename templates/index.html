@@ -2,6 +2,13 @@
 
 {% block title %}Home{% endblock %}
 
+{% block search %}
+<form action="/">
+<input class="search-index me-2" type="search" name="query" autocomplete="off" placeholder="Member ID" aria-label="Search" autofocus>
+<button class="btn btn-outline-warning">Search</button>
+</form>
+{% endblock %}
+
 {% block main %}
 <div class="container">
     {% with messages = get_flashed_messages() %}
@@ -17,6 +24,7 @@
 </div>
 <h4 style="margin-bottom:2rem;">BOOK RETURNS</h4>
 <div class="wrapper">
+
     <table class="table table-striped">
         <thead class="sticky-top table-top">
             <tr>
