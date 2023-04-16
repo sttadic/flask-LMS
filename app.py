@@ -164,9 +164,9 @@ def index():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
     
-    # Query database for transactions, members and books
+    # Query database for transactions, books & members (members sorted by transaction date, so the member with the oldest transaction, book first due for return, would show on top of the table)
     transactions = db.execute('SELECT * FROM transactions WHERE type = ?', 'borrow')
-    members = db.execute('SELECT * FROM members')
+    members = db.execute('SELECT * FROM members JOIN transactions ON members.member_id = transactions.borrower_id WHERE type = ? GROUP BY members.name ORDER BY transactions.time ASC', 'borrow')
     books = db.execute('SELECT * FROM books')
 
     # User reached route via GET
@@ -568,8 +568,6 @@ def checkout():
         # Get a list of book ids and member id from user input      
         memberId = request.form.get('memberId')
         bookIds = request.form.getlist('bookId')
-        type = 'borrow'
-        
         
         # Iterate over bookIds
         for id in bookIds:
@@ -579,7 +577,7 @@ def checkout():
             borrowed = db.execute('SELECT borrowed FROM members WHERE member_id = ?', memberId)[0]['borrowed']
 
             # Insert all data into transactions table
-            db.execute('INSERT INTO transactions (borrower_id, book_id, type, employee_id) VALUES (?, ?, ?, ?)', memberId, id, type, user_id)
+            db.execute('INSERT INTO transactions (borrower_id, book_id, type, employee_id) VALUES (?, ?, ?, ?)', memberId, id, 'borrow', user_id)
 
             # Update books availability in books table and number of books borrowed in members table
             db.execute('UPDATE books SET available = ? WHERE id = ?', available - 1, id)
