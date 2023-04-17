@@ -16,6 +16,7 @@
     <link href="../static/styles.css" rel="stylesheet">
     <link href="../static/popups.css" rel="stylesheet">
     <link href="../static/offcanvas.css" rel="stylesheet">
+    <link href="../static/management.css" rel="stylesheet">
 
     <title>LMS: {% block title %}{% endblock %}</title>
 </head>
@@ -66,10 +67,12 @@
         {% endblock %}
     </main>
     <footer>
+        {% if session["user_id"] %}
         <div class="footer-item">
             <div><a class="nav-link" aria-current="page" href="/management">LMS Management</a></div>
             <div><a class="nav-link" aria-current="page" href="/faq">FAQ</a></div>
         </div>
+        {% endif %}
         <p>Copyright 2023 by Stjepan Tadic. All Rights Reserved.<br>
         LMS is supported by CS50.</p>
     </footer>

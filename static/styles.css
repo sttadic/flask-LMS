@@ -402,3 +402,14 @@ option {
     background-color: rgb(240, 189, 33, 0.3);
     cursor: pointer;
 }
+
+/* FAQ page */
+
+.faq {
+    width: 70%;
+    margin: auto;
+}
+
+.faq p {
+    font-size: 1.2rem;
+}

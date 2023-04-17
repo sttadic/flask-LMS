@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}System Management{% endblock %}
+
+{% block main %}
+    {% if session["user_id"] == 1 %}
+    <ul class="nav">
+        <li class="nav-item-manage">
+            <button class="btn btn-manage" id="collapseHistory" autofocus>
+                Transactions History
+            </button>
+        </li>
+        <li class="nav-item-manage">
+            <button class="btn btn-manage" id="collapseRegister">
+                Register New Librarian
+            </button>
+          </li>
+        <li class="nav-item-manage">
+            <button class="btn btn-manage" id="collapseRemove">
+                Remove Librarian
+            </button>
+        </li>
+      </ul>
+      <hr>
+
+        <div class="card card-body" id="historyCollapse">
+            <div class="wrapper">
+                <table class="table table-striped">
+                    <thead class="sticky-top table-top">
+                        <tr>
+                            <th scope="col" style="border-radius: 0.7rem 0 0 0;">ID</th>
+                            <th scope="col">NAME</th>
+                            <th scope="col">EMAIL</th>
+                            <th scope="col">ADDRESS</th>
+                            <th scope="col">PHONE</th>
+                            <th scope="col" style="border-radius: 0 0.7rem 0 0;">BOOKS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members %} 
+                            <tr class="row-data-index" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom"> 
+                                <td class="memId">{{ member.member_id }}</td>
+                                <td>{{ member.name }}</td>
+                                <td>{{ member.email }}</td> 
+                                <td>{{ member.address }}</td>
+                                <td>{{ member.phone }}</td>
+                                <td>{{ member.borrowed }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card card-body" id="registerCollapse">
+          Register New Librarian
+        </div>
+
+        <div class="card card-body" id="removeCollapse">
+          Remove Librarian
+        </div>
+
+    {% endif %}
+{% endblock %}

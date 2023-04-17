@@ -602,6 +602,36 @@ def checkout():
         return redirect('/')
 
 
+@app.route('/management', methods = ['GET', 'POST'])
+@login_required
+def management():
+    '''Register new librarians, change passwords, transactions history'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    if request.method == 'GET':
+
+        return render_template('management.html', name=name)
+    
+
+@app.route('/faq')
+@login_required
+def faq():
+    '''Frequently asked questions'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    return render_template('faq.html', name=name)
+
+
 
 
 # Main driver function

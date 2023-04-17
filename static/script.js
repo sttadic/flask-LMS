@@ -455,3 +455,39 @@ $(document).ready(function() {
         });        
     });
 });
+
+
+// LMS MANAGEMENT
+
+$(document).ready(function() {
+
+    // Add class to the history nav button (looks like its been focused on, style won't be removed if clicked somewhere else as with css :focus pseudo class)
+    $('#collapseHistory').addClass('btn-manage-focus');
+
+    // If clicked on some other nav button remove style (focus) from all buttons and add it back to the selected one
+    $('#collapseHistory, #collapseRegister, #collapseRemove').click(function() {
+        $('#collapseHistory, #collapseRegister, #collapseRemove').removeClass('btn-manage-focus');
+        $(this).addClass('btn-manage-focus');
+    });
+
+    // History nav button selected/focused on (in html template autofocus is set on this element so this would be applied on page load)
+    $('#collapseHistory').focus(function() {
+        $('#historyCollapse').show();
+        $('#registerCollapse').hide();
+        $('#removeCollapse').hide();
+    });
+
+    // Register nav button selected
+    $('#collapseRegister').focus(function() {
+        $('#historyCollapse').hide();
+        $('#registerCollapse').show();
+        $('#removeCollapse').hide();
+    });
+
+    // Remove nav button selected
+    $('#collapseRemove').focus(function() {
+        $('#historyCollapse').hide();
+        $('#registerCollapse').hide();
+        $('#removeCollapse').show();
+    });
+});
