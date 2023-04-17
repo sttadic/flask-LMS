@@ -65,7 +65,7 @@ function searchBook() {
                 row.append($('<td></td>').text(book.stock));
                 
                 // Form, input and button elements
-                let form = $('<form></form>').attr('action', '/books').attr('method', 'POST').on('click', function(e) {
+                let form = $('<form></form>').attr('action', '/books').attr('method', 'POST').submit(function(e) {
                     if (!confirm('Completely remove \'' + book.title + '\' by ' + book.author + ' (book ID: ' + book.id + ') and all of its stock from library database?')) {
                         // Prevent form submission if user cancels
                         e.preventDefault();
@@ -142,7 +142,7 @@ function searchMember() {
                 row.append($('<td></td>').text(member.phone));
                 
                 // Form, input and button elements
-                let form = $('<form></form>').attr('action', '/members').attr('method', 'POST').on('click', function(e) {
+                let form = $('<form></form>').attr('action', '/members').attr('method', 'POST').submit(function(e) {
                     if (!confirm("Completely remove member " + member.name + " (member ID: " + member.member_id + ") and all their details from library database?")) {
                         // Prevent form submission if user cancels
                         e.preventDefault();
@@ -410,8 +410,8 @@ $(document).ready(function() {
                         date.setDate(date.getDate() + 21);
                         // Get date portion of a date object
                         let dueDate = date.toDateString()
-                        // Current time's date portion
-                        let currentDate = new Date($.now()).toDateString();
+                        // Current time
+                        let currentDate = new Date($.now());
                         
                         let row = $('<tr></tr>').addClass('row-return');
                         row.append($('<td></td>').text(books.id));
@@ -420,7 +420,7 @@ $(document).ready(function() {
                         row.append($('<td></td>').text(books.genre));
                         row.append($('<td></td>').text(books.year));
                         // If due date or past due date show date in red color
-                        if(currentDate >= dueDate){
+                        if(date <= currentDate){
                             row.append($('<td class="red"></td>').text(dueDate));
                         }
                         else {
@@ -428,7 +428,7 @@ $(document).ready(function() {
                         }
 
                         // Initialize form, input and button variables
-                        let form = $('<form></form>').attr('action', '/').attr('method', 'POST').on('click', function(e) {
+                        let form = $('<form></form>').attr('action', '/').attr('method', 'POST').submit(function(e) {
                             if (!confirm("Return book " + books.title + "?")) {
                                 // Prevent form submission if user cancels
                                 e.preventDefault();
