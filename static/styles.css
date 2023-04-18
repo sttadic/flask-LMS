@@ -120,10 +120,6 @@ footer {
 
 /* Flash messages */
 
-.container {
-    margin: 0 auto 2rem auto;
-}
-
 .error {
     margin: auto;
     font-family: "Bookman Old Style", Verdana;
@@ -134,7 +130,7 @@ footer {
 }
 
 .alert {
-    margin: auto;
+    margin: 0 auto 2rem auto;
     width: fit-content;
     background-color: rgb(240, 189, 33);
     box-shadow: 0.7rem 0.7rem;

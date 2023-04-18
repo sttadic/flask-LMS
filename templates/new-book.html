@@ -3,18 +3,18 @@
 {% block title %}New book{% endblock %}
 
 {% block main %}
-<div class="container">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-dismissible fade show" role="alert">
-        <span class="error">{{ message }}</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-dismissible fade show" role="alert">
+    <span class="error">{{ message }}</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
 <form class="forms" action="/new-book" method="post" onsubmit="return confirm('Please confirm that all details are correct.')">
     <h4 class="form_name">NEW BOOK FORM</h4>
     <div class="input-group">

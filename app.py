@@ -356,7 +356,7 @@ def new_book():
         flash(f'A book "{title}" by "{author}" has been added.')
        
         # Redirect to manage books route
-        return redirect('/books')
+        return redirect('/catalogue')
 
 
 @app.route('/members', methods = ['GET', 'POST'])
