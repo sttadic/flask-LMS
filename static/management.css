@@ -22,3 +22,43 @@
     background-color: black;
     box-shadow: 0.2rem 0.2rem  rgb(240, 189, 33);
 }
+
+.borrowed {
+    background-color: rgba(240, 188, 33, 0.3);
+}
+
+.returned {
+    background-color: rgba(47, 49, 47, 0.2);
+}
+
+.borrowed:hover {
+    background-color: rgba(240, 188, 33, 0.2);
+}
+
+.returned:hover {
+    background-color: rgba(47, 49, 47, 0.1);
+}
+
+.wrapper-lms {
+    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 56vh;
+    box-shadow: 1rem -1rem 1rem;
+    font-weight: bold;
+}
+
+.row-remove-staff:hover {
+    background-color: rgba(240, 188, 33, 0.39);
+}
+
+.btn-remove-staff {
+    color: white;
+    background-color: black;
+    border-radius: 0.5rem 0.5rem;
+}
+
+.btn-remove-staff:hover {
+    background-color: rgb(240, 189, 33);
+    color: black;
+}

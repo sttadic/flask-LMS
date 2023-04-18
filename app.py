@@ -87,72 +87,6 @@ def logout():
     return redirect('/login')
 
 
-@app.route('/register', methods = ['GET', 'POST'])
-def register():
-    '''Register new librarian'''
-
-    # User reached route via GET
-    if request.method == 'GET':
-        return render_template('register.html')
-
-    # User reached route via POST
-    else:
-
-        # Get name from user input
-        name = request.form.get('name')
-
-        # Ensure name is provided
-        if not name:
-            flash('Name field is required')
-            return render_template('register.html')
-
-        # Get username from user input
-        user_name = request.form.get('username')
-        
-        # Check if username provided
-        if not user_name:
-            flash('Username field is required')
-            return render_template('register.html')
-        
-        # Username already in database
-        elif db.execute('SELECT * FROM staff WHERE username = ?', user_name):
-            flash('Username already exists')
-            return render_template('register.html')
-
-        # Get password from user input
-        password = request.form.get('password')
-
-        # Check if password provided
-        if not password:
-            flash('Password field is required')
-            return render_template('register.html')
-        
-        # Ensure password is at least 4 characters long
-        if len(password) < 4:
-            flash('Password must be at least four characters long')
-            return render_template('register.html')
-        
-        # Ensure password and confirmation password match
-        elif password != request.form.get('confirmation'):
-            flash('Password and confirmation password do not match')
-            return render_template('register.html')
-        
-        # Generate hash for password
-        hash = generate_password_hash(password)
-
-        # Store name, username and password hash into database
-        db.execute('INSERT INTO staff (name, username, hash) VALUES (?, ?, ?)', name, user_name, hash)
-        
-        # Get staff_id from database
-        id = db.execute('SELECT staff_id FROM staff WHERE username = ?', user_name)
-
-        # Remember registered user
-        session['user_id'] = id[0]['staff_id']
-
-        # Redirect user to a home page
-        return redirect('/')
-
-
 @app.route('/', methods = ['GET', 'POST'])
 @login_required
 def index():
@@ -605,7 +539,7 @@ def checkout():
 @app.route('/management', methods = ['GET', 'POST'])
 @login_required
 def management():
-    '''Register new librarians, change passwords, transactions history'''
+    '''Transactions history, change password, remove librarian'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -613,10 +547,81 @@ def management():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
+    # Query database for all librarians except admin
+    staff = db.execute('SELECT * FROM staff WHERE staff_id <> 1')
+
+    # User reached route via 'GET'
     if request.method == 'GET':
 
-        return render_template('management.html', name=name)
+        # Query database for all transactions and join other tables
+        transactions = db.execute('SELECT transactions.*, members.name, books.title, staff.name as staff_name FROM transactions JOIN books ON books.id=transactions.book_id JOIN members ON member_id=transactions.borrower_id JOIN staff ON staff_id=employee_id')
+
+        return render_template('management.html', name=name, transactions=transactions, staff=staff)
     
+    # User reached route via POST
+    else:
+        return
+    
+
+@app.route('/register', methods = ['GET', 'POST'])
+def register():
+    '''Register new librarian'''
+
+    # User reached route via POST
+    if request.method == 'POST':
+
+        # Get name from user input
+        name = request.form.get('name')
+
+        # Ensure name is provided
+        if not name:
+            flash('Name field is required')
+            return redirect('/management')
+
+        # Get username from user input
+        user_name = request.form.get('username')
+        
+        # Check if username provided
+        if not user_name:
+            flash('Username field is required')
+            return redirect('/management')
+        
+        # Username already in database
+        elif db.execute('SELECT * FROM staff WHERE username = ?', user_name):
+            flash('Username already exists')
+            return redirect('/management')
+
+        # Get password from user input
+        password = request.form.get('password')
+
+        # Check if password provided
+        if not password:
+            flash('Password field is required')
+            return redirect('/management')
+        
+        # Ensure password is at least 4 characters long
+        if len(password) < 4:
+            flash('Password must be at least four characters long')
+            return redirect('/management')
+        
+        # Ensure password and confirmation password match
+        elif password != request.form.get('confirmation'):
+            flash('Password and confirmation password do not match')
+            return redirect('/management')
+        
+        # Generate hash for password
+        hash = generate_password_hash(password)
+
+        # Store name, username and password hash into database
+        db.execute('INSERT INTO staff (name, username, hash) VALUES (?, ?, ?)', name, user_name, hash)
+        
+        # Redirect user
+        flash('New librarian has been added')
+        return redirect('/management')
+    
+    # Else
+    return redirect('/management')    
+
 
 @app.route('/faq')
 @login_required

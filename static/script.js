@@ -461,7 +461,11 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 
-    // Add class to the history nav button (looks like its been focused on, style won't be removed if clicked somewhere else as with css :focus pseudo class)
+    // Defaults on page load
+    $('#historyCollapse').show();
+    $('#registerCollapse').hide();
+    $('#removeCollapse').hide();
+    // Add class to the history nav button (looks like it has been focused on, style won't be removed if clicked somewhere else as with css :focus pseudo class)
     $('#collapseHistory').addClass('btn-manage-focus');
 
     // If clicked on some other nav button remove style (focus) from all buttons and add it back to the selected one
@@ -470,7 +474,7 @@ $(document).ready(function() {
         $(this).addClass('btn-manage-focus');
     });
 
-    // History nav button selected/focused on (in html template autofocus is set on this element so this would be applied on page load)
+    // History nav button selected/focused on
     $('#collapseHistory').focus(function() {
         $('#historyCollapse').show();
         $('#registerCollapse').hide();
