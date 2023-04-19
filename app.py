@@ -576,42 +576,29 @@ def register():
     # User reached route via POST
     if request.method == 'POST':
 
-        # Get name from user input
+        # User input
         name = request.form.get('name')
-
-        # Ensure name is provided
-        if not name:
-            flash('Name field is required')
-            return redirect('/register')
-
-        # Get username from user input
         user_name = request.form.get('username')
-        
-        # Check if username provided
-        if not user_name:
-            flash('Username field is required')
+        password = request.form.get('password')
+        confirmation = request.form.get('confirmation')
+
+        # Ensure all fields provided
+        if not name or not user_name or not password:
+            flash('All fields required')
             return redirect('/register')
-        
+
         # Username already in database
         elif db.execute('SELECT * FROM staff WHERE username = ?', user_name):
             flash('Username already exists')
             return redirect('/register')
 
-        # Get password from user input
-        password = request.form.get('password')
-
-        # Check if password provided
-        if not password:
-            flash('Password field is required')
-            return redirect('/register')
-        
         # Ensure password is at least 4 characters long
         if len(password) < 4:
             flash('Password must be at least four characters long')
             return redirect('/register')
         
         # Ensure password and confirmation password match
-        elif password != request.form.get('confirmation'):
+        elif password != confirmation:
             flash('Password and confirmation password do not match')
             return redirect('/register')
         
@@ -625,7 +612,7 @@ def register():
         flash('New librarian has been added')
         return redirect('/register')
     
-    # Else
+    # Route reached via GET
     return render_template('/register.html', name=name)
 
 
@@ -642,7 +629,82 @@ def remove():
     # Query database for all librarians except admin
     staff = db.execute('SELECT * FROM staff WHERE staff_id <> 1')
 
+    # Route reached via POST
+    if request.method == 'POST':
+
+        # User selection
+        staff_id = request.form.get('remove')
+
+        # Query database for librarian name
+        l_name = db.execute('SELECT name FROM staff WHERE staff_id = ?', staff_id)[0]['name']
+
+        # Remove librarian
+        db.execute('DELETE FROM staff WHERE staff_id = ?', staff_id)
+
+        # Flash a message on removal
+        flash(f'Librarian { l_name } has been removed from LMS')
+
+        return redirect('/remove')
+
+    # Route reached via GET
     return render_template('remove.html', name=name, staff=staff)
+        
+    
+@app.route('/account', methods = ['GET', 'POST'])
+def account():
+    '''Password change'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # Route reached via POST
+    if request.method == 'POST':
+
+        # User input
+        old_pass = request.form.get('old_pass')
+        new_pass = request.form.get('new_pass')
+        confirm_pass = request.form.get('confirm_pass')
+
+        # Query database for a current password of a logged in librarian
+        current_pass = db.execute('SELECT hash FROM staff WHERE staff_id = ?', user_id)[0]['hash']
+        
+        # Check if user input matches current password
+        if not check_password_hash(current_pass, old_pass):
+            flash('Invalid password')
+            return redirect('/account')
+
+        # Ensure all fields provided
+        if not old_pass or not new_pass:
+            flash('All fields required')
+            return redirect('/account')
+        
+        # Ensure password is at least 4 characters long
+        if len(new_pass) < 4:
+            flash('Password must be at least four characters long')
+            return redirect('/account')
+        
+        # Ensure new password matches confirm password
+        elif new_pass != confirm_pass:
+            flash('New password and confirmation password do not match')
+            return redirect('/account')
+        
+        # Generate hash for a new password
+        hash = generate_password_hash(new_pass)
+
+        # Update database
+        db.execute('UPDATE staff SET hash = ? WHERE staff_id = ?', hash, user_id)
+
+        flash('Password changed')
+
+        return redirect('/account')
+        
+
+    # Route reached via GET
+    return render_template('account.html', name=name)
+    
 
 
 @app.route('/faq')

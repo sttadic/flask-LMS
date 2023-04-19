@@ -422,14 +422,15 @@ $(document).ready(function() {
         $('#inputMemId').remove();
         $('.inputAll').remove();
         
-
-        // Get child's value (member id) of a row clicked on
+        // Get child's value (member id and name) of a row clicked on
         let memId = $(this).find('.memId').text();
+        let memName = $(this).find('.memName').text();
+
+        $('#offcanvasBottomLabel').text(memName);
 
         // Ajax post request (json response: books and transactions lists)
         $.post('/', dataType="json", function(data) {
             
-           
             // Iterate over transactions list and compare its borrowed books ids with list of books ids for a selected member
             data[1].forEach(function(transaction) {
                 data[0].forEach(function(books) {

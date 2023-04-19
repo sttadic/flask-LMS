@@ -40,7 +40,7 @@
             {% for member in members %} 
                 <tr class="row-data-index" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom"> 
                     <td class="memId">{{ member.member_id }}</td>
-                    <td>{{ member.name }}</td>
+                    <td class="memName">{{ member.name }}</td>
                     <td>{{ member.email }}</td> 
                     <td>{{ member.address }}</td>
                     <td>{{ member.phone }}</td>
@@ -54,7 +54,7 @@
 <!--https://getbootstrap.com/docs/5.3/components/offcanvas/-->
 <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasBottomLabel">Offcanvas header</h5>
+      <h5 class="offcanvas-title" id="offcanvasBottomLabel"></h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>    
     <table id="borrowed" class="table">

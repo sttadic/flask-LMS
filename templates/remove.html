@@ -39,6 +39,10 @@
         <table class="table table-striped">
             <thead class="sticky-top table-top">
                 <tr>
+                    <td>Full Name</td>
+                    <td>Username</td>
+                    <td>Created</td>
+                    <td></td>
                 </tr>
             </thead>
             <tbody>
@@ -46,7 +50,13 @@
                     <tr class="row-remove-staff"> 
                         <td>{{ s.name }}</td>
                         <td>{{ s.username }}</td>
-                        <td><button class="btn-remove-staff">Remove</button></td>
+                        <td>{{ s.time }}</td>
+                        <td>
+                            <form action="/remove" method="post" onsubmit="return confirm('Remove librarian {{ s.name }}?')">
+                                <input name="remove" value="{{ s.staff_id }}" hidden>
+                                <button class="btn-remove-staff">Remove</button>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
