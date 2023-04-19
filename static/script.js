@@ -40,9 +40,17 @@ $(document).ready(function() {
     });
 });
 
+// Assign members and books table tbody elements to a global variables to repopulate tables in searchBook() and searchMember() if query is empty
+let tableBooks = {}
+let tableMembers = {}
+$(document).ready(function() {
+    tableBooks = $('#books tbody').html();
+    tableMembers = $('#members tbody').html();
+});
 
 // Dynamic search with AJAX (books.html)
 function searchBook() {
+    
     let query = $('#search').val();
     let field = $('#field').val();
 
@@ -50,9 +58,9 @@ function searchBook() {
         let table = $('#books tbody');
         table.empty();
 
-        // Reload template if query empty
+        // Repopulate table with original values if query is empty
         if (!query) {
-            window.location.reload();
+            table.append(tableBooks);
         } else {
             // Iterate over data and populate rows
             data.forEach(function(book) {
@@ -99,9 +107,9 @@ function searchCatalogue() {
         let table = $('#books tbody');
         table.empty();
 
-        // Reload template if query empty
+        // Repopulate table with original values if query is empty
         if (query === '') {
-            window.location.reload();
+            table.append(tableBooks);
         } else {
             // Iterate over data and populate rows
             data.forEach(function(book) {
@@ -128,9 +136,9 @@ function searchMember() {
         let table = $('#members tbody');
         table.empty();
 
-        // Reload template if query empty
+        // Repopulate table with original values if query is empty
         if (!query) {
-            window.location.reload();
+            table.append(tableMembers);
         } else {
             // Iterate over data and populate rows
             data.forEach(function(member) {
