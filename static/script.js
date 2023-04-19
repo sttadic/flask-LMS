@@ -331,7 +331,7 @@ function checkoutBookSearch() {
         $('#addedBooks tbody').on('click', '.btn-remove-book', function() {
             $(this).closest('tr').remove();
 
-            let formInputId = $(this).closest('tr').children().first().text();
+            let formInputId = $(this).closest('tr').children('td').eq(0).text();
             $('#checkout input').each(function() {
                 if($(this).val() == formInputId) {
                     $(this).remove();

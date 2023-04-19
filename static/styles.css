@@ -42,6 +42,10 @@ nav {
     background-color: rgb(240, 189, 33);
 }
 
+.drop-shadow {
+    box-shadow: 0.1rem 0.2rem 1rem rgb(240, 189, 33);
+}
+
 .drobdown-menu {
     z-index: 2;
 }
