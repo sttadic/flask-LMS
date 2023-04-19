@@ -245,8 +245,13 @@ def books():
         query = request.args.get('query')
         field = request.args.get('field')
 
-        # If query exists
-        if query:
+        # Query exists and search by field is 'id', return exact match as JSON response
+        if query and field == 'id':
+            match = db.execute('SELECT * FROM books WHERE id = ?', query)
+            return jsonify(match)
+        
+        # Any other search field selected
+        elif query and field != 'id':
             # Populate matches list and return JSON response with matching items
             matches = [book for book in books if query.lower() in str(book[field]).lower()]
             return jsonify(matches)  
@@ -380,14 +385,19 @@ def members():
         query = request.args.get('query')
         field = request.args.get('field')
 
-        # Query exists
-        if query:
+        # Query exists and search by field is 'id', return exact match as JSON response
+        if query and field == 'member_id':
+            match = db.execute('SELECT * FROM members WHERE member_id = ?', query)
+            return jsonify(match)
+        
+        # Any other search field selected
+        elif query and field != 'member_id':
             # Populate matches list and return JSON response with matching items
             matches = [member for member in members if query.lower() in str(member[field]).lower()]
             return jsonify(matches)
-        else:
-            # Render members.html
-            return render_template('members.html', name=name, members=members)
+        
+        # Render members.html
+        return render_template('members.html', name=name, members=members)
 
     # User reached route via POST
     else:
