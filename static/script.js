@@ -327,9 +327,18 @@ function checkoutBookSearch() {
                 });
             }
         });
-        // Remove added book by emptying the closest row to remove button
+        // Remove added book by deleting the closest row to remove button, and remove corresponding input element from form element
         $('#addedBooks tbody').on('click', '.btn-remove-book', function() {
             $(this).closest('tr').remove();
+
+            let formInputId = $(this).closest('tr').children().first().text();
+            $('#checkout input').each(function() {
+                if($(this).val() == formInputId) {
+                    $(this).remove();
+                }
+            })
+            
+           
         });
 
         // Query doesn't exists in data
@@ -347,6 +356,19 @@ function checkoutBookSearch() {
     });
 }
 
+// Trigger a click event on a search buttons when Enter is pressed
+$(document).ready(function() { 
+    $('#searchMember').keypress(function(e) {
+        if(e.which == 13) {
+        $('#memberSearch').click();
+        }
+    });
+    $('#searchBook').keypress(function(e) {
+        if(e.which == 13) {
+        $('#bookSearch').click();
+        }
+    });
+});
 
 // Check different parameters before submiting
 $(document).ready(function() { 

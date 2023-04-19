@@ -11,7 +11,7 @@
 <div class="container-ch">
 
     <input class="search-member-ch me-2" id="searchMember" type="search" name="queryMember" autocomplete="off" placeholder="Member ID" aria-label="Search" autofocus>
-    <button class="btn btn-outline-warning" onclick="checkoutMemberSearch()">Find</button>
+    <button id="memberSearch" class="btn btn-outline-warning" onclick="checkoutMemberSearch()">Find</button>
     
     <div class="wrapper">
         <table id="member" class="table">
@@ -40,7 +40,7 @@
     <div class="card card-body">
         <div>
             <input id="searchBook" name="queryBook" class="search-book-ch me-2" type="search" autocomplete="off" placeholder="Book ID" aria-label="Search">
-            <button class="btn btn-book-ch" onclick="checkoutBookSearch()">Find</button>
+            <button id="bookSearch" class="btn btn-book-ch" onclick="checkoutBookSearch()">Find</button>
         </div>
         <div class="wrapper table-book-ch">
             <table id='book' class="table">
