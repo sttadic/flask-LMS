@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %}System Management{% endblock %}
+
+{% block main %}
+{% if session["user_id"] == 1 %}
+
+    <ul class="nav">
+        <li class="nav-item-manage">
+            <a href="/history" class="btn btn-manage link-manage-active">
+                Transactions History
+            </a>
+        </li>
+        <li class="nav-item-manage">
+            <a href="/register" class="btn btn-manage">
+                Register New Librarian
+            </a>
+        </li>
+        <li class="nav-item-manage">
+            <a href="/remove" class="btn btn-manage">
+                Remove Librarian
+            </a>
+        </li>
+    </ul>
+    <hr>
+
+        
+    <p style="font-size: 1.1rem;"><span class="borrowed">Borrowed</span> / <span class="returned">Returned</span></p>
+    <div class="wrapper">
+        <table class="table table-striped">
+            <thead class="sticky-top table-top">
+                <tr>
+                    <th scope="col" style="border-radius: 0.7rem 0 0 0;">BOOK (ID)</th>
+                    <th scope="col">MEMBER (ID)</th>
+                    <th scope="col">LIBRARIAN</th>
+                    <th scope="col" style="border-radius: 0 0.7rem 0 0;">TIME</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                {% if t.type == 'borrowed' or t.type == 'borrow' %}
+                    <tr class="borrowed"> 
+                        <td class="memId">{{ t.title }} ({{ t.book_id }})</td>
+                        <td>{{ t.name }} ({{ t.borrower_id }})</td>
+                        <td>{{ t.staff_name }}</td> 
+                        <td>{{ t.time }}</td>
+                    </tr>
+                {% else %}
+                    <tr class="returned"> 
+                        <td class="memId">{{ t.title }} ({{ t.book_id }})</td>
+                        <td>{{ t.name }} ({{ t.borrower_id }})</td>
+                        <td>{{ t.staff_name }}</td> 
+                        <td>{{ t.time }}</td>
+                    </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% else %}
+
+    <h3>Admin only section</h3>
+
+{% endif %}
+{% endblock %}

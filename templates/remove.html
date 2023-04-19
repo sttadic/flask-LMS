@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}System Management{% endblock %}
+
+{% block main %}
+{% if session["user_id"] == 1 %}
+
+    <ul class="nav">
+        <li class="nav-item-manage">
+            <a href="/history" class="btn btn-manage">
+                Transactions History
+            </a>
+        </li>
+        <li class="nav-item-manage">
+            <a href="/register" class="btn btn-manage">
+                Register New Librarian
+            </a>
+        </li>
+        <li class="nav-item-manage">
+            <a href="/remove" class="btn btn-manage link-manage-active">
+                Remove Librarian
+            </a>
+        </li>
+    </ul>
+    <hr><br>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show" role="alert">
+        <span class="error">{{ message }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    
+    <div class="wrapper-lms">
+        <table class="table table-striped">
+            <thead class="sticky-top table-top">
+                <tr>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in staff %}
+                    <tr class="row-remove-staff"> 
+                        <td>{{ s.name }}</td>
+                        <td>{{ s.username }}</td>
+                        <td><button class="btn-remove-staff">Remove</button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% else %}
+
+    <h3>Admin only section</h3>
+
+{% endif %}
+{% endblock %}

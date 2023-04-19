@@ -69,7 +69,11 @@
     <footer>
         {% if session["user_id"] %}
         <div class="footer-item">
-            <div><a class="nav-link" aria-current="page" href="/management">LMS Management</a></div>
+            {% if session["user_id"] == 1 %}
+                <div><a class="nav-link" aria-current="page" href="/history">LMS Management</a></div>
+            {% else %}
+                <div><a class="nav-link" aria-current="page" href="/account">Account Management</a></div>
+            {% endif %}
             <div><a class="nav-link" aria-current="page" href="/faq">FAQ</a></div>
         </div>
         {% endif %}

@@ -11,16 +11,10 @@
     background-color: black;
 }
 
-.btn-manage:focus {
+.link-manage-active {
     color: white;
     background-color: black;
-    box-shadow: 0.2rem 0.2rem  rgb(240, 189, 33);
-}
-
-.btn-manage-focus {
-    color: white;
-    background-color: black;
-    box-shadow: 0.2rem 0.2rem  rgb(240, 189, 33);
+    box-shadow: 0.3rem 0.3rem rgb(240, 189, 33);
 }
 
 .borrowed {

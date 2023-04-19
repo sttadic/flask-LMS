@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}System Management{% endblock %}
+
+{% block main %}
+{% if session["user_id"] == 1 %}
+
+    <ul class="nav">
+        <li class="nav-item-manage">
+            <a href="/history" class="btn btn-manage">
+                Transactions History
+            </a>
+        </li>
+        <li class="nav-item-manage">
+            <a href="/register" class="btn btn-manage link-manage-active">
+                Register New Librarian
+            </a>
+        </li>
+        <li class="nav-item-manage">
+            <a href="/remove" class="btn btn-manage">
+                Remove Librarian
+            </a>
+        </li>
+    </ul>
+    <hr>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show" role="alert">
+        <span class="error">{{ message }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form class="forms" action="/register" method="post">
+        <h4 class="form_name">New Librarian Form</h4>
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+            <input class="form-control" type="text" name="name" autocomplete="off" autofocus>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">Username</span>
+            <input class="form-control" type="text" name="username" autocomplete="off">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+            <input class="form-control" type="password" name="password" autocomplete="off">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-default">Confirm Password</span>
+            <input class="form-control" type="password" name="confirmation" autocomplete="off">
+        </div>
+        <button id="staff-register" class="input-button" type="submit">Register</button>
+    </form>
+
+{% else %}
+
+    <h3>Admin only section</h3>
+
+{% endif %}
+{% endblock %}

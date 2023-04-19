@@ -536,10 +536,10 @@ def checkout():
         return redirect('/')
 
 
-@app.route('/management', methods = ['GET', 'POST'])
+@app.route('/history')
 @login_required
-def management():
-    '''Transactions history, change password, remove librarian'''
+def history():
+    '''Transactions history'''
 
     # Get user_id from session
     user_id = session['user_id']
@@ -547,25 +547,21 @@ def management():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
-    # Query database for all librarians except admin
-    staff = db.execute('SELECT * FROM staff WHERE staff_id <> 1')
+    # Query database for all transactions and join other tables
+    transactions = db.execute('SELECT transactions.*, members.name, books.title, staff.name as staff_name FROM transactions JOIN books ON books.id=transactions.book_id JOIN members ON member_id=transactions.borrower_id JOIN staff ON staff_id=employee_id ORDER BY transactions.time DESC')
 
-    # User reached route via 'GET'
-    if request.method == 'GET':
+    return render_template('history.html', name=name, transactions=transactions)
 
-        # Query database for all transactions and join other tables
-        transactions = db.execute('SELECT transactions.*, members.name, books.title, staff.name as staff_name FROM transactions JOIN books ON books.id=transactions.book_id JOIN members ON member_id=transactions.borrower_id JOIN staff ON staff_id=employee_id')
-
-        return render_template('management.html', name=name, transactions=transactions, staff=staff)
-    
-    # User reached route via POST
-    else:
-        return
-    
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     '''Register new librarian'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
     # User reached route via POST
     if request.method == 'POST':
@@ -576,7 +572,7 @@ def register():
         # Ensure name is provided
         if not name:
             flash('Name field is required')
-            return redirect('/management')
+            return redirect('/register')
 
         # Get username from user input
         user_name = request.form.get('username')
@@ -584,12 +580,12 @@ def register():
         # Check if username provided
         if not user_name:
             flash('Username field is required')
-            return redirect('/management')
+            return redirect('/register')
         
         # Username already in database
         elif db.execute('SELECT * FROM staff WHERE username = ?', user_name):
             flash('Username already exists')
-            return redirect('/management')
+            return redirect('/register')
 
         # Get password from user input
         password = request.form.get('password')
@@ -597,17 +593,17 @@ def register():
         # Check if password provided
         if not password:
             flash('Password field is required')
-            return redirect('/management')
+            return redirect('/register')
         
         # Ensure password is at least 4 characters long
         if len(password) < 4:
             flash('Password must be at least four characters long')
-            return redirect('/management')
+            return redirect('/register')
         
         # Ensure password and confirmation password match
         elif password != request.form.get('confirmation'):
             flash('Password and confirmation password do not match')
-            return redirect('/management')
+            return redirect('/register')
         
         # Generate hash for password
         hash = generate_password_hash(password)
@@ -617,10 +613,26 @@ def register():
         
         # Redirect user
         flash('New librarian has been added')
-        return redirect('/management')
+        return redirect('/register')
     
     # Else
-    return redirect('/management')    
+    return render_template('/register.html', name=name)
+
+
+@app.route('/remove', methods = ['GET', 'POST'])
+def remove():
+    '''Remove librarian'''
+
+    # Get user_id from session
+    user_id = session['user_id']
+
+    # Query database for librarian name
+    name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
+
+    # Query database for all librarians except admin
+    staff = db.execute('SELECT * FROM staff WHERE staff_id <> 1')
+
+    return render_template('remove.html', name=name, staff=staff)
 
 
 @app.route('/faq')

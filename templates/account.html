@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Account Management
+{% endblock %}
+
+{% block main %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-dismissible fade show" role="alert">
+    <span class="error">{{ message }}</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+
+<form class="forms" action="/account" method="post">
+    <h4 class="form_name">Change Password</h4>
+    <div class="input-group">
+        <span class="input-group-text" id="inputGroup-sizing-default">Old Password</span>
+        <input class="form-control" type="text" name="old_pass" autocomplete="off" autofocus>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text" id="inputGroup-sizing-default">New Password</span>
+        <input class="form-control" type="password" name="new_pass" autocomplete="off">
+    </div>
+    <div class="input-group">
+        <span class="input-group-text" id="inputGroup-sizing-default">Confirm New Password</span>
+        <input class="form-control" type="password" name="new_confirm" autocomplete="off">
+    </div>
+    <button class="input-button" type="submit">Submit</button>
+</form>
+{% endblock %}
