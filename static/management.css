@@ -118,10 +118,14 @@
 }
 
 .clear-filters:hover {
-    background-color: rgb(240, 189, 33);
-    color: black;
+    outline: 0.1rem solid rgb(240, 189, 33);
+    color: rgb(240, 189, 33);;
 }
 
+#sortDate {
+    cursor: pointer;
+}
 
-
-
+#sortDate:hover {
+    color:rgb(240, 189, 33);
+}

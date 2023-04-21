@@ -500,28 +500,29 @@ $(document).ready(function () {
 
 
     // Filter out by transaction type
-    
-    /* Note: show() and hide() methods not working properly along with elements that have hidden property. 
-       When triggered, sometimes they set display to block which messes up layout of the table. Display properties are set manually to avoid conflicts */
 
     $('#borrowed').click(function() {
 
-        // Show rows with borrowed class and hide rows with return class (remove and add .hiddenTxn classes as well - to be used in librarian name filter below)
+        // Show rows with borrowed class and hide rows with returned class (remove and add .hiddenTxn classes as well - to be used in other filters)
         $('#historyTbody').find('.borrowed').removeClass('hiddenTxn').css('display', '');
         $('#historyTbody').find('.returned').addClass('hiddenTxn').css('display', 'none');
 
-        // If librarian filter already applied and click event unhides some of those rows in a step above, hide those rows (class .hiddenLibrarian) again
+        // If other filter(s) already applied and click event unhides some of those rows in a step above, hide those rows again
         $('#historyTbody').find('.hiddenLibrarian').css('display', 'none');
+        $('#historyTbody').find('.hiddenBook').css('display', 'none');
+        $('#historyTbody').find('.hiddenMember').css('display', 'none');
 
     });
 
     $('#returned').click(function() {
-        // Hide rows with borrowed class and show rows with return class (add and remove .hiddenTxn classes as well)
+        // Hide rows with borrowed class and show rows with returned class (add and remove .hiddenTxn classes as well)
         $('#historyTbody').find('.borrowed').addClass('hiddenTxn').css('display', 'none');
         $('#historyTbody').find('.returned').removeClass('hiddenTxn').css('display', '');
 
-        // If librarian filter already applied and click event unhides some of those rows in a step above, hide those rows (class .hiddenLibrarian) again
+        // If other filter(s) already applied and click event unhides some of those rows in a step above, hide those rows again
         $('#historyTbody').find('.hiddenLibrarian').css('display', 'none');
+        $('#historyTbody').find('.hiddenBook').css('display', 'none');
+        $('#historyTbody').find('.hiddenMember').css('display', 'none');
     });
 
 
@@ -529,42 +530,52 @@ $(document).ready(function () {
     $('#queryBookId').keyup(function() {
 
         // If more then one keyup (if query has multiple digits), unhide those rows that were hidden before so new comparison can be made in the script below
-        $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', false).removeClass('hiddenBook');
+        $('#historyTable tbody').find($('.hiddenBook')).css('display', '').removeClass('hiddenBook');
 
-        // When coupled with member Id filter, if query unhides rows that should stay hidden via member Id filter, hide them again 
-        $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', true);
+        // If query unhides rows that should stay hidden via other filters, hide them again 
+        $('#historyTable tbody').find($('.hiddenMember')).css('display', 'none');
+        $('#historyTable tbody').find($('.hiddenTxn')).css('display', 'none');
+        $('#historyTable tbody').find($('.hiddenLibrarian')).css('display', 'none');
 
         // Iterate over rows, find all bookId values and compare to query
         $('#historyTbody tr').each(function() {
             if($(this).find('.bookId').text() != $('#queryBookId').val()) {
 
                 // Hide all that don't match the query and add class hiddenBook
-                $(this).addClass('hiddenBook').attr('hidden', true);
+                $(this).addClass('hiddenBook').css('display', 'none');
             }
         });
         // If query deleted, show all hidden books and remove hiddenBook class
         if ($('#queryBookId').val().length === 0) {
-            $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', false).removeClass('hiddenBook');
+            $('#historyTable tbody').find($('.hiddenBook')).css('display', '').removeClass('hiddenBook');
 
-            // When coupled with member Id filter, if deleted query unhides rows that should stay hidden via member Id filter, hide them again
-            $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', true);
+            // If deleted query unhides rows that should stay hidden via other filters, hide them again
+            $('#historyTable tbody').find($('.hiddenMember')).css('display', 'none');
+            $('#historyTable tbody').find($('.hiddenTxn')).css('display', 'none');
+            $('#historyTable tbody').find($('.hiddenLibrarian')).css('display', 'none');
         }
     });
 
 
     // Filter out by member ID (check comments above in the book ID filter)
     $('#queryMemberId').keyup(function() {
-        $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', false).removeClass('hiddenMember');
-        $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', true);
+        $('#historyTable tbody').find($('.hiddenMember')).css('display', '').removeClass('hiddenMember');
+
+        $('#historyTable tbody').find($('.hiddenBook')).css('display', 'none');
+        $('#historyTable tbody').find($('.hiddenTxn')).css('display', 'none');
+        $('#historyTable tbody').find($('.hiddenLibrarian')).css('display', 'none');
+
         $('#historyTbody tr').each(function() {
             if($(this).find('.memberId').text() != $('#queryMemberId').val()) {
-                $(this).addClass('hiddenMember').attr('hidden', true);
+                $(this).addClass('hiddenMember').css('display', 'none');
             }
         });
-        if ($('#queryMemberId').val().length === 0) {
-            
-            $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', false).removeClass('hiddenMember');
-            $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', true);
+        if ($('#queryMemberId').val().length === 0) {            
+            $('#historyTable tbody').find($('.hiddenMember')).css('display', '').removeClass('hiddenMember');
+
+            $('#historyTable tbody').find($('.hiddenBook')).css('display', 'none');
+            $('#historyTable tbody').find($('.hiddenTxn')).css('display', 'none');
+            $('#historyTable tbody').find($('.hiddenLibrarian')).css('display', 'none');
         }
     });
 
@@ -610,34 +621,50 @@ $(document).ready(function () {
                 $(this).removeClass('hiddenLibrarian').css('display', '');                
             }
         });
-        // If transaction type filter already applied, hide rows from that filter again if some are revealed in the loop above
+        // If any rows that were hidden via other filters are being revealed in the loop above, hide them again
         $('#historyTbody').find('.hiddenTxn').css('display', 'none');
+        $('#historyTbody').find('.hiddenBook').css('display', 'none');
+        $('#historyTbody').find('.hiddenMember').css('display', 'none');
     });
 
-    // Sort rows by time DESC or ASC (by default table is sorted DESC on page load, so I'm only switching the rows)
+
+    // Sort rows by time DESC or ASC (by default, table is sorted DESC on page load, so I'm only switching the rows)
+
+    // Arrow pointing down for DESC order on page load
+    $('#arrowUp').hide();
+    $('#arrowDown').show();
 
     $('#sortDate').click(function() {
+
+        // Toggle arrows on click
+        $('#arrowUp').toggle();
+        $('#arrowDown').toggle();
         
         let rows = $('#historyTbody').find('tr');
 
+        // Make half times less iterations than there are number of rows (rounded to the nearest integer)
         for (let i = 0; i < Math.floor(rows.length / 2); i++) {
             
-            var temp = $(rows[i]).html();
-            var tempClass = $(rows[i]).attr('class');
-            var tempCss = $(rows[i]).css('display');
+            // Initialize temporary variables, value is always first row that has not been switched yet 
+            // Class and attribute are assigned as well to preserve style of the rows and potentially applied filters
+            let temp = $(rows[i]).html();
+            let tempClass = $(rows[i]).attr('class');
+            let tempCss = $(rows[i]).css('display');
 
+            // Add last row that hasn't switched yet to the first row that hasn't switched yet (along with class and attribute)
             $(rows[i]).html($(rows[rows.length - 1 - i]).html());
             $(rows[i]).attr('class', $(rows[rows.length - 1 - i]).attr('class'));
             $(rows[i]).css('display', $(rows[rows.length - 1 - i]).css('display'));
             
+            // Add first (temporary variable) to last
             $(rows[rows.length - 1 - i]).html(temp);
             $(rows[rows.length - 1 - i]).attr('class', tempClass);
             $(rows[rows.length - 1 - i]).css('display', tempCss);
         }        
     });
 
-    
-    // Clear filters
+
+    // Clear all filters
     $('.clear-filters').click(function() {
         $('#historyTable tbody').html(table);
         $('#borrowed').prop('checked', false);
