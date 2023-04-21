@@ -23,11 +23,33 @@
         </li>
     </ul>
     <hr>
+    <div class="filters">
 
-        
-    <p style="font-size: 1.1rem;"><span class="borrowed">Borrowed</span> / <span class="returned">Returned</span></p>
+        <div class="transaction-filter">
+            <input type="radio" id="borrowed" name="transaction">
+            <label class="borrowed-filter" for="borrowed">Borrowed</label><br>
+            <input type="radio" id="returned" name="transaction">
+            <label class="returned-filter" for="returned">Returned</label><br>
+        </div>
+
+        <div class="book-filter">
+            <input class="book-search" id="queryBookId" placeholder="Book ID">
+        </div>
+    
+        <div class="member-filter">
+            <input class="member-search" id="queryMemberId" placeholder="Member ID">
+        </div>
+
+        <select class="librarian-filter">
+            <option id="disabled" disabled></option>
+        </select>
+            
+        <button class="clear-filters">Clear Filters</button>
+
+    </div>
+
     <div class="wrapper">
-        <table class="table table-striped">
+        <table id="historyTable" class="table table-striped">
             <thead class="sticky-top table-top">
                 <tr>
                     <th scope="col" style="border-radius: 0.7rem 0 0 0;">BOOK (ID)</th>
@@ -36,20 +58,20 @@
                     <th scope="col" style="border-radius: 0 0.7rem 0 0;">TIME</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="historyTbody">
                 {% for t in transactions %}
                 {% if t.type == 'borrowed' or t.type == 'borrow' %}
                     <tr class="borrowed"> 
-                        <td class="memId">{{ t.title }} ({{ t.book_id }})</td>
-                        <td>{{ t.name }} ({{ t.borrower_id }})</td>
-                        <td>{{ t.staff_name }}</td> 
+                        <td>{{ t.title }} (<span class="bookId">{{ t.book_id }}</span>)</td>
+                        <td>{{ t.name }} (<span class="memberId">{{ t.borrower_id }}</span>)</td>
+                        <td class="staff-name">{{ t.staff_name }}</td> 
                         <td>{{ t.time }}</td>
                     </tr>
                 {% else %}
                     <tr class="returned"> 
-                        <td class="memId">{{ t.title }} ({{ t.book_id }})</td>
-                        <td>{{ t.name }} ({{ t.borrower_id }})</td>
-                        <td>{{ t.staff_name }}</td> 
+                        <td>{{ t.title }} (<span class="bookId">{{ t.book_id }}</span>)</td>
+                        <td>{{ t.name }} (<span class="memberId">{{ t.borrower_id }}</span>)</td>
+                        <td class="staff-name">{{ t.staff_name }}</td> 
                         <td>{{ t.time }}</td>
                     </tr>
                 {% endif %}

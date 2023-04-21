@@ -56,3 +56,72 @@
     background-color: rgb(240, 189, 33);
     color: black;
 }
+
+.filters {
+    margin-bottom: 1rem;
+}
+
+.transaction-filter {
+    display: inline-block;
+    text-align: left;
+}
+
+.borrowed-filter {
+    background-color: rgba(240, 188, 33, 0.3);
+    border-radius: 0.4rem;
+    padding: 0.1rem;
+    margin-bottom: 0.1rem;
+    cursor: pointer;
+}
+
+.returned-filter {
+    background-color: rgba(47, 49, 47, 0.2);
+    border-radius: 0.4rem;
+    padding: 0.1rem;
+    cursor: pointer;
+    
+}
+
+.librarian-filter {
+    display: inline-block;
+    margin: 1rem 2rem 0 0;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+.member-filter {
+    display: inline-block;
+}
+
+.member-search {
+    border-radius: 0.3rem;
+    width: 7rem;
+}
+
+.book-filter {
+    margin-left: 2rem;
+    display: inline-block;
+}
+
+.book-search {
+    border-radius: 0.3rem;
+    width: 7rem;
+}
+
+.clear-filters {
+    color: white;
+    background-color: black;
+    border-radius: 0.5rem;
+    display: inline-block;
+    margin-left: 1rem;
+}
+
+.clear-filters:hover {
+    background-color: rgb(240, 189, 33);
+    color: black;
+}
+
+
+
+

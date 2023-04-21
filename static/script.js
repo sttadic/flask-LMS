@@ -426,6 +426,7 @@ $(document).ready(function() {
         let memId = $(this).find('.memId').text();
         let memName = $(this).find('.memName').text();
 
+        // Add member's name to the offcanvas element where borrowed books will be listed
         $('#offcanvasBottomLabel').text(memName);
 
         // Ajax post request (json response: books and transactions lists)
@@ -485,4 +486,110 @@ $(document).ready(function() {
                      
         });        
     });
+});
+
+
+// LMS Management
+
+$(document).ready(function () {
+    
+    // Remember whole table content on page load
+    let table = $('#historyTable tbody').html();
+    $('.librarian-filter #disabled').text('Librarian').prop('selected', true);
+
+
+    // Borrowed & returned filters (.show() and .hide() methods not working properly with already hidden elements, display changes to block)
+    $('#borrowed').click(function() {
+        $('#historyTbody').find('.borrowed').css('display', '');
+        $('#historyTbody').find('.returned').css('display', 'none');
+    });
+
+    $('#returned').click(function() {
+        $('#historyTbody').find('.borrowed').css('display', 'none');
+        $('#historyTbody').find('.returned').css('display', '');
+    });
+
+
+    // Filter out by book ID
+    $('#queryBookId').keyup(function() {
+
+        // If more then one keyup (query has multiple digits), unhide those rows that were hidden before so new comparison can be made in the script below
+        $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', false).removeClass('hiddenBook');
+
+        // When coupled with member Id filter, if query makes hidden rows to overlap and thus unhides rows that should stay hidden via member Id filter, hide them again 
+        $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', true);
+
+        // Iterate over rows, find all bookId values and compare to query
+        $('#historyTbody tr').each(function() {
+            if($(this).find('.bookId').text() != $('#queryBookId').val()) {
+
+                // Hide all that don't match the query and add class hiddenBook
+                $(this).addClass('hiddenBook').attr('hidden', true);
+            }
+        });
+        // If query deleted, show all hidden books and remove hiddenBook class
+        if ($('#queryBookId').val().length === 0) {
+            $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', false).removeClass('hiddenBook');
+
+            // When coupled with member Id filter, if deleted query makes hidden rows to overlap and thus unhides rows that should stay hidden via member Id filter, hide them again
+            $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', true);
+        }
+    });
+
+
+    // Filter out by member ID (check comments above in the book ID filter)
+    $('#queryMemberId').keyup(function() {
+        $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', false).removeClass('hiddenMember');
+        $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', true);
+        $('#historyTbody tr').each(function() {
+            if($(this).find('.memberId').text() != $('#queryMemberId').val()) {
+                $(this).addClass('hiddenMember').attr('hidden', true);
+            }
+        });
+        if ($('#queryMemberId').val().length === 0) {
+            
+            $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', false).removeClass('hiddenMember');
+            $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', true);
+        }
+    });
+
+
+    // Filter out by librarian name
+
+    // Extract distinct librarian names and add them to the select element
+    let allNames = {}
+    $('#historyTbody tr').each(function() {
+        let name = $(this).find('.staff-name').text();
+        if (!allNames[name]) {
+            $('.librarian-filter').append($('<option>'+name+'</option>)').addClass('lib_name'))
+            allNames[name] = true;
+        }
+    });
+
+    // Filter (not finished yet, does not work properly with borrowed & returned filter above)
+    $('.librarian-filter').change(function() {    
+
+        let option = ($(this).val())
+
+        $('#historyTbody tr').each(function() {
+            
+            $(this).css('display', '');
+            
+            if($(this).find('.staff-name').text() != option) {
+                $(this).css('display', 'none');
+            }
+        });
+    });
+    
+
+    
+    // Clear filters
+    $('.clear-filters').click(function() {
+        $('#historyTable tbody').html(table);
+        $('#borrowed').prop('checked', false);
+        $('#returned').prop('checked', false);
+        $('#queryBookId').val('');
+        $('#queryMemberId').val('');
+        $('.librarian-filter #disabled').text('Librarian').prop('selected', true);
+    })
 });
