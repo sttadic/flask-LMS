@@ -664,7 +664,7 @@ $(document).ready(function () {
     });
 
 
-    // Clear all filters
+    // Reset all filters
     $('.clear-filters').click(function() {
         $('#historyTable tbody').html(table);
         $('#borrowed').prop('checked', false);
@@ -672,5 +672,7 @@ $(document).ready(function () {
         $('#queryBookId').val('');
         $('#queryMemberId').val('');
         $('.librarian-filter #disabled').text('Librarian').prop('selected', true);
+        $('#arrowUp').hide();
+        $('#arrowDown').show();
     })
 });
