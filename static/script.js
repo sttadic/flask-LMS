@@ -489,34 +489,49 @@ $(document).ready(function() {
 });
 
 
-// LMS Management
+// LMS MANAGEMENT - TRANSACTIONS HISTORY (FILTERS)
 
 $(document).ready(function () {
     
     // Remember whole table content on page load
     let table = $('#historyTable tbody').html();
+    // Add 'Libraran' as a disabled and selected option to the select element 
     $('.librarian-filter #disabled').text('Librarian').prop('selected', true);
 
 
-    // Borrowed & returned filters (.show() and .hide() methods not working properly with already hidden elements, display changes to block)
+    // Filter out by transaction type
+    
+    /* Note: show() and hide() methods not working properly along with elements that have hidden property. 
+       When triggered, sometimes they set display to block which messes up layout of the table. Display properties are set manually to avoid conflicts */
+
     $('#borrowed').click(function() {
-        $('#historyTbody').find('.borrowed').css('display', '');
-        $('#historyTbody').find('.returned').css('display', 'none');
+
+        // Show rows with borrowed class and hide rows with return class (remove and add .hiddenTxn classes as well - to be used in librarian name filter below)
+        $('#historyTbody').find('.borrowed').removeClass('hiddenTxn').css('display', '');
+        $('#historyTbody').find('.returned').addClass('hiddenTxn').css('display', 'none');
+
+        // If librarian filter already applied and click event unhides some of those rows in a step above, hide those rows (class .hiddenLibrarian) again
+        $('#historyTbody').find('.hiddenLibrarian').css('display', 'none');
+
     });
 
     $('#returned').click(function() {
-        $('#historyTbody').find('.borrowed').css('display', 'none');
-        $('#historyTbody').find('.returned').css('display', '');
+        // Hide rows with borrowed class and show rows with return class (add and remove .hiddenTxn classes as well)
+        $('#historyTbody').find('.borrowed').addClass('hiddenTxn').css('display', 'none');
+        $('#historyTbody').find('.returned').removeClass('hiddenTxn').css('display', '');
+
+        // If librarian filter already applied and click event unhides some of those rows in a step above, hide those rows (class .hiddenLibrarian) again
+        $('#historyTbody').find('.hiddenLibrarian').css('display', 'none');
     });
 
 
     // Filter out by book ID
     $('#queryBookId').keyup(function() {
 
-        // If more then one keyup (query has multiple digits), unhide those rows that were hidden before so new comparison can be made in the script below
+        // If more then one keyup (if query has multiple digits), unhide those rows that were hidden before so new comparison can be made in the script below
         $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', false).removeClass('hiddenBook');
 
-        // When coupled with member Id filter, if query makes hidden rows to overlap and thus unhides rows that should stay hidden via member Id filter, hide them again 
+        // When coupled with member Id filter, if query unhides rows that should stay hidden via member Id filter, hide them again 
         $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', true);
 
         // Iterate over rows, find all bookId values and compare to query
@@ -531,7 +546,7 @@ $(document).ready(function () {
         if ($('#queryBookId').val().length === 0) {
             $('#historyTable tbody').find($('.hiddenBook')).attr('hidden', false).removeClass('hiddenBook');
 
-            // When coupled with member Id filter, if deleted query makes hidden rows to overlap and thus unhides rows that should stay hidden via member Id filter, hide them again
+            // When coupled with member Id filter, if deleted query unhides rows that should stay hidden via member Id filter, hide them again
             $('#historyTable tbody').find($('.hiddenMember')).attr('hidden', true);
         }
     });
@@ -557,30 +572,69 @@ $(document).ready(function () {
     // Filter out by librarian name
 
     // Extract distinct librarian names and add them to the select element
+    // Initialize allNames object
     let allNames = {}
+    // Iterate over rows
     $('#historyTbody tr').each(function() {
+
+        // Assign librarian name from current row to the name variable
         let name = $(this).find('.staff-name').text();
+
+        // If name not true
         if (!allNames[name]) {
+
+            // Add it as an option to the select element
             $('.librarian-filter').append($('<option>'+name+'</option>)').addClass('lib_name'))
+
+            // Set added name to true
             allNames[name] = true;
         }
     });
 
-    // Filter (not finished yet, does not work properly with borrowed & returned filter above)
+    // Filter (trigger event on option change)
     $('.librarian-filter').change(function() {    
 
+        // Value of selected option (librarian name)
         let option = ($(this).val())
 
-        $('#historyTbody tr').each(function() {
+        $('#historyTbody tr').each(function() {            
             
-            $(this).css('display', '');
-            
-            if($(this).find('.staff-name').text() != option) {
-                $(this).css('display', 'none');
+            // If librarian names in the rows do not match selected one
+             if($(this).find('.staff-name').text() != option) {
+                // Hide those rows and add classes .hiddenLibrarian (also used in transaction type filter above)
+                $(this).addClass('hiddenLibrarian').css('display', 'none');
+            }
+            // Else if they match
+            else {
+                // Show those rows and remove class .hiddenLibrarian (if exists)
+                $(this).removeClass('hiddenLibrarian').css('display', '');                
             }
         });
+        // If transaction type filter already applied, hide rows from that filter again if some are revealed in the loop above
+        $('#historyTbody').find('.hiddenTxn').css('display', 'none');
     });
-    
+
+    // Sort rows by time DESC or ASC (by default table is sorted DESC on page load, so I'm only switching the rows)
+
+    $('#sortDate').click(function() {
+        
+        let rows = $('#historyTbody').find('tr');
+
+        for (let i = 0; i < Math.floor(rows.length / 2); i++) {
+            
+            var temp = $(rows[i]).html();
+            var tempClass = $(rows[i]).attr('class');
+            var tempCss = $(rows[i]).css('display');
+
+            $(rows[i]).html($(rows[rows.length - 1 - i]).html());
+            $(rows[i]).attr('class', $(rows[rows.length - 1 - i]).attr('class'));
+            $(rows[i]).css('display', $(rows[rows.length - 1 - i]).css('display'));
+            
+            $(rows[rows.length - 1 - i]).html(temp);
+            $(rows[rows.length - 1 - i]).attr('class', tempClass);
+            $(rows[rows.length - 1 - i]).css('display', tempCss);
+        }        
+    });
 
     
     // Clear filters
