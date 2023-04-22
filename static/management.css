@@ -69,29 +69,41 @@
 .borrowed-filter {
     background-color: rgba(240, 188, 33, 0.3);
     border-radius: 0.4rem;
+    border: 0.1rem solid black;
     padding: 0.1rem;
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.3rem;
     cursor: pointer;
+    font-weight: 600;
+    width: 5rem;
+    text-align: center;
+}
+
+.borrowed-filter:hover {
+    background-color: rgba(240, 188, 33, 0.6);
 }
 
 .returned-filter {
     background-color: rgba(47, 49, 47, 0.2);
     border-radius: 0.4rem;
+    border: 0.1rem solid black;
     padding: 0.1rem;
     cursor: pointer;
-    
+    font-weight: 600;
+    width: 5rem;
+    text-align: center;
 }
 
-.librarian-filter {
+.returned-filter:hover {
+    background-color: rgba(47, 49, 47, 0.4);
+}
+
+.book-member-group {
     display: inline-block;
-    margin: 1rem 2rem 0 0;
-    padding: 0.1rem 0.4rem;
-    border-radius: 0.3rem;
-    cursor: pointer;
+    margin: 0 1rem 0 1rem;
 }
 
 .member-filter {
-    display: inline-block;
+   margin-top: 0.3rem;
 }
 
 .member-search {
@@ -99,9 +111,8 @@
     width: 7rem;
 }
 
-.book-filter {
-    margin-left: 2rem;
-    display: inline-block;
+.member-search:focus {
+    outline: 0.1rem solid black;
 }
 
 .book-search {
@@ -109,12 +120,29 @@
     width: 7rem;
 }
 
+.book-search:focus {
+    outline: 0.1rem solid black;
+}
+
+.librarian-clear-group {
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.librarian-filter {
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
 .clear-filters {
     color: white;
     background-color: black;
     border-radius: 0.5rem;
-    display: inline-block;
-    margin-left: 1rem;
+    display: block;
+    margin: auto;
 }
 
 .clear-filters:hover {

@@ -270,7 +270,8 @@ def books():
             # Query database for the title of the book to be removed
             removed = db.execute('SELECT title FROM books WHERE id = ?', request.form.get('id'))[0]['title']
 
-            # Delete book
+            # Delete book and all related data from child table
+            db.execute('DELETE FROM transactions WHERE book_id = ?', request.form.get('id')) 
             db.execute('DELETE FROM books WHERE id = ?', request.form.get('id'))            
 
             # Flash book removed message
@@ -410,8 +411,9 @@ def members():
             # Query database for a name of a member to be deleted
             removed = db.execute('SELECT name FROM members WHERE member_id = ?', request.form.get('id'))[0]['name']
 
-            # Delete member
-            db.execute('DELETE FROM members WHERE member_id = ?', request.form.get('id'))            
+            # Delete member and all related data from child table
+            db.execute('DELETE FROM transactions WHERE borrower_id = ?', request.form.get('id'))
+            db.execute('DELETE FROM members WHERE member_id = ?', request.form.get('id'))
 
             # Flash a message
             flash(f'Member {removed} has been removed.')
@@ -638,7 +640,8 @@ def remove():
         # Query database for librarian name
         l_name = db.execute('SELECT name FROM staff WHERE staff_id = ?', staff_id)[0]['name']
 
-        # Remove librarian
+        # Remove librarian and all related data form child table
+        db.execute('DELETE FROM transactions WHERE employee_id = ?', staff_id)
         db.execute('DELETE FROM staff WHERE staff_id = ?', staff_id)
 
         # Flash a message on removal

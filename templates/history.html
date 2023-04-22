@@ -32,20 +32,23 @@
             <label class="returned-filter" for="returned">Returned</label><br>
         </div>
 
-        <div class="book-filter">
-            <input class="book-search" id="queryBookId" placeholder="Book ID">
-        </div>
-    
-        <div class="member-filter">
-            <input class="member-search" id="queryMemberId" placeholder="Member ID">
+        <div class="book-member-group">
+            <div class="book-filter">
+                <input class="book-search" id="queryBookId" placeholder="Book ID">
+            </div>
+        
+            <div class="member-filter">
+                <input class="member-search" id="queryMemberId" placeholder="Member ID">
+            </div>
         </div>
 
-        <select class="librarian-filter">
-            <option id="disabled" disabled></option>
-        </select>
-            
-        <button class="clear-filters">Clear Filters</button>
+        <div class="librarian-clear-group">
+            <select class="librarian-filter">
+                <option id="disabled" disabled></option>
+            </select>
 
+            <button class="clear-filters">Clear Filters</button>
+        </div> 
     </div>
 
     <div class="wrapper">
