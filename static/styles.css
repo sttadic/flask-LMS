@@ -403,6 +403,14 @@ option {
     cursor: pointer;
 }
 
+.index-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-family:'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: rgb(240, 189, 3);    
+    text-shadow: 0.2rem 0.2rem black; 
+}
+
 /* FAQ page */
 
 .faq {
