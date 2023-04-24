@@ -62,7 +62,7 @@ def login():
             return render_template('login.html')
         
         # Query database for username
-        user_name = db.execute('SELECT * FROM staff WHERE username = ?', request.form.get('username'))
+        user_name = db.execute('SELECT * FROM staff WHERE username = ? AND deleted = ?', request.form.get('username'), 0)
 
         # Ensure username exists and password is correct
         if len(user_name) != 1 or not check_password_hash(user_name[0]['hash'], request.form.get('password')):
@@ -209,18 +209,18 @@ def catalogue():
     elif request.args.get('sort') == 'author':
         
         # Query database for books and sort by author
-        books = db.execute('SELECT * FROM books ORDER BY author ASC')
+        books = db.execute('SELECT * FROM books WHERE deleted = ? ORDER BY author ASC', 0)
         return render_template('catalogue.html', books=books, name=name)
     
     # Sort by genre
     elif request.args.get('sort') == 'genre':
         
         # Query database for books and sort by genre
-        books = db.execute('SELECT * FROM books ORDER BY genre ASC')
+        books = db.execute('SELECT * FROM books WHERE deleted = ? ORDER BY genre ASC', 0)
         return render_template('catalogue.html', books=books, name=name)
     
     # User reached route from navbar - query database for books and sort by title
-    books = db.execute('SELECT * FROM books ORDER BY title ASC')
+    books = db.execute('SELECT * FROM books WHERE deleted = ? ORDER BY title ASC', 0)
     return render_template('catalogue.html', books=books, name=name)
 
 
@@ -236,7 +236,7 @@ def books():
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
     # Query database for books and sort by title
-    books = db.execute('SELECT * FROM books ORDER BY title ASC')    
+    books = db.execute('SELECT * FROM books WHERE deleted = ? ORDER BY title ASC', 0)    
 
     # User reached route via GET
     if request.method == 'GET':
@@ -247,7 +247,7 @@ def books():
 
         # Query exists and search by field is 'id', return exact match as JSON response
         if query and field == 'id':
-            match = db.execute('SELECT * FROM books WHERE id = ?', query)
+            match = db.execute('SELECT * FROM books WHERE deleted = ? AND id = ?', 0, query)
             return jsonify(match)
         
         # Any other search field selected
@@ -270,9 +270,8 @@ def books():
             # Query database for the title of the book to be removed
             removed = db.execute('SELECT title FROM books WHERE id = ?', request.form.get('id'))[0]['title']
 
-            # Delete book and all related data from child table
-            db.execute('DELETE FROM transactions WHERE book_id = ?', request.form.get('id')) 
-            db.execute('DELETE FROM books WHERE id = ?', request.form.get('id'))            
+            # Delete book (tag as deleted)
+            db.execute('UPDATE books SET deleted = ? WHERE id = ?', 1, request.form.get('id'))            
 
             # Flash book removed message
             flash(f'Book "{removed}" has been successfully removed!')
@@ -377,7 +376,7 @@ def members():
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
     # Query database for members ordered by name
-    members = db.execute('SELECT * FROM members ORDER BY name ASC')  
+    members = db.execute('SELECT * FROM members WHERE deleted = ? ORDER BY name ASC', 0)  
 
     # User reached route via GET
     if request.method == 'GET':
@@ -388,7 +387,7 @@ def members():
 
         # Query exists and search by field is 'id', return exact match as JSON response
         if query and field == 'member_id':
-            match = db.execute('SELECT * FROM members WHERE member_id = ?', query)
+            match = db.execute('SELECT * FROM members WHERE deleted = ? AND member_id = ?', 0, query)
             return jsonify(match)
         
         # Any other search field selected
@@ -411,9 +410,8 @@ def members():
             # Query database for a name of a member to be deleted
             removed = db.execute('SELECT name FROM members WHERE member_id = ?', request.form.get('id'))[0]['name']
 
-            # Delete member and all related data from child table
-            db.execute('DELETE FROM transactions WHERE borrower_id = ?', request.form.get('id'))
-            db.execute('DELETE FROM members WHERE member_id = ?', request.form.get('id'))
+            # Delete member (tag as deleted)
+            db.execute('UPDATE members SET deleted = ? WHERE member_id = ?', 1, request.form.get('id'))
 
             # Flash a message
             flash(f'Member {removed} has been removed.')
@@ -494,8 +492,8 @@ def checkout():
     # Query database for librarian name
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
-    members = db.execute('SELECT * FROM members')
-    books = db.execute('SELECT * FROM books')
+    members = db.execute('SELECT * FROM members WHERE deleted = ?', 0)
+    books = db.execute('SELECT * FROM books WHERE deleted = ?', 0)
     transactions = db.execute('SELECT * FROM transactions')
 
     # User reached route via GET
@@ -589,7 +587,7 @@ def register():
             flash('All fields required')
             return redirect('/register')
 
-        # Username already in database
+        # Username already in database (even if tagged as deleted)
         elif db.execute('SELECT * FROM staff WHERE username = ?', user_name):
             flash('Username already exists')
             return redirect('/register')
@@ -629,7 +627,7 @@ def remove():
     name = db.execute('SELECT name FROM staff WHERE staff_id = ?', user_id)[0]['name']
 
     # Query database for all librarians except admin
-    staff = db.execute('SELECT * FROM staff WHERE staff_id <> 1')
+    staff = db.execute('SELECT * FROM staff WHERE staff_id <> ? AND deleted = ?', 1, 0)
 
     # Route reached via POST
     if request.method == 'POST':
@@ -640,9 +638,8 @@ def remove():
         # Query database for librarian name
         l_name = db.execute('SELECT name FROM staff WHERE staff_id = ?', staff_id)[0]['name']
 
-        # Remove librarian and all related data form child table
-        db.execute('DELETE FROM transactions WHERE employee_id = ?', staff_id)
-        db.execute('DELETE FROM staff WHERE staff_id = ?', staff_id)
+        # Remove librarian (tag as deleted)
+        db.execute('UPDATE staff SET deleted = ? WHERE staff_id = ?', 1,staff_id)
 
         # Flash a message on removal
         flash(f'Librarian { l_name } has been removed from LMS')
