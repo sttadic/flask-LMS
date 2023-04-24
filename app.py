@@ -279,12 +279,23 @@ def books():
             author = request.form.get('author')
             genre = request.form.get('genre')
             year = request.form.get('year')
+            current_stock = db.execute('SELECT stock FROM books WHERE id = ?', id)[0]['stock']
+            available = db.execute('SELECT available FROM books WHERE id = ?', id)[0]['available']
 
-            # Ensure valid input for stock levels
+            # Ensure valid input for stock levels ( and )
             try:
                 stock = int(request.form.get('stock'))
-                if stock < 1:
+                # Zero does not change anything
+                if stock == 0:
                     flash('Invalid stock input')
+                    return redirect('/books')
+                # Stock level can not be set to 0 or below
+                if (current_stock + stock) < 1:
+                    flash('Stock level of a book can not be set to 0, use remove option instead')
+                    return redirect('/books')
+                # Current availability of a book can not be reduced below 0 (otherwise, when book returned, availability of a book would be greater than its total stock level)
+                if (available + stock) < 0:
+                    flash(f'Not enaugh currently available copies ({ available }) of a book in library, please wait until they are returned')
                     return redirect('/books')
             except:
                 flash('Invalid stock input')
@@ -296,7 +307,7 @@ def books():
                 return redirect('/books')
 
             # Update books table
-            db.execute('UPDATE books SET title = ?, author = ?, genre = ?, year = ?, stock = ?, available = ? WHERE id = ?', title, author, genre, year, stock, stock, id)
+            db.execute('UPDATE books SET title = ?, author = ?, genre = ?, year = ?, stock = ?, available = ? WHERE id = ?', title, author, genre, year, current_stock + stock, available + stock, id)
 
             # Flash a message
             flash(f'Book ID:{id} details updated!')

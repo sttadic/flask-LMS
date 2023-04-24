@@ -407,8 +407,10 @@ option {
     font-size: 2rem;
     margin-bottom: 2rem;
     font-family:'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: rgb(240, 189, 3);    
-    text-shadow: 0.2rem 0.2rem 0.4rem black; 
+    color: black;    
+    text-shadow: 0.1rem 0.1rem black;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: rgb(240, 189, 33);
 }
 
 /* FAQ page */

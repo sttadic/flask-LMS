@@ -11,12 +11,13 @@
 
 // Populate popup form fields with corresponding values of a selected book (books.html)
 function editBook(id, title, author, genre, year, stock) {
+    $("#form_stock").val('');
     $("#form_id").val(id);
     $("#form_title").val(title);
     $("#form_author").val(author);
     $("#form_genre").val(genre);
     $("#form_year").val(year);
-    $("#form_stock").val(stock);
+    $("#show_stock").text(stock);
 }
 
 
