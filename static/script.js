@@ -40,9 +40,9 @@ $(document).ready(function() {
     });
 });
 
-// Assign members and books table tbody elements to a global variables to repopulate tables in searchBook() and searchMember() if query is empty
-let tableBooks = {}
-let tableMembers = {}
+// Assign members and books table tbody elements to global variables for repopulating tables in searchBook() and searchMember() if query is empty
+let tableBooks = {};
+let tableMembers = {};
 $(document).ready(function() {
     tableBooks = $('#books tbody').html();
     tableMembers = $('#members tbody').html();
@@ -220,7 +220,7 @@ function checkoutMemberSearch() {
                 // Move focus (caret) to searchBook input element
                 $('#searchBook').focus();
             }
-        });  
+        }); 
         // Query doesn't exists in data
         if (!found) {
             $('.collapseCh').hide();
@@ -253,7 +253,7 @@ function checkoutBookSearch() {
     let query = $('#searchBook').val();
 
     // Query empty
-    if (!query) {                         
+    if (!query) {
         $('#book tbody').empty();    // Clear table's body element
         $('#searchBook').focus();    // Focus back (caret) on input element
         return                            
@@ -277,10 +277,10 @@ function checkoutBookSearch() {
                 row.append($('<td class="available"></td>').text(element.available));
                 row.append($('<td></td>').html('<button class="btn-book" id="addBook">Add Book</button>'));
                 row.append($('<td></td>').html('<button class="btn-book" id="cancelBook">Cancel</button>'));
-                // Add to/replace existing content of tbody element (so only one book will show at time) 
+                // Add to/replace existing content of tbody element (so only one book will show at time)
                 $('#book tbody').html(row);
                 // Set found variable to true
-                found = true; 
+                found = true;
                 
 
                 // Add books block
@@ -290,11 +290,11 @@ function checkoutBookSearch() {
                     let alreadyBorrowed = false;
 
                     // Loop through each row of added books and check if book already added
-                    $('#addedBooks tbody tr').each(function() {                        
+                    $('#addedBooks tbody tr').each(function() {
                         if ($(this).find('.check-Id').text() == element.id) {
                             alreadyAdded = true;
                             // As soon as book match found break out of the loop
-                            return false; 
+                            return false;
                         }
                     });
                     // Iterate over transactions list and check if book with the same id has already being borrowed but not returned
@@ -311,7 +311,7 @@ function checkoutBookSearch() {
                     // Book already added
                     else if (alreadyAdded) {
                         alert('Book already added');
-                    } 
+                    }
                     // Book current stock == 0
                     else if($('.available').text() <= 0) {
                         alert('Book currently unavailable')
@@ -323,7 +323,7 @@ function checkoutBookSearch() {
                         rowAdded.append($('<td></td>').text(element.author));
                         rowAdded.append($('<td></td>').text(element.genre));
                         rowAdded.append($('<td></td>').text(element.year));
-                        rowAdded.append($('<td></td>').html('<button class="btn-remove-book">Remove</button>'));                        
+                        rowAdded.append($('<td></td>').html('<button class="btn-remove-book">Remove</button>'));
                         $('#addedBooks tbody').append(rowAdded);
                         // Add hidden input elements with book id values to the form element
                         $('#checkout').append($('<input name="bookId" hidden>').attr('value', element.id));
@@ -365,7 +365,7 @@ function checkoutBookSearch() {
 }
 
 // Trigger a click event on a search buttons when Enter is pressed
-$(document).ready(function() { 
+$(document).ready(function() {
     $('#searchMember').keypress(function(e) {
         if(e.which == 13) {
         $('#memberSearch').click();
@@ -380,7 +380,7 @@ $(document).ready(function() {
 
 // Check different parameters before submiting
 $(document).ready(function() { 
-    $('#checkout').submit(function(event) {         
+    $('#checkout').submit(function(event) {
         
         // Number of rows (added books)
         let counter = $('.check-Id').length;
@@ -414,7 +414,32 @@ $(document).ready(function() {
 // INDEX (BOOK RETURNS)
 
 $(document).ready(function() {
-    
+
+    // Dynamic search on index template (member id)
+
+    let tableReturns = $('#returns tbody').html();
+
+    $('#searchReturns').keyup(function() {
+
+        let query = $('#searchReturns').val();
+
+        // In case of multiple keystokes populate table with original values (show all) so query can continue (multiple digits query)
+        $('#returns tbody').html(tableReturns);
+        // Hide all rows that don't match the query
+        $('.row-data-index').each(function() {
+            if (query != $(this).find('.memId').text()) {
+                $(this).hide();
+            }
+        });
+        // If query deleted repopulate table (show all again)
+        if (!query) {
+            $('#returns tbody').html(tableReturns);
+        }
+    });
+
+
+    // Book returns
+
     $('.row-data-index').click(function () {
 
         // Clear table body element and remove all hidden input elements (in case they were already populated from previous click)
@@ -483,8 +508,8 @@ $(document).ready(function() {
             }); 
             // Add input element to a form (id="returnAll") with member id
             $('#returnAll').append(($('<input>')).attr('id','inputMemId').attr('name', 'memberId').attr('value', memId).hide());
-                     
-        });        
+
+        });
     });
 });
 
