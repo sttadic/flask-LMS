@@ -305,7 +305,7 @@ def books():
                 return redirect('/books')
 
             # Update books table
-            db.execute('UPDATE books SET title = ?, author = ?, genre = ?, year = ?, stock = ? WHERE id = ?', title, author, genre, year, stock, id)
+            db.execute('UPDATE books SET title = ?, author = ?, genre = ?, year = ?, stock = ?, available = ? WHERE id = ?', title, author, genre, year, stock, stock, id)
 
             # Flash a message
             flash(f'Book ID:{id} details updated!')
