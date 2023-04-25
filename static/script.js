@@ -445,23 +445,21 @@ $(document).ready(function() {
 
     // Dynamic search on index template (member id)
 
-    let tableReturns = $('#returns tbody').html();
-
     $('#searchReturns').keyup(function() {
 
         let query = $('#searchReturns').val();
 
-        // In case of multiple keystokes populate table with original values (show all) so query can continue (multiple digits query)
-        $('#returns tbody').html(tableReturns);
-        // Hide all rows that don't match the query
+        // On keyup hide all rows first
+        $('#returns tbody').find('tr').hide();
+        // Show row that matches the query
         $('.row-data-index').each(function() {
-            if (query != $(this).find('.memId').text()) {
-                $(this).hide();
+            if (query == $(this).find('.memId').text()) {
+                $(this).show();
             }
         });
-        // If query deleted repopulate table (show all again)
+        // If query deleted show all again
         if (!query) {
-            $('#returns tbody').html(tableReturns);
+            $('#returns tbody').find('tr').show();
         }
     });
 
@@ -469,7 +467,7 @@ $(document).ready(function() {
     // Book returns
 
     $('.row-data-index').click(function () {
-
+        
         // Clear table body element and remove all hidden input elements (in case they were already populated from previous click)
         $('#borrowed tbody').empty();
         $('#inputMemId').remove();
