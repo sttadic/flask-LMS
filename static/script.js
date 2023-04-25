@@ -185,10 +185,14 @@ function checkoutMemberSearch() {
 
     // Query empty
     if (!query) {                         
-        $('.collapseCh').hide();         // Hide collapsable element
-        $('#member tbody').empty();    // Clear table's body element
-        $('#searchMember').focus();    // Focus back (caret) on input element
-        return                            
+        $('.collapseCh').hide();            // Hide collapsable element
+        $('#member tbody').empty();         // Clear table's body element
+        $('#searchMember').focus();         // Focus back (caret) on input element
+        $('#checkout').empty();             // Clear checkout form if any inputs added
+        $('#book tbody').empty();           // Clear book if already searched for
+        $('#searchBook').val('');           // Clear search vlaue of books
+        $('#addedBooks tbody').empty();     // Clear added books
+        return           
     }
     $.get('/checkout', {'queryMember': query}, function(data) {
         let found = false;
@@ -200,7 +204,11 @@ function checkoutMemberSearch() {
         data.forEach(function(element) {
             // Query exists in data
             if(query == element.member_id) {
-                       
+
+                // After searched for member disable input and button elements
+                $('#searchMember').prop('disabled', true)
+                $('#memberSearch').prop('disabled', true)
+                
                 // Populate rows with members details and add cancel button
                 row.append($('<td id="memberId"></td>').text(element.member_id));
                 row.append($('<td></td>').text(element.name));
@@ -210,7 +218,9 @@ function checkoutMemberSearch() {
                 // Also used in script below to check max amount of books that can be issued to a member (6):
                 row.append($('<td id="borrowed"></td>').text(element.borrowed));
                 // Cancel button
-                row.append($('<td></td>').html('<button class="btn-cancel-member" id="cancelMember">Cancel</button>'));
+                row.append($('<td></td>').html('<button class="btn-cancel-member" id="cancelMember">Cancel</button>'));                
+                // Add checkout button
+                $('#checkout').append($('<button class="btn-checkout">Checkout</button>'));
                 // Add hidden input element with member id value to the form element at the bottom of the template
                 $('#checkout').append($('<input name="memberId" hidden>').attr('value', element.member_id));
 
@@ -233,8 +243,12 @@ function checkoutMemberSearch() {
             $('#book tbody').empty();
             $('#searchBook').val('');
         }
-        // Remove member (clear table's body element) if cancel selected
+        // Cancel searched member
         $('#cancelMember').click(function() {
+            // Enable search member and button elements again
+            $('#searchMember').prop('disabled', false)
+            $('#memberSearch').prop('disabled', false)
+            // Clear table's body element and move focus back on search member element
             $('.collapseCh').hide();
             $('#member tbody').empty();
             $('#searchMember').val('');
@@ -244,6 +258,8 @@ function checkoutMemberSearch() {
             $('#searchBook').val('');
             // Clear any added books in collapseable element
             $('#addedBooks tbody').empty();
+            // Clear any input elements that were already added
+            $('#checkout').empty();
         });
     });
 }
@@ -269,6 +285,10 @@ function checkoutBookSearch() {
             // Query exists in data
             if(query == element.id) {
                        
+                // After searched for book disable input and button elements
+                $('#searchBook').prop('disabled', true)
+                $('#bookSearch').prop('disabled', true)
+
                 // Populate rows with book details and add cancel and add book buttons
                 row.append($('<td></td>').text(element.id));
                 row.append($('<td></td>').text(element.title));
@@ -327,10 +347,14 @@ function checkoutBookSearch() {
                         rowAdded.append($('<td></td>').html('<button class="btn-remove-book">Remove</button>'));
                         $('#addedBooks tbody').append(rowAdded);
                         // Add hidden input elements with book id values to the form element
-                        $('#checkout').append($('<input name="bookId" hidden>').attr('value', element.id));
+                        $('#checkout').append($('<input class="addedBookId" name="bookId" hidden>').attr('value', element.id));
+                        
+                        // Enable search elements again
+                        $('#searchBook').prop('disabled', false)
+                        $('#bookSearch').prop('disabled', false)
                         // Clear search result and move focus back to search 
                         $('#book tbody').empty();
-                        $('#searchBook').val('');
+                        $('#searchBook').val('');    
                         $('#searchBook').focus();
                     }
                 });
@@ -341,13 +365,11 @@ function checkoutBookSearch() {
             $(this).closest('tr').remove();
 
             let formInputId = $(this).closest('tr').children('td').eq(0).text();
-            $('#checkout input').each(function() {
+            $('#checkout .addedBookId').each(function() {
                 if($(this).val() == formInputId) {
                     $(this).remove();
                 }
-            })
-            
-           
+            })           
         });
 
         // Query doesn't exists in data
@@ -356,11 +378,16 @@ function checkoutBookSearch() {
             $('#searchBook').val('');
             alert('Book ID does not exist in library database');
         }
-        // Cancel book search (clear table's body element) if cancel selected
+        // Cancel book search
         $('#cancelBook').click(function() {
+             // Enable search elements again
+            $('#searchBook').prop('disabled', false)
+            $('#bookSearch').prop('disabled', false)
+            // Clear table's body element
             $('#book tbody').empty();
             $('#searchBook').val('');
             $('#searchBook').focus();
+           
         }); 
     });
 }
