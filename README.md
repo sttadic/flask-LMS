@@ -1,7 +1,7 @@
 # Library Management System
 Web Application - Final Project for CS50x Harvard University Course
 
-By Stjepan Tadic
+Author: Stjepan Tadic
 
 ### [Short video demo](https://www.youtube.com/watch?v=7GMXeOrey2M)
 <br>
@@ -18,7 +18,7 @@ This web application allows its users (librarians) to manage library functions s
 - Ajax 
 - Python (Flask)  
 - Jinja
-- SQL
+- SQLite
 
 <br>
 
