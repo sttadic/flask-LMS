@@ -1,7 +1,4 @@
 # Library Management System
-Web Application - Final Project for CS50x Harvard University Course
-
-Author: Stjepan Tadic
 
 ### [Short video demo](https://www.youtube.com/watch?v=7GMXeOrey2M)
 <br>
